@@ -3,6 +3,9 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT;
 
+// Base de données
+require("./db");
+
 app.get("/", (req, res) => {
   res.send("Rien à voir ici");
 });
