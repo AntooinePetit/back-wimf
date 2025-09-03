@@ -6,6 +6,16 @@ const port = process.env.PORT;
 // Base de données
 require("./db");
 
+// Middleware pour parse le JSON
+app.use(express.json());
+
+// Intégration des routes
+const recipeRoutes = require("./routes/recipeRoutes");
+const userRoutes = require("./routes/userRoutes");
+
+app.use("/api/recipes", recipeRoutes);
+app.use("/api/users", userRoutes);
+
 app.get("/", (req, res) => {
   res.send("Rien à voir ici");
 });
