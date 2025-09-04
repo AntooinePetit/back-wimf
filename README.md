@@ -110,6 +110,18 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 }
 ```
 
+### Obtention des informations de tous les utilisateurs inscrits
+
+**GET** `/api/users`
+
+Nécessite un token d'authentification d'un compte modérateur ou administrateur
+
+### Obtention des informations d'un utilisateur spécifique
+
+**GET** `/api/users/:id_de_l_utilisateur`
+
+Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur recherché
+
   <!-- 
 ### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
 
