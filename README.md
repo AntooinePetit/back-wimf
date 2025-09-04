@@ -1,4 +1,4 @@
-# Nom de l'API REST
+# WIMF Back
 
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)
 ![Statut CI](https://img.shields.io/badge/CI-Passing-brightgreen.svg)
@@ -53,14 +53,14 @@ JWT_SECRET=votre_secret_jwt_super_securise
 4. Lancer l'API :
 
 ```bash
-node .\app.js
+nodemon .\app.js
 ```
 
 L'API sera disponible sur `http://localhost:3000`.
 
 ## Utilisation de l'API
 
-<!-- ### Enregistrement d'un utilisateur
+### Enregistrement d'un utilisateur
 
 **POST** `/api/auth/register`
 
@@ -71,6 +71,8 @@ L'API sera disponible sur `http://localhost:3000`.
   "password": "password1234"
 }
 ```
+<!-- 
+
 
 ### Connexion d'un utilisateur
 

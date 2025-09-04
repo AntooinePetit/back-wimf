@@ -2,6 +2,20 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+/**
+ * Enregistre un nouvel utilisateur dans la base de donnée
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Répond avec un JSON contenant les informations de l'utilisateur et un token de connexion
+ * @example 
+ * // POST /api/auth/register
+ * {
+ *  "username": "testuser",
+ *  "email": "test@example.com",
+ *  "password": "password1234"
+ * }
+ */
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
