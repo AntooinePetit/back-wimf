@@ -68,6 +68,7 @@ const userSchema = new mongoose.Schema({
   },
   accessibility: {
     type: accessibilitySchema,
+    default: () => ({}), // Valeur par défaut vide qui utilisera les defaults du sous-schéma
   },
 });
 

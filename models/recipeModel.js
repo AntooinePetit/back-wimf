@@ -81,6 +81,9 @@ const recipeSchema = new mongoose.Schema({
     type: [ingredientsSchema],
     required: true,
   },
+  picture: {
+    type: String,
+  },
   calories: {
     type: Number,
   },
