@@ -71,8 +71,8 @@ L'API sera disponible sur `http://localhost:3000`.
   "password": "password1234"
 }
 ```
-<!-- 
 
+Retourne un jeton JWT.
 
 ### Connexion d'un utilisateur
 
@@ -87,6 +87,19 @@ L'API sera disponible sur `http://localhost:3000`.
 
 Retourne un jeton JWT.
 
+### Mot de passe oublié d'un utilisateur
+
+**POST** `/api/auth/forgot-pass`
+
+```json
+{
+  "email": "test@example.com"
+}
+```
+
+Retourne un jeton JWT de réinitialisation de mot de passe.
+
+  <!-- 
 ### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
 
 **GET** `/api/users`

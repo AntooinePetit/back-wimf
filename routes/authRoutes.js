@@ -7,7 +7,7 @@ const authControllers = require("../controllers/authControllers");
 // Authentification
 router.post("/register", authControllers.register); // inscription
 router.post("/login", authControllers.login); // connexion
-// router.post("/forgot-pass"); // Mot de passe oublié
+router.post("/forgot-pass", authControllers.forgotPass); // Mot de passe oublié
 // router.put("/reset-pass/:token"); // Réinitialisation
 
 module.exports = router
