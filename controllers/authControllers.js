@@ -161,6 +161,8 @@ exports.resetPassword = async (req, res) => {
       const salt = await bcrypt.genSalt(parseInt(12));
       const passwordHash = await bcrypt.hash(password, salt);
       userToReset.password = passwordHash;
+
+      userToReset.updatedAt = Date.now();
     }
 
     const resetUser = await userToReset.save();
