@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-// A AJOUTER : PARAMETRES D'ACCESSIBILITE
 const accessibilitySchema = new mongoose.Schema({
   nutritionalValues: {
     type: Boolean,
