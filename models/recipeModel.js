@@ -1,31 +1,34 @@
 const mongoose = require("mongoose");
 
-const nutritionalSchema = new mongoose.Schema({
-  energy: {
-    type: Number,
+const nutritionalSchema = new mongoose.Schema(
+  {
+    energy: {
+      type: Number,
+    },
+    proteins: {
+      type: Number,
+    },
+    lipids: {
+      type: Number,
+    },
+    fibers: {
+      type: Number,
+    },
+    carbohydrates: {
+      type: Number,
+    },
+    saturatedFats: {
+      type: Number,
+    },
+    sugar: {
+      type: Number,
+    },
+    salt: {
+      type: Number,
+    },
   },
-  proteins: {
-    type: Number,
-  },
-  lipids: {
-    type: Number,
-  },
-  fibers: {
-    type: Number,
-  },
-  carbohydrates: {
-    type: Number,
-  },
-  saturatedFats: {
-    type: Number,
-  },
-  sugar: {
-    type: Number,
-  },
-  salt: {
-    type: Number,
-  },
-});
+  { _id: false }
+);
 
 const ingredientsSchema = new mongoose.Schema(
   {

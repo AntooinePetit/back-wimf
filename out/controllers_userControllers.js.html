@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: middlewares/resetPassMiddleware.js</title>
+    <title>JSDoc: Source: controllers/userControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: middlewares/resetPassMiddleware.js</h1>
+    <h1 class="page-title">Source: controllers/userControllers.js</h1>
 
     
 
@@ -26,35 +26,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const jwt = require("jsonwebtoken");
+            <pre class="prettyprint source linenums"><code>const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 /**
- * Middleware permettant de vérifier le token de réinitialisation de mot de passe
- *
+ * Récupère tous les utilisateurs dans la base de données si l'utilisateur connecté est un modérateur ou administrateur
+ * 
+ * @async
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @param {Function} next - Fonction qui renvoie au middleware suivant
- * @returns {void}
+ * @returns Retourne un JSON contenant tous les utilisateurs existant et leurs informations
+ * @example
+ * // GET /api/users/
  */
-const resetPassMiddleware = async (req, res, next) => {
-  const resetPassHeader = req.headers.authorization;
-
-  if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token manquant !" });
-  }
-
-  const token = resetPassHeader.split(" ")[1];
-
+exports.getAllUsers = async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT);
-    req.user = decoded;
-    next();
+    const userConnected = await User.findById(req.user.id);
+
+    if (userConnected.rights === "Member") {
+      return res
+        .status(401)
+        .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
+    }
+
+    const users = await User.find();
+    res.json(users);
   } catch (err) {
-    res.status(401).json({ message: "Token invalide ou expiré" });
+    res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = resetPassMiddleware;
 </code></pre>
         </article>
     </section>

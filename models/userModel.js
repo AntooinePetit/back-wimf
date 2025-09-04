@@ -1,28 +1,31 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const accessibilitySchema = new mongoose.Schema({
-  nutritionalValues: {
-    type: Boolean,
-    default: true,
+const accessibilitySchema = new mongoose.Schema(
+  {
+    nutritionalValues: {
+      type: Boolean,
+      default: true,
+    },
+    calories: {
+      type: Boolean,
+      default: true,
+    },
+    allergies: {
+      type: [String],
+      default: [],
+    },
+    diet: {
+      type: [String],
+      default: [],
+    },
+    bannedIngredients: {
+      type: [String],
+      default: [],
+    },
   },
-  calories: {
-    type: Boolean,
-    default: true,
-  },
-  allergies: {
-    type: [String],
-    default: [],
-  },
-  diet: {
-    type: [String],
-    default: [],
-  },
-  bannedIngredients: {
-    type: [String],
-    default: [],
-  },
-});
+  { _id: false }
+);
 
 const userSchema = new mongoose.Schema({
   username: {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: middlewares/resetPassMiddleware.js</title>
+    <title>JSDoc: Source: middlewares/authMiddleware.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: middlewares/resetPassMiddleware.js</h1>
+    <h1 class="page-title">Source: middlewares/authMiddleware.js</h1>
 
     
 
@@ -29,21 +29,22 @@
             <pre class="prettyprint source linenums"><code>const jwt = require("jsonwebtoken");
 
 /**
- * Middleware permettant de vérifier le token de réinitialisation de mot de passe
- *
+ * Vérifie le token de connexion de l'utilisateur
+ * 
+ * @async
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
  * @param {Function} next - Fonction qui renvoie au middleware suivant
  * @returns {void}
  */
-const resetPassMiddleware = async (req, res, next) => {
-  const resetPassHeader = req.headers.authorization;
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-  if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token manquant !" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Accès refusé, token manquant" });
   }
 
-  const token = resetPassHeader.split(" ")[1];
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT);
@@ -54,7 +55,7 @@ const resetPassMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = resetPassMiddleware;
+module.exports = authMiddleware;
 </code></pre>
         </article>
     </section>
