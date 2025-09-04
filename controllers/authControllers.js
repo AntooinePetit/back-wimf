@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Répond avec un JSON contenant les informations de l'utilisateur et un token de connexion
- * @example 
+ * @example
  * // POST /api/auth/register
  * {
  *  "username": "testuser",
@@ -48,6 +48,46 @@ exports.register = async (req, res) => {
       },
       token,
     });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Permet de connecter un utilisateur
+ *
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Répond avec un token de connexion
+ * @example
+ * // POST /api/auth/login
+ * {
+ *  "email": "antoine@mail.com",
+ *  "password": "pass1234"
+ * }
+ */
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: "Cet email n'est lié à aucun compte" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(401).json({ message: "Le mot de passe est incorrect" });
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT,
+      { expiresIn: "7d" }
+    );
+    res.json(token);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
