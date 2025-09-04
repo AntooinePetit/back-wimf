@@ -12,12 +12,15 @@ const accessibilitySchema = new mongoose.Schema({
   },
   allergies: {
     type: [String],
+    default: [],
   },
   diet: {
     type: [String],
+    default: [],
   },
   bannedIngredients: {
     type: [String],
+    default: [],
   },
 });
 
