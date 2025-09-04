@@ -4,7 +4,10 @@ const router = express.Router();
 // Intégrer le controller des utilisateurs
 const userControllers = require("../controllers/userControllers");
 
-router.post("/register");
-router.post("/login");
+// // Users
+// router.get("/"); // récupérer tous les utilisateurs si mod/admin
+// router.get("/:id"); // récupérer un utilisateur si mod/admin ou soi-même
+// router.put("/:id"); // mise à jour
+// router.delete("/:id"); // Suppression/bannissement définitif d'un utilisateur
 
 module.exports = router;

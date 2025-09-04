@@ -1,8 +1,35 @@
 const mongoose = require("mongoose");
 
+const nutritionalSchema = new mongoose.Schema({
+  energy: {
+    type: Number,
+  },
+  proteins: {
+    type: Number,
+  },
+  lipids: {
+    type: Number,
+  },
+  fibers: {
+    type: Number,
+  },
+  carbohydrates: {
+    type: Number,
+  },
+  saturatedFats: {
+    type: Number,
+  },
+  sugar: {
+    type: Number,
+  },
+  salt: {
+    type: Number,
+  },
+});
+
 const ingredientsSchema = new mongoose.Schema(
   {
-    name: {
+    idIngredient: {
       type: String,
       required: true,
     },
@@ -53,6 +80,12 @@ const recipeSchema = new mongoose.Schema({
   ingredients: {
     type: [ingredientsSchema],
     required: true,
+  },
+  calories: {
+    type: Number,
+  },
+  nutrionalValues: {
+    type: nutritionalSchema,
   },
 });
 

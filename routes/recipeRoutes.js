@@ -4,10 +4,10 @@ const router = express.Router();
 // Intégrer le controller des recettes
 const recipeControllers = require("../controllers/recipeControllers");
 
-router.get("/"); // Récupérer toutes les recettes
-router.get("/:id"); // Récupérer une seule recette
-router.post("/"); // Ajouter une recette (avec middleware authentification pour vérifier que bien un admin)
-router.put("/:id"); // Modifier une recette (avec middleware authentification pour vérifier que bien un admin)
-router.delete("/:id"); // Supprimer une recette (avec middleware authentification pour vérifier que bien un admin)
+// router.get("/"); // Récupérer toutes les recettes
+// router.get("/:id"); // Récupérer une seule recette
+// router.post("/"); // Ajouter une recette (avec middleware authentification pour vérifier que bien un admin)
+// router.put("/:id"); // Modifier une recette (avec middleware authentification pour vérifier que bien un admin)
+// router.delete("/:id"); // Supprimer une recette (avec middleware authentification pour vérifier que bien un admin)
 
 module.exports = router;

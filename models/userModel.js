@@ -2,6 +2,25 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 // A AJOUTER : PARAMETRES D'ACCESSIBILITE
+const accessibilitySchema = new mongoose.Schema({
+  nutritionalValues: {
+    type: Boolean,
+    default: true,
+  },
+  calories: {
+    type: Boolean,
+    default: true,
+  },
+  allergies: {
+    type: [String],
+  },
+  diet: {
+    type: [String],
+  },
+  bannedIngredients: {
+    type: [String],
+  },
+});
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -44,6 +63,9 @@ const userSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now,
+  },
+  accessibility: {
+    type: accessibilitySchema,
   },
 });
 

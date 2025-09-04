@@ -10,6 +10,7 @@ Cette API REST fournit des points d'accès pour gérer les utilisateurs et leurs
 - Création, lecture, mise à jour et suppression d'utilisateurs.
 - Création, lecture, mise à jour et suppression de recettes.
 - Authentification par jeton JWT.
+- Modification de mot de passe oublié par jeton JWT
 - Validation des données d'entrée.
 
 ## Technologies utilisées
@@ -59,3 +60,51 @@ L'API sera disponible sur `http://localhost:3000`.
 
 ## Utilisation de l'API
 
+<!-- ### Enregistrement d'un utilisateur
+
+**POST** `/api/auth/register`
+
+```json
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password1234"
+}
+```
+
+### Connexion d'un utilisateur
+
+**POST** `/api/auth/login`
+
+```json
+{
+  "email": "test@example.com",
+  "password": "password1234"
+}
+```
+
+Retourne un jeton JWT.
+
+### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
+
+**GET** `/api/users`
+
+Header: `Authorization: Bearer <votre_jeton_jwt>`
+
+## Exécution des tests
+
+```bash
+npm test
+```
+
+## Contribution
+
+Voir le fichier [CONTRIBUTING.md](CONTRIBUTING.md) pour les directives de contribution.
+
+## Licence
+
+Ce projet est sous licence Apache 2.0. Voir le fichier _LICENSE_ pour plus de détails.
+
+## Contact
+
+Pour toute question, contactez [votre nom/email](mailto:votre.mail@example.com) -->

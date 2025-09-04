@@ -12,9 +12,11 @@ app.use(express.json());
 // Intégration des routes
 const recipeRoutes = require("./routes/recipeRoutes");
 const userRoutes = require("./routes/userRoutes");
+const authRoutes = require('./routes/authRoutes')
 
 app.use("/api/recipes", recipeRoutes);
 app.use("/api/users", userRoutes);
+app.use('/api/auth', authRoutes)
 
 app.get("/", (req, res) => {
   res.send("Rien à voir ici");
