@@ -122,6 +122,26 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur recherché
 
+### Mise à jour des informations d'un compte spécifique
+
+**PUT** `/api/users/:id_de_l_utilisateur`
+
+```json
+{
+  "username": "usertest",
+  "rights": "Administrator",
+  "accessibility": {
+    "nutritionalValues": false,
+    "calories": false,
+    "allergies": ["Noix", "Saumon"],
+    "diet": ["Végétarien"],
+    "bannedIngredients": ["Navet"]
+  }
+}
+```
+
+Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
+
   <!-- 
 ### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
 

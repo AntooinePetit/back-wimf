@@ -135,7 +135,7 @@ exports.forgotPass = async (req, res) => {
  * @async
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @returns Répond avec un JSON des informations de l'utilisateur dont le mot de passe a été réinitialisé
+ * @returns {Promise<void>} - Répond avec un JSON des informations de l'utilisateur dont le mot de passe a été réinitialisé
  * @example
  * // PUT /api/auth/reset-pass
  * {
