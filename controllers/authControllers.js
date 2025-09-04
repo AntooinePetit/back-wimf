@@ -128,3 +128,44 @@ exports.forgotPass = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Permet de réinitialiser le mot de passe
+ *
+ * @async
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns Répond avec un JSON des informations de l'utilisateur dont le mot de passe a été réinitialisé
+ * @example
+ * // PUT /api/auth/reset-pass
+ * {
+ *  "email": "test@example.com",
+ *  "password": "newpassword1234"
+ * }
+ */
+exports.resetPassword = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const userToReset = await User.findById(req.user.id);
+
+    if (!userToReset)
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+
+    if (email != userToReset.email)
+      return res
+        .status(401)
+        .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
+
+    if (password != null) {
+      const salt = await bcrypt.genSalt(parseInt(12));
+      const passwordHash = await bcrypt.hash(password, salt);
+      userToReset.password = passwordHash;
+    }
+
+    const resetUser = await userToReset.save();
+    res.json(resetUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

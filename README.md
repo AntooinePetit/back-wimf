@@ -99,6 +99,17 @@ Retourne un jeton JWT.
 
 Retourne un jeton JWT de réinitialisation de mot de passe.
 
+### Réinitialisation du mot de passe oublié
+
+**PUT** `/api/auth/reset-pass`
+
+```json
+{
+  "email": "test@example.com",
+  "password": "newpassword1234"
+}
+```
+
   <!-- 
 ### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
 
