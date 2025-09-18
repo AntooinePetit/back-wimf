@@ -19,6 +19,7 @@ Cette API REST fournit des points d'accès pour gérer les utilisateurs et leurs
 - Express.js
 - MongoDB
 - JWT
+- Bcrypt
 
 ## Installation
 

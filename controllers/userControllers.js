@@ -16,8 +16,12 @@ exports.getAllUsers = async (req, res) => {
   try {
     const userConnected = await User.findById(req.user.id);
 
+    if (userConnected == null) {
+      res.status(401).json({ message: "Tu n'es pas connecté" });
+    }
+
     if (userConnected.rights === "Member") {
-      return res
+      res
         .status(401)
         .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
     }
