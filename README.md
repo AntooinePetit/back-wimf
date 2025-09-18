@@ -72,7 +72,7 @@ L'API sera disponible sur `http://localhost:3000`.
 }
 ```
 
-Retourne un jeton JWT.
+Retourne un jeton JWT d'authentification.
 
 ### Connexion d'un utilisateur
 
@@ -85,7 +85,7 @@ Retourne un jeton JWT.
 }
 ```
 
-Retourne un jeton JWT.
+Retourne un jeton JWT d'authentification.
 
 ### Mot de passe oublié d'un utilisateur
 
@@ -114,17 +114,23 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 
 **GET** `/api/users`
 
+Header: `Authorization: Bearer <votre_jeton_jwt>`
+
 Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 ### Obtention des informations d'un utilisateur spécifique
 
 **GET** `/api/users/:id_de_l_utilisateur`
 
+Header: `Authorization: Bearer <votre_jeton_jwt>`
+
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur recherché
 
 ### Mise à jour des informations d'un compte spécifique
 
 **PUT** `/api/users/:id_de_l_utilisateur`
+
+Header: `Authorization: Bearer <votre_jeton_jwt>`
 
 ```json
 {
@@ -142,12 +148,7 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
 
-  <!-- 
-### Obtenir tous les utilisateurs (nécessite un jeton d'authentification)
-
-**GET** `/api/users`
-
-Header: `Authorization: Bearer <votre_jeton_jwt>`
+<!-- 
 
 ## Exécution des tests
 
