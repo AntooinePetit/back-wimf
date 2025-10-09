@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
 
     const newUser = await db.one(
-      `INSERT INTO users (username_user, email_user, password_user, created_at, updated_at, "rights_user") VALUES ($1, $2, $3, $4, $5, 'Member') RETURNING *`,
+      `INSERT INTO users (username_user, email_user, password_user, created_at, updated_at, "rights_user") VALUES ($1, $2, $3, $4, $5, 'Member') RETURNING id_user, username_user, email_user`,
       [username, email, passwordHash, date, date]
     );
 
