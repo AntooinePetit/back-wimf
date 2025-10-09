@@ -75,7 +75,7 @@ L'API sera disponible sur `http://localhost:3000`.
 
 Retourne un jeton JWT d'authentification.
 
-<!-- ### Connexion d'un utilisateur
+### Connexion d'un utilisateur
 
 **POST** `/api/v1/auth/login`
 
@@ -88,6 +88,7 @@ Retourne un jeton JWT d'authentification.
 
 Retourne un jeton JWT d'authentification.
 
+<!-- 
 ### Mot de passe oublié d'un utilisateur
 
 **POST** `/api/v1/auth/forgot-pass`

@@ -77,31 +77,31 @@ exports.register = async (req, res) => {
  *  "password": "password1234"
  * }
  */
-// exports.login = async (req, res) => {
-//   const { email, password } = req.body;
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
 
-//   try {
-//     const user = await User.findOne({ email });
+  try {
+    const user = await db.oneOrNone('SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1', email);
 
-//     if (!user)
-//       return res
-//         .status(404)
-//         .json({ message: "Cet email n'est lié à aucun compte" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Cet email n'est lié à aucun compte" });
 
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch)
-//       return res.status(401).json({ message: "Le mot de passe est incorrect" });
+    const isMatch = await bcrypt.compare(password, user.password_user);
+    if (!isMatch)
+      return res.status(401).json({ message: "Le mot de passe est incorrect" });
 
-//     const token = jwt.sign(
-//       { id: user._id, username: user.username },
-//       process.env.JWT,
-//       { expiresIn: "7d" }
-//     );
-//     res.json(token);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    const token = jwt.sign(
+      { id: user.id_user, username: user.username_user },
+      process.env.JWT,
+      { expiresIn: "7d" }
+    );
+    res.json(token);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * Génère un token pour permettre à l'utilisateur de réinitialiser son mot de passe oublié
