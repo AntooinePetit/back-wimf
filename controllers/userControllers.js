@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -14,7 +14,10 @@ const bcrypt = require("bcrypt");
  */
 exports.getAllUsers = async (req, res) => {
   try {
-    const userConnected = await db.oneOrNone('SELECT rights_user FROM users WHERE id_user = $1', req.user.id);
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
 
     if (userConnected == null) {
       res.status(401).json({ message: "Tu n'es pas connecté" });
@@ -26,7 +29,9 @@ exports.getAllUsers = async (req, res) => {
         .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
     }
 
-    const users = await db.many('SELECT username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users');
+    const users = await db.many(
+      "SELECT id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -43,29 +48,35 @@ exports.getAllUsers = async (req, res) => {
  * @example
  * // GET /api/users/:id_de_l_utilisateur
  */
-// exports.getOneUser = async (req, res) => {
-//   try {
-//     const userConnected = await User.findById(req.user.id);
+exports.getOneUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
 
-//     const user = await User.findById(req.params.id);
-//     if (user == null) {
-//       return res.status(404).json({ message: "Utilisateur introuvable" });
-//     }
+    const user = await db.oneOrNone(
+      "SELECT id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users WHERE id_user = $1",
+      req.params.id
+    );
+    if (user == null) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
 
-//     if (
-//       userConnected.rights === "Member" &&
-//       userConnected.email != user.email
-//     ) {
-//       return res
-//         .status(401)
-//         .json({ message: "Tu n'as pas le droit de consulter ce profil" });
-//     }
+    if (
+      userConnected.rights_user === "Member" &&
+      userConnected.email_user != user.email_user
+    ) {
+      return res
+        .status(401)
+        .json({ message: "Tu n'as pas le droit de consulter ce profil" });
+    }
 
-//     res.json(user);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * Met un jour les informations d'un utilisateur donné si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à modifier
