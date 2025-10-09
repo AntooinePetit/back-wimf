@@ -88,7 +88,6 @@ Retourne un jeton JWT d'authentification.
 
 Retourne un jeton JWT d'authentification.
 
-<!-- 
 ### Mot de passe oublié d'un utilisateur
 
 **POST** `/api/v1/auth/forgot-pass`
@@ -112,6 +111,7 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 }
 ```
 
+  <!-- 
 ### Obtention des informations de tous les utilisateurs inscrits
 
 **GET** `/api/v1/users`

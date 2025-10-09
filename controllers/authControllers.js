@@ -116,28 +116,28 @@ exports.login = async (req, res) => {
  *  "email": "test@example.com"
  * }
  */
-// exports.forgotPass = async (req, res) => {
-//   const { email } = req.body;
+exports.forgotPass = async (req, res) => {
+  const { email } = req.body;
 
-//   try {
-//     const user = await User.findOne({ email });
+  try {
+    const user = await db.oneOrNone('SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1', email);
 
-//     if (!user)
-//       return res
-//         .status(404)
-//         .json({ message: "Cet email n'est lié à aucun compte" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Cet email n'est lié à aucun compte" });
 
-//     const token = jwt.sign(
-//       { id: user._id, purpose: "password_reset" },
-//       process.env.JWT,
-//       { expiresIn: "1h" }
-//     );
+    const token = jwt.sign(
+      { id: user.id_user, purpose: "password_reset" },
+      process.env.JWT,
+      { expiresIn: "1h" }
+    );
 
-//     res.json(token);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    res.json(token);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * Permet de réinitialiser le mot de passe
@@ -153,31 +153,38 @@ exports.login = async (req, res) => {
  *  "password": "newpassword1234"
  * }
  */
-// exports.resetPassword = async (req, res) => {
-//   const { email, password } = req.body;
+exports.resetPassword = async (req, res) => {
+  const { email, password } = req.body;
 
-//   try {
-//     const userToReset = await User.findById(req.user.id);
+  try {
+    const userToReset = await db.oneOrNone('SELECT email_user FROM users WHERE id_user = $1', req.user.id);
 
-//     if (!userToReset)
-//       return res.status(404).json({ message: "Utilisateur introuvable" });
+    if (!userToReset)
+      return res.status(404).json({ message: "Utilisateur introuvable" });
 
-//     if (email != userToReset.email)
-//       return res
-//         .status(401)
-//         .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
+    if (email != userToReset.email_user)
+      return res
+        .status(401)
+        .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
 
-//     if (password != null) {
-//       const salt = await bcrypt.genSalt(parseInt(12));
-//       const passwordHash = await bcrypt.hash(password, salt);
-//       userToReset.password = passwordHash;
+    if (password != null) {
+      const salt = await bcrypt.genSalt(parseInt(12));
+      const passwordHash = await bcrypt.hash(password, salt);
 
-//       userToReset.updatedAt = Date.now();
-//     }
+      const updateDate = new Date()
 
-//     const resetUser = await userToReset.save();
-//     res.json(resetUser);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+      const userReseted = await db.one(
+        `UPDATE users 
+                  SET "password_user" = $1,
+                      "updated_at" = $2  
+                  WHERE id_user = $3
+                  RETURNING id_user, username_user, email_user`, 
+              [passwordHash, updateDate, req.user.id])
+  
+      res.json(userReseted);
+    }
+    
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
