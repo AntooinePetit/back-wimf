@@ -64,8 +64,9 @@ exports.getOneUser = async (req, res) => {
     }
 
     if (
-      userConnected.rights_user === "Member" &&
-      userConnected.email_user != user.email_user
+      (userConnected.rights_user === "Member" &&
+        userConnected.email_user != user.email_user) ||
+      !userConnected
     ) {
       return res
         .status(401)
@@ -110,8 +111,9 @@ exports.updateUser = async (req, res) => {
     }
 
     if (
-      userConnected.rights_user === "Member" &&
-      userConnected.email_user != user.email_user
+      (userConnected.rights_user === "Member" &&
+        userConnected.email_user != user.email_user) ||
+      !userConnected
     ) {
       return res
         .status(401)
@@ -150,6 +152,42 @@ exports.updateUser = async (req, res) => {
       ]
     );
     res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Suppression d'un utilisateur
+exports.deleteUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
+
+    const userToDelete = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.params.id
+    );
+
+    // AJOUTER SECURITE DE SUPPRESSION SELON NIVEAU DE COMPTE (EX : MODERATOR PEUT PAS SUPPRIMER ADMINISTRATOR)
+
+    if (
+      (userConnected.rights_user === "Member" &&
+        userConnected.email_user != userToDelete.email_user) ||
+      !userConnected
+    ) {
+      return res
+        .status(401)
+        .json({ message: "Tu n'as pas le droit de supprimer cet utilisateur" });
+    }
+
+    const userDeleted = await db.result('DELETE FROM users WHERE id_user = $1', req.params.id)
+    if (userDeleted.rowCount === 0){
+      res.status(404).json({message: "Utilisateur introuvable"})
+    }
+
+    res.status(200).json({message: "Utilisateur supprimé"})
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
