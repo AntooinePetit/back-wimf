@@ -12,26 +12,26 @@ const bcrypt = require("bcrypt");
  * @example
  * // GET /api/users
  */
-// exports.getAllUsers = async (req, res) => {
-//   try {
-//     const userConnected = await User.findById(req.user.id);
+exports.getAllUsers = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone('SELECT rights_user FROM users WHERE id_user = $1', req.user.id);
 
-//     if (userConnected == null) {
-//       res.status(401).json({ message: "Tu n'es pas connecté" });
-//     }
+    if (userConnected == null) {
+      res.status(401).json({ message: "Tu n'es pas connecté" });
+    }
 
-//     if (userConnected.rights === "Member") {
-//       res
-//         .status(401)
-//         .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
-//     }
+    if (userConnected.rights_user === "Member") {
+      res
+        .status(401)
+        .json({ message: "Tu n'es pas autorisé à réaliser cette action" });
+    }
 
-//     const users = await User.find();
-//     res.json(users);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    const users = await db.many('SELECT username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * Récupère un utilisateur spécifique si l'utilisateur connecté est soit modérator ou administrateur, soit propriétaire du compte utilisateur à consulter
