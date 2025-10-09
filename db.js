@@ -1,8 +1,14 @@
-const mongoose = require('mongoose')
-const db_url = process.env.MONGO_URI
+const pgp = require('pg-promise')()
 
-mongoose.connect(db_url)
-.then(() => console.log('Connexion réussie à MongoDB'))
-.catch(err => console.log(`Erreur de connexion: ${err}`))
+const dbURI = process.env.POSTGRESQL_URI
 
-module.exports = mongoose.connection
+const db = pgp(dbURI)
+
+// variable   → remplacée par cette valeur
+db.one('SELECT $1 AS value', 123)
+   .then(data => console.log(data))
+   .catch(error => console.error(`Erreur : ${error}`))
+
+
+
+module.exports = db

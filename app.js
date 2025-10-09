@@ -1,4 +1,5 @@
 const express = require("express");
+const helmet = require('helmet')
 const app = express();
 require("dotenv").config();
 const port = process.env.PORT;
@@ -8,6 +9,9 @@ require("./db");
 
 // Middleware pour parse le JSON
 app.use(express.json());
+
+// Helmet
+app.use(helmet())
 
 // Intégration des routes
 const recipeRoutes = require("./routes/recipeRoutes");

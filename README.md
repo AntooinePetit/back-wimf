@@ -47,7 +47,7 @@ npm install
 
 ```
 PORT=3000
-MONGO_URI=mongodb+srv://[username]:[password]@cluster0.r5wdwyg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+POSTGRESQL_URI=MonLienDeConnectionNeon
 JWT_SECRET=votre_secret_jwt_super_securise
 ```
 
