@@ -111,7 +111,6 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 }
 ```
 
-  <!-- 
 ### Obtention des informations de tous les utilisateurs inscrits
 
 **GET** `/api/v1/users`
@@ -138,18 +137,14 @@ Header: `Authorization: Bearer <votre_jeton_jwt>`
 {
   "username": "usertest",
   "rights": "Administrator",
-  "accessibility": {
-    "nutritionalValues": false,
-    "calories": false,
-    "allergies": ["Noix", "Saumon"],
-    "diet": ["Végétarien"],
-    "bannedIngredients": ["Navet"]
-  }
+  "nutritionalValues": false,
+  "calories": false
 }
 ```
 
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier -->
 
+  <!-- 
 ## Exécution des tests
 
 ```bash

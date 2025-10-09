@@ -51,7 +51,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getOneUser = async (req, res) => {
   try {
     const userConnected = await db.oneOrNone(
-      "SELECT rights_user FROM users WHERE id_user = $1",
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
       req.user.id
     );
 
@@ -90,60 +90,67 @@ exports.getOneUser = async (req, res) => {
  * {
  *  "username": "usertest",
  *  "rights": "Administrator",
- *  "accessibility": {
- *    "nutritionalValues": false,
- *    "calories": false,
- *    "allergies": ["Noix", "Saumon"],
- *    "diet": ["Végétarien"],
- *    "bannedIngredients": ["Navet"]
- *  }
+ *  "nutritionalValues": false,
+ *  "calories": false
  * }
  */
-// exports.updateUser = async (req, res) => {
-//   try {
-//     const userConnected = await User.findById(req.user.id);
+exports.updateUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
 
-//     const user = await User.findById(req.params.id);
-//     if (user == null) {
-//       return res.status(404).json({ message: "Utilisateur introuvable" });
-//     }
+    const user = await db.oneOrNone(
+      "SELECT id_user, username_user, password_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users WHERE id_user = $1",
+      req.params.id
+    );
+    if (user == null) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
 
-//     if (
-//       userConnected.rights === "Member" &&
-//       userConnected.email != user.email
-//     ) {
-//       return res
-//         .status(401)
-//         .json({ message: "Tu n'as pas le droit de modifier ce profil" });
-//     }
+    if (
+      userConnected.rights_user === "Member" &&
+      userConnected.email_user != user.email_user
+    ) {
+      return res
+        .status(401)
+        .json({ message: "Tu n'as pas le droit de modifier ce profil" });
+    }
 
-//     const { username, email, password, rights, accessibility } = req.body;
+    const { username, email, password, rights, nutritionalValues, calories } =
+      req.body;
 
-//     if (username != null) {
-//       user.username = username;
-//     }
+    let passwordHash;
 
-//     if (email != null) {
-//       user.email = email;
-//     }
+    if (password != null) {
+      const salt = await bcrypt.genSalt(parseInt(12));
+      passwordHash = await bcrypt.hash(password, salt);
+    }
 
-//     if (password != null) {
-//       const salt = await bcrypt.genSalt(parseInt(12));
-//       const passwordHash = await bcrypt.hash(password, salt);
-//       user.password = passwordHash;
-//     }
-
-//     if (rights != null) {
-//       user.rights = rights;
-//     }
-
-//     if (accessibility != null) {
-//       user.accessibility = accessibility;
-//     }
-
-//     const updatedUser = await user.save();
-//     res.json(updatedUser);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+    const updatedUser = await db.one(
+      `UPDATE users 
+                SET 
+                  username_user = $1,
+                  email_user = $2,
+                  password_user = $3,
+                  rights_user = $4,
+                  nutritional_values_user = $5,
+                  calories_user = $6
+                WHERE id_user = $7
+                RETURNING id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user`,
+      [
+        username ?? user.username_user,
+        email ?? user.email_user,
+        password != null ? passwordHash : user.password_user,
+        rights ?? user.rights_user,
+        nutritionalValues ?? user.nutritional_values_user,
+        calories ?? user.calories_user,
+        req.params.id,
+      ]
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
