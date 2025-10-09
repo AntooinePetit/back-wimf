@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -20,20 +20,30 @@ exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    const user = await User.findOne({ $or: [{ email }, { username }] });
+    const user = await db.oneOrNone(
+      "SELECT * FROM users WHERE email_user = $1 OR username_user = $2",
+      [email, username]
+    );
 
     if (user)
       res.status(200).json({
         message: "Tu ne peux pas utiliser ce nom d'utilisateur ou cet email.",
       });
 
-    const newUser = new User({ username, email, password });
-    await newUser.save();
+    const date = new Date();
+
+    const salt = await bcrypt.genSalt(parseInt(12));
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const newUser = await db.one(
+      `INSERT INTO users (username_user, email_user, password_user, created_at, updated_at, "rights_user") VALUES ($1, $2, $3, $4, $5, 'Member') RETURNING *`,
+      [username, email, passwordHash, date, date]
+    );
 
     const token = jwt.sign(
       {
-        id: newUser._id,
-        username: newUser.username,
+        id: newUser.id_user,
+        username: newUser.username_user,
       },
       process.env.JWT,
       { expiresIn: "7d" }
@@ -42,9 +52,9 @@ exports.register = async (req, res) => {
     res.status(201).json({
       message: "Utilisateur connecté avec succès",
       user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
+        id: newUser.id_user,
+        username: newUser.username_user,
+        email: newUser.email_user,
       },
       token,
     });

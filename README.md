@@ -17,7 +17,7 @@ Cette API REST fournit des points d'accès pour gérer les utilisateurs et leurs
 
 - Node.js
 - Express.js
-- MongoDB
+- Neon
 - JWT
 - Bcrypt
 
@@ -26,7 +26,7 @@ Cette API REST fournit des points d'accès pour gérer les utilisateurs et leurs
 ### Prérequis
 
 - Node.js (v14 ou supérieur)
-- MongoDB (local ou Atlas)
+- [Neon](https://neon.com/)
 
 ### Étapes
 
@@ -63,7 +63,7 @@ L'API sera disponible sur `http://localhost:3000`.
 
 ### Enregistrement d'un utilisateur
 
-**POST** `/api/auth/register`
+**POST** `/api/v1/auth/register`
 
 ```json
 {
@@ -75,9 +75,9 @@ L'API sera disponible sur `http://localhost:3000`.
 
 Retourne un jeton JWT d'authentification.
 
-### Connexion d'un utilisateur
+<!-- ### Connexion d'un utilisateur
 
-**POST** `/api/auth/login`
+**POST** `/api/v1/auth/login`
 
 ```json
 {
@@ -90,7 +90,7 @@ Retourne un jeton JWT d'authentification.
 
 ### Mot de passe oublié d'un utilisateur
 
-**POST** `/api/auth/forgot-pass`
+**POST** `/api/v1/auth/forgot-pass`
 
 ```json
 {
@@ -102,7 +102,7 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 
 ### Réinitialisation du mot de passe oublié
 
-**PUT** `/api/auth/reset-pass`
+**PUT** `/api/v1/auth/reset-pass`
 
 ```json
 {
@@ -113,7 +113,7 @@ Retourne un jeton JWT de réinitialisation de mot de passe.
 
 ### Obtention des informations de tous les utilisateurs inscrits
 
-**GET** `/api/users`
+**GET** `/api/v1/users`
 
 Header: `Authorization: Bearer <votre_jeton_jwt>`
 
@@ -121,7 +121,7 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 ### Obtention des informations d'un utilisateur spécifique
 
-**GET** `/api/users/:id_de_l_utilisateur`
+**GET** `/api/v1/users/:id_de_l_utilisateur`
 
 Header: `Authorization: Bearer <votre_jeton_jwt>`
 
@@ -129,7 +129,7 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 ### Mise à jour des informations d'un compte spécifique
 
-**PUT** `/api/users/:id_de_l_utilisateur`
+**PUT** `/api/v1/users/:id_de_l_utilisateur`
 
 Header: `Authorization: Bearer <votre_jeton_jwt>`
 
@@ -147,7 +147,7 @@ Header: `Authorization: Bearer <votre_jeton_jwt>`
 }
 ```
 
-Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
+Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier -->
 
 ## Exécution des tests
 
