@@ -452,6 +452,6 @@ describe("Auth Controllers", () => {
       expect(User.findById).toHaveBeenCalledWith("1");
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-    });
+    }); // /it
   }); // /describe resetPassword
-});
+});// /describe Auth Controller

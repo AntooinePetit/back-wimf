@@ -149,13 +149,13 @@ Header: `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
 
-<!-- 
-
 ## Exécution des tests
 
 ```bash
 npm test
 ```
+
+<!-- 
 
 ## Contribution
 
