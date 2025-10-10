@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Répond avec un JSON contenant les informations de l'utilisateur et un token de connexion
  * @example
- * // POST /api/auth/register
+ * // POST /api/v1/auth/register
  * {
  *  "username": "testuser",
  *  "email": "test@example.com",
@@ -71,7 +71,7 @@ exports.register = async (req, res) => {
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Répond avec un token de connexion
  * @example
- * // POST /api/auth/login
+ * // POST /api/v1/auth/login
  * {
  *  "email": "test@example.com",
  *  "password": "password1234"
@@ -111,7 +111,7 @@ exports.login = async (req, res) => {
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Répond avec un token de réinitialisation de mot de passe
  * @example
- * // POST /api/auth/forgot-pass
+ * // POST /api/v1/auth/forgot-pass
  * {
  *  "email": "test@example.com"
  * }
@@ -147,7 +147,7 @@ exports.forgotPass = async (req, res) => {
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Répond avec un JSON des informations de l'utilisateur dont le mot de passe a été réinitialisé
  * @example
- * // PUT /api/auth/reset-pass
+ * // PUT /api/v1/auth/reset-pass
  * {
  *  "email": "test@example.com",
  *  "password": "newpassword1234"

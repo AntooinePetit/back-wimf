@@ -305,6 +305,193 @@
     
 
     
+    <h4 class="name" id="deleteUser"><span class="type-signature">(async) </span>deleteUser<span class="signature">(req, res)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Supprime un utilisateur de la base de donnée si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à supprimer. Si l'utilisateur à supprimer a des autorisations plus importantes ou égales que l'utilisateur connecté, une erreur est renvoyée.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Objet de requête Express</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Objet de réponse Express</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line185">line 185</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Retourne un message de validation de suppression
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// DELETE /api/v1/users/:id_de_l_utilisateur// Nécessite un token d'authentification Bearer</code></pre>
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="forgotPass"><span class="type-signature">(async) </span>forgotPass<span class="signature">(req, res)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
@@ -429,7 +616,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line109">line 109</a>
+        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -482,7 +669,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// POST /api/auth/forgot-pass{ "email": "test@example.com"}</code></pre>
+    <pre class="prettyprint"><code>// POST /api/v1/auth/forgot-pass{ "email": "test@example.com"}</code></pre>
 
 
 
@@ -500,7 +687,7 @@
 
 
 <div class="description">
-    Récupère tous les utilisateurs dans la base de données si l'utilisateur connecté est un modérateur ou administrateur
+    Récupère tous les utilisateurs dans la base de données si l'utilisateur connecté est un modérateur ou administrateur.
 </div>
 
 
@@ -616,7 +803,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line15">line 15</a>
+        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -669,7 +856,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// GET /api/users</code></pre>
+    <pre class="prettyprint"><code>// GET /api/v1/users// Nécessite un token d'authentification Bearer</code></pre>
 
 
 
@@ -687,7 +874,7 @@
 
 
 <div class="description">
-    Récupère un utilisateur spécifique si l'utilisateur connecté est soit modérator ou administrateur, soit propriétaire du compte utilisateur à consulter
+    Récupère un utilisateur spécifique si l'utilisateur connecté est soit modérator ou administrateur, soit propriétaire du compte utilisateur à consulter. Si l'utilisateur à consulter a des autorisations plus importantes ou égales que l'utilisateur connecté, une erreur est renvoyée.
 </div>
 
 
@@ -803,7 +990,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line42">line 42</a>
+        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -856,7 +1043,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// GET /api/users/:id_de_l_utilisateur</code></pre>
+    <pre class="prettyprint"><code>// GET /api/v1/users/:id_de_l_utilisateur// Nécessite un token d'authentification Bearer</code></pre>
 
 
 
@@ -990,7 +1177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line70">line 70</a>
+        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1043,7 +1230,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// POST /api/auth/login{ "email": "test@example.com", "password": "password1234"}</code></pre>
+    <pre class="prettyprint"><code>// POST /api/v1/auth/login{ "email": "test@example.com", "password": "password1234"}</code></pre>
 
 
 
@@ -1230,7 +1417,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// POST /api/auth/register{ "username": "testuser", "email": "test@example.com", "password": "password1234"}</code></pre>
+    <pre class="prettyprint"><code>// POST /api/v1/auth/register{ "username": "testuser", "email": "test@example.com", "password": "password1234"}</code></pre>
 
 
 
@@ -1565,7 +1752,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line146">line 146</a>
+        <a href="controllers_authControllers.js.html">controllers/authControllers.js</a>, <a href="controllers_authControllers.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -1618,7 +1805,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// PUT /api/auth/reset-pass{ "email": "test@example.com", "password": "newpassword1234"}</code></pre>
+    <pre class="prettyprint"><code>// PUT /api/v1/auth/reset-pass{ "email": "test@example.com", "password": "newpassword1234"}</code></pre>
 
 
 
@@ -1628,7 +1815,7 @@
     
 
     
-    <h4 class="name" id="updateUser"><span class="type-signature">(async) </span>updateUser<span class="signature">(req, res)</span><span class="type-signature"> &rarr; {Promis.&lt;void>}</span></h4>
+    <h4 class="name" id="updateUser"><span class="type-signature">(async) </span>updateUser<span class="signature">(req, res)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
     
 
     
@@ -1636,7 +1823,7 @@
 
 
 <div class="description">
-    Met un jour les informations d'un utilisateur donné si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à modifier
+    Met à jour les informations d'un utilisateur donné si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à modifier. Si l'utilisateur à mettre à jour a des autorisations plus importantes ou égales que l'utilisateur connecté, une erreur est renvoyée.
 </div>
 
 
@@ -1752,7 +1939,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line87">line 87</a>
+        <a href="controllers_userControllers.js.html">controllers/userControllers.js</a>, <a href="controllers_userControllers.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -1792,7 +1979,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promis.&lt;void></span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </dd>
@@ -1805,7 +1992,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// PUT /api/users/:id_de_l_utilisateur{ "username": "usertest", "rights": "Administrator", "accessibility": {   "nutritionalValues": false,   "calories": false,   "allergies": ["Noix", "Saumon"],   "diet": ["Végétarien"],   "bannedIngredients": ["Navet"] }}</code></pre>
+    <pre class="prettyprint"><code>// PUT /api/v1/users/:id_de_l_utilisateur{ "username": "usertest", "rights": "Administrator", "nutritionalValues": false, "calories": false}// Nécessite un token d'authentification Bearer</code></pre>
 
 
 
@@ -1825,13 +2012,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Sep 04 2025 16:52:17 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Oct 10 2025 11:32:13 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>
