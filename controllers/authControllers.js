@@ -81,7 +81,10 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await db.oneOrNone('SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1', email);
+    const user = await db.oneOrNone(
+      "SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1",
+      email
+    );
 
     if (!user)
       return res
@@ -120,7 +123,10 @@ exports.forgotPass = async (req, res) => {
   const { email } = req.body;
 
   try {
-    const user = await db.oneOrNone('SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1', email);
+    const user = await db.oneOrNone(
+      "SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1",
+      email
+    );
 
     if (!user)
       return res
@@ -148,6 +154,7 @@ exports.forgotPass = async (req, res) => {
  * @returns {Promise<void>} - Répond avec un JSON des informations de l'utilisateur dont le mot de passe a été réinitialisé
  * @example
  * // PUT /api/v1/auth/reset-pass
+ * // Header: Authorization: Bearer <votre_jeton_jwt>
  * {
  *  "email": "test@example.com",
  *  "password": "newpassword1234"
@@ -157,7 +164,10 @@ exports.resetPassword = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const userToReset = await db.oneOrNone('SELECT email_user FROM users WHERE id_user = $1', req.user.id);
+    const userToReset = await db.oneOrNone(
+      "SELECT email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
 
     if (!userToReset)
       return res.status(404).json({ message: "Utilisateur introuvable" });
@@ -171,19 +181,19 @@ exports.resetPassword = async (req, res) => {
       const salt = await bcrypt.genSalt(parseInt(12));
       const passwordHash = await bcrypt.hash(password, salt);
 
-      const updateDate = new Date()
+      const updateDate = new Date();
 
       const userReseted = await db.one(
         `UPDATE users 
                   SET "password_user" = $1,
                       "updated_at" = $2  
                   WHERE id_user = $3
-                  RETURNING id_user, username_user, email_user`, 
-              [passwordHash, updateDate, req.user.id])
-  
+                  RETURNING id_user, username_user, email_user`,
+        [passwordHash, updateDate, req.user.id]
+      );
+
       res.json(userReseted);
     }
-    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

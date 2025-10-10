@@ -142,8 +142,16 @@ Header: `Authorization: Bearer <votre_jeton_jwt>`
 }
 ```
 
-Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier -->
+Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
 
+
+### Suppresion d'un compte spécifique
+
+**DELETE** `/api/v1/users/:id_de_l_utilisateur`
+
+Header: `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à supprimer
   <!-- 
 ## Exécution des tests
 

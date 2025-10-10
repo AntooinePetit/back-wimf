@@ -9,9 +9,10 @@ const {
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-jest.mock("../models/userModel.js");
 jest.mock("jsonwebtoken");
 jest.mock("bcrypt");
+
+// TODO: Ré-écrire les tests pour correspondre aux nouveaux controllers en psql
 
 describe("Auth Controllers", () => {
   // describe("Register", () => {

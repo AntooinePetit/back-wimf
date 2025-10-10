@@ -11,8 +11,7 @@ const bcrypt = require("bcrypt");
  * @returns {Promise<void>} - Retourne un JSON contenant tous les utilisateurs existant et leurs informations
  * @example
  * // GET /api/v1/users
- * 
- * // Nécessite un token d'authentification Bearer
+ * // Header: Authorization: Bearer <votre_jeton_jwt>
  */
 exports.getAllUsers = async (req, res) => {
   try {
@@ -49,8 +48,7 @@ exports.getAllUsers = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant les informations de l'utilisateur recherché
  * @example
  * // GET /api/v1/users/:id_de_l_utilisateur
- * 
- * // Nécessite un token d'authentification Bearer
+ * // Header: Authorization: Bearer <votre_jeton_jwt>
  */
 exports.getOneUser = async (req, res) => {
   try {
@@ -95,15 +93,14 @@ exports.getOneUser = async (req, res) => {
  * @returns {Promise<void>} - Retourne les informations du compte modifié
  * @example
  * // PUT /api/v1/users/:id_de_l_utilisateur
- * 
+ * // Header: Authorization: Bearer <votre_jeton_jwt>
  * {
  *  "username": "usertest",
  *  "rights": "Administrator",
  *  "nutritionalValues": false,
  *  "calories": false
  * }
- * 
- * // Nécessite un token d'authentification Bearer
+ *
  */
 exports.updateUser = async (req, res) => {
   try {
@@ -178,8 +175,7 @@ exports.updateUser = async (req, res) => {
  * @returns {Promise<void>} - Retourne un message de validation de suppression
  * @example
  * // DELETE /api/v1/users/:id_de_l_utilisateur
- * 
- * // Nécessite un token d'authentification Bearer
+ * // Header: Authorization: Bearer <votre_jeton_jwt>
  */
 // Suppression d'un utilisateur
 exports.deleteUser = async (req, res) => {
