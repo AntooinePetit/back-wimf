@@ -3,7 +3,7 @@
 ![Version](https://img.shields.io/badge/Version-1.0.0-blue.svg)
 ![Statut CI](https://img.shields.io/badge/CI-Passing-brightgreen.svg)
 
-Cette API REST fournit des points d'accès pour gérer les utilisateurs et leurs données. Elle est construite avec JavaScript.
+Cette API REST fournit des points d'accès pour gérer les données de recettes et d'utilisateurs. Elle est construite avec JavaScript.
 
 ## Fonctionnalités
 
@@ -61,6 +61,8 @@ L'API sera disponible sur `http://localhost:3000`.
 
 ## Utilisation de l'API
 
+Exemples d'utilisation de l'API. Pour plus d'informations, consultez la [documentation ici](./DOCS.md)
+
 ### Enregistrement d'un utilisateur
 
 **POST** `/api/v1/auth/register`
@@ -88,29 +90,6 @@ Retourne un jeton JWT d'authentification.
 
 Retourne un jeton JWT d'authentification.
 
-### Mot de passe oublié d'un utilisateur
-
-**POST** `/api/v1/auth/forgot-pass`
-
-```json
-{
-  "email": "test@example.com"
-}
-```
-
-Retourne un jeton JWT de réinitialisation de mot de passe.
-
-### Réinitialisation du mot de passe oublié
-
-**PUT** `/api/v1/auth/reset-pass`
-
-```json
-{
-  "email": "test@example.com",
-  "password": "newpassword1234"
-}
-```
-
 ### Obtention des informations de tous les utilisateurs inscrits
 
 **GET** `/api/v1/users`
@@ -127,31 +106,14 @@ Header: `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur recherché
 
-### Mise à jour des informations d'un compte spécifique
+### Récupérer toutes les recettes
 
-**PUT** `/api/v1/users/:id_de_l_utilisateur`
+**GET** `/api/v1/recipes/`
 
-Header: `Authorization: Bearer <votre_jeton_jwt>`
+### Récupérer une recette spécifique
 
-```json
-{
-  "username": "usertest",
-  "rights": "Administrator",
-  "nutritionalValues": false,
-  "calories": false
-}
-```
+**GET** `/api/v1/recipes/:id`
 
-Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à modifier
-
-
-### Suppresion d'un compte spécifique
-
-**DELETE** `/api/v1/users/:id_de_l_utilisateur`
-
-Header: `Authorization: Bearer <votre_jeton_jwt>`
-
-Nécessite un token d'authentification d'un compte modérateur ou administrateur OU du compte utilisateur à supprimer
   <!-- 
 ## Exécution des tests
 
