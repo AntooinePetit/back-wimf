@@ -32,7 +32,7 @@ exports.getAllRecipes = async (req, res) => {
  */
 exports.getOneRecipe = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
     const recipe = await db.oneOrNone(
       "SELECT * FROM recipes WHERE id_recipe = $1",
@@ -162,7 +162,9 @@ exports.addRecipe = async (req, res) => {
       parseInt(preparationTime) + parseInt(cookingTime) + parseInt(restingTime);
 
     const recipeCreated = await db.one(
-      "INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      `INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      RETURNING *`,
       [
         name,
         preparationTime,
@@ -178,6 +180,89 @@ exports.addRecipe = async (req, res) => {
     res
       .status(201)
       .json({ message: "Recette ajoutée avec succès", recipeCreated });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Met à jour les informations d'une recette donnée
+ * 
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
+ * @example 
+ * // PUT /api/v1/recipes/1
+ * {
+ *  "name": "Recette de test renommée"
+ * }
+ */
+exports.updateRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const {
+      name,
+      preparationTime,
+      cookingTime,
+      restingTime,
+      instructions,
+      nutritionalValues,
+      servings,
+    } = req.body;
+
+    const existingRecipeName = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE name_recipe = $1 AND id_recipe != $2",
+      [name, id]
+    );
+
+    if (existingRecipeName) {
+      return res
+        .status(409)
+        .json({ message: "Ce nom de recette n'est pas disponible" });
+    }
+
+    const totalTime =
+      preparationTime && cookingTime && restingTime
+        ? parseInt(preparationTime) +
+          parseInt(cookingTime) +
+          parseInt(restingTime)
+        : existingRecipe.totalTime;
+
+    const recipeUpdated = await db.one(
+      `UPDATE recipes
+        SET
+          name_recipe = $1,
+          preparation_time = $2,
+          cooking_time = $3,
+          instructions = $4,
+          total_time = $5,
+          "nutritional_values_recipe" = $6,
+          servings_recipe = $7
+        WHERE id_recipe = $8
+        RETURNING *`,
+      [
+        name ?? existingRecipe.name_recipe,
+        preparationTime ?? existingRecipe.preparation_time,
+        cookingTime ?? existingRecipe.cooking_time,
+        instructions ?? existingRecipe.instructions,
+        totalTime,
+        nutritionalValues ?? existingRecipe.nutritional_values_recipe,
+        servings ?? existingRecipe.servings_recipe,
+        id
+      ]
+    );
+
+    res.status(200).json({ message: "Recette mise à jour", recipeUpdated });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
