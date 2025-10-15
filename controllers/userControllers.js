@@ -33,7 +33,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await db.many(
       "SELECT id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users"
     );
-    res.json(users);
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -78,7 +78,7 @@ exports.getOneUser = async (req, res) => {
         .json({ message: "Tu n'as pas le droit de consulter ce profil" });
     }
 
-    res.json(user);
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -161,7 +161,7 @@ exports.updateUser = async (req, res) => {
         req.params.id,
       ]
     );
-    res.json(updatedUser);
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -211,7 +211,7 @@ exports.deleteUser = async (req, res) => {
       res.status(404).json({ message: "Utilisateur introuvable" });
     }
 
-    res.status(200).json({ message: "Utilisateur supprimé" });
+    res.status(204).json({ message: "Utilisateur supprimé" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

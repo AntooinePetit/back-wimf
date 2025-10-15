@@ -18,3 +18,22 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.getOneRecipe = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const recipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!recipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    res.status(200).json(recipe);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
