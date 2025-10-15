@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     );
 
     if (user)
-      res.status(200).json({
+      res.status(409).json({
         message: "Tu ne peux pas utiliser ce nom d'utilisateur ou cet email.",
       });
 

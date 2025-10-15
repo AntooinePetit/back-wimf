@@ -6,7 +6,7 @@ const recipeControllers = require("../controllers/recipeControllers");
 
 router.get("/", recipeControllers.getAllRecipes); // Récupérer toutes les recettes
 router.get("/:id", recipeControllers.getOneRecipe); // Récupérer une seule recette
-// router.post("/"); // Ajouter une recette (avec middleware authentification pour vérifier que bien un admin)
+router.post("/", recipeControllers.addRecipe); // Ajouter une recette (avec middleware authentification pour vérifier que bien un admin)
 // router.put("/:id"); // Modifier une recette (avec middleware authentification pour vérifier que bien un admin)
 // router.delete("/:id"); // Supprimer une recette (avec middleware authentification pour vérifier que bien un admin)
 
