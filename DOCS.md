@@ -266,3 +266,9 @@ Nécessite un token d'authentification d'un compte administrateur
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
+
+## Tags
+
+### Obtenir les informations de tous les tags
+
+**GET** `/api/v1/tags`

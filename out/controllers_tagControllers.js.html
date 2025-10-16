@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: controllers/tagControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,38 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: controllers/tagControllers.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const db = require("../db");
 
+/**
+ * Récupère tous les tags disponibles dans la base de données
+ * 
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise&lt;void>} - Retourne un JSON contenant les informations de tous les tags de la base de données.
+ * @example
+ * // GET /api/v1/tags
+ */
+exports.getAllTags = async (req, res) => {
+  try {
+    const tags = await db.manyOrNone("SELECT * FROM tags");
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    return res.status(200).json(tags);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
