@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 // Intégrer le middleware d'authentification
+const resetPassMiddleware = require('../middlewares/resetPassMiddleware')
 // Intégrer le controller des utilisateurs
 const authControllers = require("../controllers/authControllers");
-const resetPassMiddleware = require('../middlewares/resetPassMiddleware')
 
 // Authentification
 router.post("/register", authControllers.register); // inscription
