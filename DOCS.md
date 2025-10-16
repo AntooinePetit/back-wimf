@@ -206,3 +206,9 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Supprimer une recette
+
+**DELETE** `/api/v1/recipes/:id`
+
+Nécessite un token d'authentification d'un compte administrateur
