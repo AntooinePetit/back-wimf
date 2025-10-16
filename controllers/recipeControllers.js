@@ -315,17 +315,20 @@ exports.searchRecipes = async (req, res) => {
   try {
     const { search } = req.params;
 
-    const splitSearch = search.split("+");
+    const splitSearch = search
+      .split("+")
+      .map((word) => word.trim())
+      .filter(Boolean);
 
-    let query = "";
+    const conditions = splitSearch
+      .map((_, idx) => `name_recipe ILIKE $${idx + 1}`)
+      .join(" AND ");
 
-    splitSearch.forEach((word) => {
-      query += `${word} `;
-    });
+    const values = splitSearch.map((word) => `%${word}%`);
 
-    const searchResult = await db.many(
-      `SELECT * FROM recipes WHERE LOWER(name_recipe) LIKE $1`,
-      [`%${query.trim().toLowerCase()}%`]
+    const searchResult = await db.any(
+      `SELECT * FROM recipes WHERE ${conditions}`,
+      values
     );
 
     res.status(200).json(searchResult);

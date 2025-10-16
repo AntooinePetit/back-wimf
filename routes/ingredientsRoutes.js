@@ -6,7 +6,7 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 const ingredientsControllers = require("../controllers/ingredientsControllers");
 
 router.get('/', ingredientsControllers.getAllIngredients) // Récupérer tous les ingrédients
-// router.get('/search/:search') // Rechercher un/des ingrédient(s) par le nom
+router.get('/search/:search', ingredientsControllers.searchIngredients) // Rechercher un/des ingrédient(s) par le nom
 // Utilisation de middleware d'authentification admin en dessous
 // router.post('/', adminMiddleware) // Ajouter un ingrédient à la liste
 // router.put('/:id', adminMiddleware) // Mettre à jour un ingrédient
