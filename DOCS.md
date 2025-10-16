@@ -97,15 +97,15 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 ## Recettes
 
-### Récupérer toutes les recettes
+### Obtention des informations de toutes les recettes
 
 **GET** `/api/v1/recipes/`
 
-### Récupérer une recette spécifique
+### Obtention des informations d'une recette spécifique
 
 **GET** `/api/v1/recipes/:id`
 
-### Rechercher des recettes par le nom
+### Rechercher des recettes par leur nom
 
 **GET** `/api/v1/recipes/search/:search`
 
@@ -214,5 +214,32 @@ Nécessite un token d'authentification d'un compte administrateur
 ### Supprimer une recette
 
 **DELETE** `/api/v1/recipes/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+
+## Ingrédients
+
+### Récupérer les informations de tous les ingrédients
+
+**GET** `/api/v1/ingredients`
+
+### Rechercher des ingrédients par leur nom
+
+**GET** `/api/v1/ingredients/search/:search`
+
+### Ajouter un ingrédient à la base de donnée
+
+**POST** `/api/v1/ingredients`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Ingrédient test",
+  "category": 21
+}
+```
 
 Nécessite un token d'authentification d'un compte administrateur

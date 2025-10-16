@@ -62,3 +62,51 @@ exports.searchIngredients = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Permet d'ajouter un ingrédient à la base de donnée.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les informations de l'ingrédient ajouté.
+ * @example
+ * // POST /api/v1/ingredients/
+ * {
+ *   "name": "Ingrédient test",
+ *   "category": 21
+ * }
+ */
+exports.addIngredient = async (req, res) => {
+  try {
+    const { name, category } = req.body;
+
+    if (!name || !category) {
+      return res
+        .status(400)
+        .json({ message: "Le nom et la catégorie doivent être renseignés" });
+    }
+
+    const existingIngredient = await db.oneOrNone(
+      "SELECT * FROM ingredients WHERE name_ingredient = $1",
+      name
+    );
+
+    if (existingIngredient) {
+      return res.status(409).json({ message: "Cet ingrédient existe déjà" });
+    }
+
+    const addedIngredient = await db.one(
+      `INSERT INTO 
+      ingredients(name_ingredient, fk_id_ingredient_category)
+      VALUES ($1, $2)
+      RETURNING *`,
+      [name, category]
+    );
+
+    return res
+      .status(201)
+      .json({ message: "Ingrédient ajouté", addedIngredient });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
