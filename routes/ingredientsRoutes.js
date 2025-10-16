@@ -9,7 +9,7 @@ router.get("/", ingredientsControllers.getAllIngredients); // Récupérer tous l
 router.get("/search/:search", ingredientsControllers.searchIngredients); // Rechercher un/des ingrédient(s) par le nom
 // Utilisation de middleware d'authentification admin en dessous
 router.post("/", adminMiddleware, ingredientsControllers.addIngredient); // Ajouter un ingrédient à la liste
-// router.put('/:id', adminMiddleware) // Mettre à jour un ingrédient
+router.put("/:id", adminMiddleware, ingredientsControllers.updateIngredient); // Mettre à jour un ingrédient
 // router.delete('/:id', adminMiddleware) // Supprimer un ingrédient
 
 module.exports = router;

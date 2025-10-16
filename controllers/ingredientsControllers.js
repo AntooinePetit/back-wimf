@@ -71,6 +71,7 @@ exports.searchIngredients = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant les informations de l'ingrédient ajouté.
  * @example
  * // POST /api/v1/ingredients/
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *   "name": "Ingrédient test",
  *   "category": 21
@@ -106,6 +107,64 @@ exports.addIngredient = async (req, res) => {
     return res
       .status(201)
       .json({ message: "Ingrédient ajouté", addedIngredient });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Permet de mettre à jour un ingrédient de la base de donnée.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les informations de l'ingrédient mis à jour.
+ * @example
+ * // PUT /api/v1/ingredients/:id
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * {
+ *   "name": "Ingrédient test renommé",
+ *   "category": 14
+ * }
+ */
+exports.updateIngredient = async (req, res) => {
+  try {
+    const { name, category } = req.body;
+    const { id } = req.params;
+
+    const ingredientToUpdate = await db.oneOrNone(
+      "SELECT * FROM ingredients WHERE id_ingredient = $1",
+      id
+    );
+
+    if (!ingredientToUpdate) {
+      return res.status(404).json({ message: "Ingrédient introuvable" });
+    }
+
+    const existingIngredient = await db.oneOrNone(
+      "SELECT * FROM ingredients WHERE name_ingredient ILIKE $1 AND id_ingredient != $2",
+      [name, id]
+    );
+
+    if (existingIngredient) {
+      return res.status(409).json({
+        message:
+          "Ce nom d'ingrédient est déjà enregistré dans la base de donnée",
+      });
+    }
+
+    const updatedIngredient = await db.one(
+      `UPDATE ingredients
+      SET 
+      name_ingredient = $1,
+      fk_id_ingredient_category = $2
+      WHERE id_ingredient = $3
+      RETURNING *`,
+      [name, category, id]
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Ingrédient mis à jour", updatedIngredient });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

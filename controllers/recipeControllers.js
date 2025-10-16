@@ -57,6 +57,7 @@ exports.getOneRecipe = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de création ainsi que les informations de la recette.
  * @example
  * // POST /api/v1/recipes/
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *  "name": "Recette de test",
  *  "preparationTime": 20,
@@ -148,7 +149,7 @@ exports.addRecipe = async (req, res) => {
     } = req.body;
 
     const existingRecipe = await db.oneOrNone(
-      "SELECT * FROM recipes WHERE name_recipe = $1",
+      "SELECT * FROM recipes WHERE name_recipe ILIKE $1",
       name
     );
 
@@ -193,6 +194,7 @@ exports.addRecipe = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
  * @example
  * // PUT /api/v1/recipes/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *  "name": "Recette de test renommée"
  * }
@@ -221,7 +223,7 @@ exports.updateRecipe = async (req, res) => {
     } = req.body;
 
     const existingRecipeName = await db.oneOrNone(
-      "SELECT * FROM recipes WHERE name_recipe = $1 AND id_recipe != $2",
+      "SELECT * FROM recipes WHERE name_recipe ILIKE $1 AND id_recipe != $2",
       [name, id]
     );
 
@@ -282,6 +284,7 @@ exports.updateRecipe = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
  * @example
  * // /api/v1/recipes/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  */
 exports.deleteRecipe = async (req, res) => {
   try {

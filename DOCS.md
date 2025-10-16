@@ -243,3 +243,16 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Mettre à jour un ingrédient de la base de données
+
+**PUT** `/api/v1/ingredients/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Ingrédient test renommé",
+  "category": 14
+}
+```
