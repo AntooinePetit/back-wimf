@@ -301,3 +301,23 @@ exports.deleteRecipe = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.searchRecipes = async (req, res) => {
+  try {
+    const { search } = req.params;
+
+    const splitSearch = search.split('+')
+
+    let query = ""
+
+    splitSearch.forEach(word => {
+      query += `${word} `
+    });
+
+    const searchResult = await db.many(`SELECT * FROM recipes WHERE LOWER(name_recipe) LIKE $1`, [`%${query.trim().toLowerCase()}%`])
+
+    res.status(200).json(searchResult)
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
