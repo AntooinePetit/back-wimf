@@ -10,8 +10,7 @@ const db = require("../db");
  * @param {Function} next - Fonction qui renvoie au middleware suivant
  * @returns {void}
  */
-const recipeMiddleware = async (req, res, next) => {
-  
+const adminMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -46,4 +45,4 @@ const recipeMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = recipeMiddleware;
+module.exports = adminMiddleware;
