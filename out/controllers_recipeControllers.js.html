@@ -259,13 +259,16 @@ exports.updateRecipe = async (req, res) => {
         .json({ message: "Ce nom de recette n'est pas disponible" });
     }
 
-    // TODO: Modifier pour mettre à jour le temps total avec le changement d'une seule des données
     const totalTime =
-      preparationTime &amp;&amp; cookingTime &amp;&amp; restingTime
-        ? parseInt(preparationTime) +
-          parseInt(cookingTime) +
-          parseInt(restingTime)
-        : existingRecipe.totalTime;
+      (preparationTime
+        ? parseInt(preparationTime)
+        : parseInt(existingRecipe.preparation_time)) +
+      (cookingTime
+        ? parseInt(cookingTime)
+        : parseInt(existingRecipe.cooking_time)) +
+      (restingTime
+        ? parseInt(restingTime)
+        : parseInt(existingRecipe.resting_time));
 
     const recipeUpdated = await db.one(
       `UPDATE recipes
@@ -273,16 +276,18 @@ exports.updateRecipe = async (req, res) => {
           name_recipe = $1,
           preparation_time = $2,
           cooking_time = $3,
-          instructions = $4,
-          total_time = $5,
-          "nutritional_values_recipe" = $6,
-          servings_recipe = $7
-        WHERE id_recipe = $8
+          resting_time = $4,
+          instructions = $5,
+          total_time = $6,
+          "nutritional_values_recipe" = $7,
+          servings_recipe = $8
+        WHERE id_recipe = $9
         RETURNING *`,
       [
         name ?? existingRecipe.name_recipe,
         preparationTime ?? existingRecipe.preparation_time,
         cookingTime ?? existingRecipe.cooking_time,
+        restingTime ?? existingRecipe.resting_time,
         instructions ?? existingRecipe.instructions,
         totalTime,
         nutritionalValues ?? existingRecipe.nutritional_values_recipe,
@@ -299,7 +304,7 @@ exports.updateRecipe = async (req, res) => {
 
 /**
  * Supprime une recette de la base de données
- * 
+ *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise&lt;void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
@@ -310,13 +315,48 @@ exports.deleteRecipe = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedRecipe = await db.result(`DELETE FROM recipes WHERE id_recipe = $1`, id)
+    const deletedRecipe = await db.result(
+      `DELETE FROM recipes WHERE id_recipe = $1`,
+      id
+    );
 
-    if(deletedRecipe.rowCount === 0){
-      return res.status(404).json({message: "Recette introuvable"})
+    if (deletedRecipe.rowCount === 0) {
+      return res.status(404).json({ message: "Recette introuvable" });
     }
 
-    res.status(204).json({message: "Recette supprimée"})
+    res.status(204).json({ message: "Recette supprimée" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Permet de rechercher des recettes par leur nom.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise&lt;void>} - Renvoie les informations des recettes correspondant à la recherche
+ * @example
+ * // GET /api/v1/recipes/search/tartinade-de-saumon
+ */
+exports.searchRecipes = async (req, res) => {
+  try {
+    const { search } = req.params;
+
+    const splitSearch = search.split("+");
+
+    let query = "";
+
+    splitSearch.forEach((word) => {
+      query += `${word} `;
+    });
+
+    const searchResult = await db.many(
+      `SELECT * FROM recipes WHERE LOWER(name_recipe) LIKE $1`,
+      [`%${query.trim().toLowerCase()}%`]
+    );
+
+    res.status(200).json(searchResult);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -331,13 +371,13 @@ exports.deleteRecipe = async (req, res) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Oct 16 2025 09:38:01 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Oct 16 2025 10:57:05 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

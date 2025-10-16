@@ -105,6 +105,10 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 **GET** `/api/v1/recipes/:id`
 
+### Rechercher des recettes par le nom
+
+**GET** `/api/v1/recipes/search/:search`
+
 ### Ajouter une recette à la base de données
 
 **POST** `/api/v1/recipes/`

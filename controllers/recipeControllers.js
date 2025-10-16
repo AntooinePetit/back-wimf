@@ -302,21 +302,33 @@ exports.deleteRecipe = async (req, res) => {
   }
 };
 
+/**
+ * Permet de rechercher des recettes par leur nom.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Renvoie les informations des recettes correspondant à la recherche
+ * @example
+ * // GET /api/v1/recipes/search/tartinade-de-saumon
+ */
 exports.searchRecipes = async (req, res) => {
   try {
     const { search } = req.params;
 
-    const splitSearch = search.split('+')
+    const splitSearch = search.split("+");
 
-    let query = ""
+    let query = "";
 
-    splitSearch.forEach(word => {
-      query += `${word} `
+    splitSearch.forEach((word) => {
+      query += `${word} `;
     });
 
-    const searchResult = await db.many(`SELECT * FROM recipes WHERE LOWER(name_recipe) LIKE $1`, [`%${query.trim().toLowerCase()}%`])
+    const searchResult = await db.many(
+      `SELECT * FROM recipes WHERE LOWER(name_recipe) LIKE $1`,
+      [`%${query.trim().toLowerCase()}%`]
+    );
 
-    res.status(200).json(searchResult)
+    res.status(200).json(searchResult);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
