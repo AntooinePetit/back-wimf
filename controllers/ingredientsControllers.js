@@ -119,7 +119,7 @@ exports.addIngredient = async (req, res) => {
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Retourne un JSON contenant les informations de l'ingrédient mis à jour.
  * @example
- * // PUT /api/v1/ingredients/:id
+ * // PUT /api/v1/ingredients/1
  * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *   "name": "Ingrédient test renommé",
@@ -165,6 +165,35 @@ exports.updateIngredient = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Ingrédient mis à jour", updatedIngredient });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Supprime un ingrédient de la base de données
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 confirmant la délétion.
+ * @example
+ * // DELETE /api/v1/ingredients/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.deleteIngredient = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const ingredientDeleted = await db.result(
+      "DELETE FROM ingredients WHERE id_ingredient = $1",
+      id
+    );
+
+    if (ingredientDeleted.rowCount === 0) {
+      return res.status(404).json({ message: "Ingrédient introuvable" });
+    }
+
+    return res.status(204).json({message: "Ingrédient supprimé"});
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

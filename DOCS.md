@@ -256,3 +256,13 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
   "category": 14
 }
 ```
+
+Nécessite un token d'authentification d'un compte administrateur
+
+### Supprimer un ingrédient de la base de données
+
+**DELETE** `/api/v1/ingredients/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur

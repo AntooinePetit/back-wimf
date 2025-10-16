@@ -10,6 +10,6 @@ router.get("/search/:search", ingredientsControllers.searchIngredients); // Rech
 // Utilisation de middleware d'authentification admin en dessous
 router.post("/", adminMiddleware, ingredientsControllers.addIngredient); // Ajouter un ingrédient à la liste
 router.put("/:id", adminMiddleware, ingredientsControllers.updateIngredient); // Mettre à jour un ingrédient
-// router.delete('/:id', adminMiddleware) // Supprimer un ingrédient
+router.delete('/:id', adminMiddleware, ingredientsControllers.deleteIngredient) // Supprimer un ingrédient
 
 module.exports = router;

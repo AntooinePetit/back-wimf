@@ -281,9 +281,9 @@ exports.updateRecipe = async (req, res) => {
  *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
+ * @returns {Promise<void>} - Retourne un code 204 confirmant la délétion.
  * @example
- * // /api/v1/recipes/1
+ * // DELETE /api/v1/recipes/1
  * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  */
 exports.deleteRecipe = async (req, res) => {
