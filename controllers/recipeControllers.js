@@ -231,13 +231,16 @@ exports.updateRecipe = async (req, res) => {
         .json({ message: "Ce nom de recette n'est pas disponible" });
     }
 
-    // TODO: Modifier pour mettre à jour le temps total avec le changement d'une seule des données
     const totalTime =
-      preparationTime && cookingTime && restingTime
-        ? parseInt(preparationTime) +
-          parseInt(cookingTime) +
-          parseInt(restingTime)
-        : existingRecipe.totalTime;
+      (preparationTime
+        ? parseInt(preparationTime)
+        : parseInt(existingRecipe.preparation_time)) +
+      (cookingTime
+        ? parseInt(cookingTime)
+        : parseInt(existingRecipe.cooking_time)) +
+      (restingTime
+        ? parseInt(restingTime)
+        : parseInt(existingRecipe.resting_time));
 
     const recipeUpdated = await db.one(
       `UPDATE recipes
@@ -245,16 +248,18 @@ exports.updateRecipe = async (req, res) => {
           name_recipe = $1,
           preparation_time = $2,
           cooking_time = $3,
-          instructions = $4,
-          total_time = $5,
-          "nutritional_values_recipe" = $6,
-          servings_recipe = $7
-        WHERE id_recipe = $8
+          resting_time = $4,
+          instructions = $5,
+          total_time = $6,
+          "nutritional_values_recipe" = $7,
+          servings_recipe = $8
+        WHERE id_recipe = $9
         RETURNING *`,
       [
         name ?? existingRecipe.name_recipe,
         preparationTime ?? existingRecipe.preparation_time,
         cookingTime ?? existingRecipe.cooking_time,
+        restingTime ?? existingRecipe.resting_time,
         instructions ?? existingRecipe.instructions,
         totalTime,
         nutritionalValues ?? existingRecipe.nutritional_values_recipe,
@@ -271,7 +276,7 @@ exports.updateRecipe = async (req, res) => {
 
 /**
  * Supprime une recette de la base de données
- * 
+ *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
  * @returns {Promise<void>} - Retourne un JSON contenant un message de confirmation de mise à jour ainsi que les informations de la recette.
@@ -282,13 +287,16 @@ exports.deleteRecipe = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedRecipe = await db.result(`DELETE FROM recipes WHERE id_recipe = $1`, id)
+    const deletedRecipe = await db.result(
+      `DELETE FROM recipes WHERE id_recipe = $1`,
+      id
+    );
 
-    if(deletedRecipe.rowCount === 0){
-      return res.status(404).json({message: "Recette introuvable"})
+    if (deletedRecipe.rowCount === 0) {
+      return res.status(404).json({ message: "Recette introuvable" });
     }
 
-    res.status(204).json({message: "Recette supprimée"})
+    res.status(204).json({ message: "Recette supprimée" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
