@@ -21,6 +21,10 @@ router.post(
   adminMiddleware,
   ustensilControllers.linkUstensilsToRecipe
 ); // Lier un ou des ustensile à une recette
-// router.delete("/link/:ids", adminMiddleware); // Délier un ustensile d'une recette
+router.delete(
+  "/link/:ids",
+  adminMiddleware,
+  ustensilControllers.unlinkUstensilFromRecipe
+); // Délier un ustensile d'une recette
 
 module.exports = router;

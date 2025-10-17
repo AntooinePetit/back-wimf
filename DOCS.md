@@ -337,7 +337,7 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle lier le 
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
-La première valeur de `:ids` doit être l'id de la recette à laquelle délier le tags, suivi de l'id du tag à délier. Les deux id doivent être séparé par un `+`.
+La première valeur de `:ids` doit être l'id de la recette à laquelle délier le tag, suivi de l'id du tag à délier. Les deux id doivent être séparé par un `+`.
 
 ## Ustensiles
 
@@ -406,3 +406,12 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle lier le ou les ustensiles, suivi du ou des id d'ustensile à ajouter. Chaque id doit être séparé du suivant par un `+`.
+
+### Délier un ustensile d'une recette
+
+**DELETE** `/api/v1/ustensils/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle délier l'ustensile, suivi de l'id de l'ustensile à délier. Les deux id doivent être séparé par un `+`.
