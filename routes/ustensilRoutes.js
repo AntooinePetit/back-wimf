@@ -7,7 +7,11 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 const ustensilControllers = require("../controllers/ustensilControllers");
 
 router.get("/", adminMiddleware, ustensilControllers.getAllUstensils); // Récupérer tous les ustensiles
-// router.get("/:id", adminMiddleware); // Récupérer un ustensile
+router.get(
+  "/search/:search",
+  adminMiddleware,
+  ustensilControllers.searchUstensil
+); // Chercher un ustensile
 // router.get("/recipe/:id"); // Récupérer les ustensiles d'une recette
 // router.post("/", adminMiddleware); // Ajouter un ustensile
 // router.put("/:id", adminMiddleware); // Mettre à jour un ustensile
