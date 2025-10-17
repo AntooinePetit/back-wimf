@@ -131,3 +131,55 @@ exports.addUstensil = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Met à jour un ustensile de la base de donnée.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un json contenant les informations de l'ustensile mis à jour.
+ * @example
+ * // PUT /api/v1/ustensil/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * {
+ *   "name": "Ustensile test mis à jour"
+ * }
+ */
+exports.updateUstensil = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const existingUstensil = await db.oneOrNone(
+      "SELECT * FROM ustensils WHERE id_ustensil = $1",
+      id
+    );
+
+    if (!existingUstensil) {
+      return res.status(404).json({ message: "Ustensile introuvable" });
+    }
+
+    const existingUstensilName = await db.oneOrNone(
+      "SELECT * FROM ustensils WHERE name_ustensil ILIKE $1 AND id_ustensil != $2",
+      [name, id]
+    );
+
+    if (existingUstensilName) {
+      return res
+        .status(409)
+        .json({ message: "Ce nom d'ustensile est déjà utilisé" });
+    }
+
+    const updatedUstensil = await db.oneOrNone(
+      `UPDATE ustensils
+      SET name_ustensil = $1
+      WHERE id_ustensil = $2
+      RETURNING *`,
+      [name, id]
+    );
+
+    return res.status(200).json(updatedUstensil);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

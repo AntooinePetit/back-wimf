@@ -14,7 +14,7 @@ router.get(
 ); // Chercher un ustensile
 router.get("/recipe/:id", ustensilControllers.getUstensilsFromRecipe); // Récupérer les ustensiles d'une recette
 router.post("/", adminMiddleware, ustensilControllers.addUstensil); // Ajouter un ustensile
-// router.put("/:id", adminMiddleware); // Mettre à jour un ustensile
+router.put("/:id", adminMiddleware, ustensilControllers.updateUstensil); // Mettre à jour un ustensile
 // router.delete("/:id", adminMiddleware); // Supprimer un ustensile
 // router.post("/link/:ids", adminMiddleware); // Lier un ou des ustensile à une recette
 // router.delete("/link/:ids", adminMiddleware); // Délier un ustensile d'une recette

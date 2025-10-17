@@ -375,3 +375,17 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Mettre à jour un ustensile de la base de données
+
+**PUT** `/api/v1/ustensils/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Ustensile test mis à jour"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur
