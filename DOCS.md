@@ -389,3 +389,11 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Supprimer un ustensile de la base de données
+
+**DELETE** `/api/v1/ustensils/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur

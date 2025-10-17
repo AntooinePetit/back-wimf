@@ -183,3 +183,32 @@ exports.updateUstensil = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Supprime un ustensile existant de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 validant la suppression.
+ * @example
+ * // DELETE /api/v1/ustensils/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.deleteUstensil = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedUstensil = await db.result(
+      "DELETE FROM ustensils WHERE id_ustensil = $1",
+      id
+    );
+
+    if (deletedUstensil.rowCount === 0) {
+      return res.status(404).json({ message: "Ustensile introuvable" });
+    }
+
+    return res.status(204).json({ message: "Ustensile supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
