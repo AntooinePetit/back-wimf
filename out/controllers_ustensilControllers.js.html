@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: middlewares/resetPassMiddleware.js</title>
+    <title>JSDoc: Source: controllers/ustensilControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: middlewares/resetPassMiddleware.js</h1>
+    <h1 class="page-title">Source: controllers/ustensilControllers.js</h1>
 
     
 
@@ -26,35 +26,27 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const jwt = require("jsonwebtoken");
+            <pre class="prettyprint source linenums"><code>const db = require("../db");
 
 /**
- * Middleware permettant de vérifier le token de réinitialisation de mot de passe
+ * Récupère les informations de tous les ustensiles de la base de données.
  *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @param {Function} next - Fonction qui renvoie au middleware suivant
- * @returns {void}
+ * @returns {Promise&lt;void>} - Retourne un json contenant tous les ustensils disponibles dans la base de données.
+ * @example
+ * // GET /api/v1/ustensils
+ * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`
  */
-const resetPassMiddleware = async (req, res, next) => {
-  const resetPassHeader = req.headers.authorization;
-
-  if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token manquant !" });
-  }
-
-  const token = resetPassHeader.split(" ")[1];
-
+exports.getAllUstensils = async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT);
-    req.user = decoded;
-    next();
+    const ustensils = await db.manyOrNone("SELECT * FROM ustensils");
+
+    return res.status(200).json(ustensils);
   } catch (err) {
-    res.status(401).json({ message: "Token invalide ou expiré" });
+    return res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = resetPassMiddleware;
 </code></pre>
         </article>
     </section>

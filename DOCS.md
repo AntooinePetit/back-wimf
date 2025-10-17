@@ -334,3 +334,13 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle délier le tags, suivi de l'id du tag à délier. Les deux id doivent être séparé par un `+`.
+
+## Ustensiles
+
+### Obtenir les informations de tous les ustensiles
+
+**GET** `/api/v1/ustensils`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
