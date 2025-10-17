@@ -109,6 +109,8 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 **GET** `/api/v1/recipes/search/:search`
 
+Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
+
 ### Ajouter une recette à la base de données
 
 **POST** `/api/v1/recipes/`
@@ -229,6 +231,8 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **GET** `/api/v1/ingredients/search/:search`
 
+Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
+
 ### Ajouter un ingrédient à la base de donnée
 
 **POST** `/api/v1/ingredients`
@@ -344,3 +348,12 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Rechercher un ou plusieurs ustensiles par leur nom
+
+**GET** `/api/v1/ustensils/search/:search`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
