@@ -93,6 +93,7 @@ exports.getTagsFromRecipe = async (req, res) => {
 };
 
 /**
+ * Ajoute un tag à la base de données.
  *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
@@ -124,6 +125,55 @@ exports.addTag = async (req, res) => {
     );
 
     return res.status(201).json({ message: "Tag ajouté", newTag });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Met à jour un tag existant de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant un message de validation et les informations du tag mis à jour.
+ * @example
+ * // PUT /api/v1/tags/1
+ * {
+ *  "name": "Tag test renommé"
+ * }
+ */
+exports.updateTag = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const existingTag = await db.oneOrNone(
+      "SELECT * FROM tags WHERE id_tag = $1",
+      id
+    );
+
+    if (!existingTag) {
+      return res.status(404).json({ message: "Tag introuvable" });
+    }
+
+    const existingTagName = await db.oneOrNone(
+      "SELECT * FROM tags WHERE name_tag ILIKE $1 AND id_tag != $2",
+      [name, id]
+    );
+
+    if (existingTagName != null) {
+      return res.status(409).json({ message: "Ce tag existe déjà" });
+    }
+
+    const updatedTag = await db.one(
+      `UPDATE tags 
+      SET name_tag = $1
+      WHERE id_tag = $2
+      RETURNING *`,
+      [name, id]
+    );
+
+    return res.status(201).json({ message: "Tag mis à jour", updatedTag });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

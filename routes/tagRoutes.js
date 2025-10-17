@@ -10,7 +10,7 @@ router.get("/search/:search", tagController.searchTag); // Recherche un tag par 
 // TODO: Envisager de récupérer les tags directement dans le controller de récupération de recettes
 router.get("/recipe/:id", tagController.getTagsFromRecipe); // Récupérer tous les tags correspondant à une recette
 router.post("/", adminMiddleware, tagController.addTag); // Ajoute un tag
-// router.put('/:id', adminMiddleware) // Modifie un tag
+router.put('/:id', adminMiddleware, tagController.updateTag) // Modifie un tag
 // router.delete('/:id', adminMiddleware) // Supprime un tag
 
 module.exports = router;

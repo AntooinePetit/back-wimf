@@ -294,3 +294,17 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Mettre à jour un tag
+
+**PUT** `/api/v1/tag/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Tag Test renommé"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur
