@@ -280,3 +280,17 @@ Nécessite un token d'authentification d'un compte administrateur
 ### Récupérer les tags liés à une recette
 
 **GET** `/api/v1/tags/recipe/:id`
+
+### Ajouter un tag
+
+**POST** `/api/v1/tags/`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Tag Test"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur

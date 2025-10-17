@@ -91,3 +91,40 @@ exports.getTagsFromRecipe = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant un message de validation et les informations du tag ajouté.
+ * @example
+ * // POST /api/v1/tags/
+ * {
+ *  "name": "Tag test"
+ * }
+ */
+exports.addTag = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const existingTag = await db.oneOrNone(
+      "SELECT * FROM tags WHERE name_tag ILIKE $1",
+      name
+    );
+
+    if (existingTag != null) {
+      return res.status(409).json({ message: "Ce tag existe déjà" });
+    }
+
+    const newTag = await db.one(
+      `INSERT INTO tags(name_tag)
+      VALUES ($1)
+      RETURNING *`,
+      name
+    );
+
+    return res.status(201).json({ message: "Tag ajouté", newTag });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

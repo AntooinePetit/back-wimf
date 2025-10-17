@@ -133,6 +133,8 @@ exports.updateUser = async (req, res) => {
     const { username, email, password, rights, nutritionalValues, calories } =
       req.body;
 
+    // TODO: Ajouter une sécurité pour que éviter les duplicata email et nom d'utilisateur
+
     let passwordHash;
 
     if (password != null) {

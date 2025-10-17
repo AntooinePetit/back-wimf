@@ -88,7 +88,7 @@ exports.addIngredient = async (req, res) => {
     }
 
     const existingIngredient = await db.oneOrNone(
-      "SELECT * FROM ingredients WHERE name_ingredient = $1",
+      "SELECT * FROM ingredients WHERE name_ingredient ILIKE $1",
       name
     );
 
