@@ -397,3 +397,12 @@ Nécessite un token d'authentification d'un compte administrateur
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Lier un ou des ustensiles à une recette
+
+**POST** `/api/v1/ustensils/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle lier le ou les ustensiles, suivi du ou des id d'ustensile à ajouter. Chaque id doit être séparé du suivant par un `+`.

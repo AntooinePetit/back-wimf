@@ -16,7 +16,11 @@ router.get("/recipe/:id", ustensilControllers.getUstensilsFromRecipe); // Récup
 router.post("/", adminMiddleware, ustensilControllers.addUstensil); // Ajouter un ustensile
 router.put("/:id", adminMiddleware, ustensilControllers.updateUstensil); // Mettre à jour un ustensile
 router.delete("/:id", adminMiddleware, ustensilControllers.deleteUstensil); // Supprimer un ustensile
-// router.post("/link/:ids", adminMiddleware); // Lier un ou des ustensile à une recette
+router.post(
+  "/link/:ids",
+  adminMiddleware,
+  ustensilControllers.linkUstensilsToRecipe
+); // Lier un ou des ustensile à une recette
 // router.delete("/link/:ids", adminMiddleware); // Délier un ustensile d'une recette
 
 module.exports = router;
