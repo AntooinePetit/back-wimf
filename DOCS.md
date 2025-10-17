@@ -272,3 +272,7 @@ Nécessite un token d'authentification d'un compte administrateur
 ### Obtenir les informations de tous les tags
 
 **GET** `/api/v1/tags`
+
+### Rechercher des tags par leur nom
+
+**GET** `/api/v1/tags/search/:search`
