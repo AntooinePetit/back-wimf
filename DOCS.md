@@ -361,3 +361,17 @@ Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
 ### Récupérer les ustensiles liés à une recette
 
 **GET** `/api/v1/ustensils/recipe/:id`
+
+### Ajouter un ustensile à la base de données
+
+**POST** `/api/v1/ustensils`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+```json
+{
+  "name": "Ustensile test"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur
