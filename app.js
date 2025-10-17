@@ -17,6 +17,7 @@ app.use(helmet());
 const recipeRoutes = require("./routes/recipeRoutes");
 const ingredientRoutes = require("./routes/ingredientRoutes");
 const tagRoutes = require("./routes/tagRoutes");
+const ustensilRoutes = require('./routes/ustensilRoutes')
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 
@@ -26,6 +27,8 @@ app.use("/api/v1/recipes", recipeRoutes);
 app.use("/api/v1/ingredients", ingredientRoutes);
 // Tags
 app.use("/api/v1/tags", tagRoutes);
+// Ustensiles
+app.use("/api/v1/ustensils", ustensilRoutes)
 // Utilisateurs
 app.use("/api/v1/users", userRoutes);
 // Authentification
