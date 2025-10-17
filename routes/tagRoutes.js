@@ -12,7 +12,7 @@ router.get("/recipe/:id", tagControllers.getTagsFromRecipe); // Récupérer tous
 router.post("/", adminMiddleware, tagControllers.addTag); // Ajoute un tag
 router.put("/:id", adminMiddleware, tagControllers.updateTag); // Modifie un tag
 router.delete("/:id", adminMiddleware, tagControllers.deleteTag); // Supprime un tag
-router.post("/link/:ids", adminMiddleware, tagControllers.linkTagsToRecipe) // Lier un tag à une recette
-// router.delete("/link/:ids", adminMiddleware) // Délier un tag à une recette
+router.post("/link/:ids", adminMiddleware, tagControllers.linkTagsToRecipe); // Lier un tag à une recette
+router.delete("/link/:ids", adminMiddleware, tagControllers.unlinkTagToRecipe); // Délier un tag à une recette
 
 module.exports = router;

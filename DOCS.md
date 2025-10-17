@@ -324,4 +324,13 @@ Nécessite un token d'authentification d'un compte administrateur
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
-La première valeur de `:ids` doit être l'id de la recette à laquelle lié les autres tags, suivi des id de tag à ajouter. Chaque id doit être séparé du suivant par un `+` 
+La première valeur de `:ids` doit être l'id de la recette à laquelle lier le ou les tags, suivi du ou des id de tag à ajouter. Chaque id doit être séparé du suivant par un `+`.
+
+### Délier un tag d'une recette
+
+**DELETE** `/api/v1/tags/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle délier le tags, suivi de l'id du tag à délier. Les deux id doivent être séparé par un `+`.
