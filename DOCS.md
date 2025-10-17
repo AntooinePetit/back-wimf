@@ -276,3 +276,7 @@ Nécessite un token d'authentification d'un compte administrateur
 ### Rechercher des tags par leur nom
 
 **GET** `/api/v1/tags/search/:search`
+
+### Récupérer les tags liés à une recette
+
+**GET** `/api/v1/tags/recipe/:id`

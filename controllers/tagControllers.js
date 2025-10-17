@@ -50,7 +50,43 @@ exports.searchTag = async (req, res) => {
       values
     );
 
-    res.status(200).json(searchResult);
+    return res.status(200).json(searchResult);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Récupère les tags liés à une recette
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les informations des tags liés à la recette voulue.
+ * @example
+ * // GET /api/v1/tags/recipe/1
+ */
+exports.getTagsFromRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const tags = await db.manyOrNone(
+      `SELECT t.name_tag FROM tags AS t 
+      INNER JOIN recipes_has_tags AS r
+      ON t.id_tag = r.fk_id_tag
+      WHERE r.fk_id_recipe = $1`,
+      id
+    );
+
+    return res.status(200).json(tags);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
