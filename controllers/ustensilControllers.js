@@ -56,3 +56,39 @@ exports.searchUstensil = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Récupère le nom de tous les ustensiles utilisés dans une recette
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un json contenant les informations des ustensiles utilisés dans la recette sélectionnée.
+ * @example
+ * // GET /api/v1/ustensils/recipe/1
+ */
+exports.getUstensilsFromRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const ustensils = await db.manyOrNone(
+      `SELECT u.name_ustensil FROM recipes_has_ustensils AS r
+      LEFT JOIN ustensils AS u
+      ON r.fk_id_ustensil = u.id_ustensil
+      WHERE r.fk_id_recipe = $1`,
+      id
+    );
+
+    return res.status(200).json(ustensils);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
