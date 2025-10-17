@@ -308,3 +308,11 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Supprimer un tag
+
+**DELETE** `/api/v1/tag/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur

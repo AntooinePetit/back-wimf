@@ -128,6 +128,7 @@ exports.getTagsFromRecipe = async (req, res) => {
  * @returns {Promise&lt;void>} - Retourne un JSON contenant un message de validation et les informations du tag ajouté.
  * @example
  * // POST /api/v1/tags/
+ * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`
  * {
  *  "name": "Tag test"
  * }
@@ -166,6 +167,7 @@ exports.addTag = async (req, res) => {
  * @returns {Promise&lt;void>} - Retourne un JSON contenant un message de validation et les informations du tag mis à jour.
  * @example
  * // PUT /api/v1/tags/1
+ * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`
  * {
  *  "name": "Tag test renommé"
  * }
@@ -206,6 +208,35 @@ exports.updateTag = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Supprime un tag existant de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise&lt;void>} - Retourne un code 204 validant la suppression.
+ * @example
+ * // DELETE /api/v1/tags/1
+ * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`
+ */
+exports.deleteTag = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedTag = await db.result(
+      "DELETE FROM tags WHERE id_tag = $1",
+      id
+    );
+
+    if (deletedTag.rowCount === 0) {
+      return res.status(404).json({ message: "Tag introuvable" });
+    }
+
+    return res.status(204).json({ message: "Tag supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
 </code></pre>
         </article>
     </section>
@@ -216,13 +247,13 @@ exports.updateTag = async (req, res) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Oct 17 2025 11:24:25 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Oct 17 2025 11:31:46 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

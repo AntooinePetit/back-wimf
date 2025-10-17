@@ -602,7 +602,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_tagControllers.js.html">controllers/tagControllers.js</a>, <a href="controllers_tagControllers.js.html#line107">line 107</a>
+        <a href="controllers_tagControllers.js.html">controllers/tagControllers.js</a>, <a href="controllers_tagControllers.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -655,7 +655,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// POST /api/v1/tags/{ "name": "Tag test"}</code></pre>
+    <pre class="prettyprint"><code>// POST /api/v1/tags/// Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`{ "name": "Tag test"}</code></pre>
 
 
 
@@ -1432,6 +1432,193 @@
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>// DELETE /api/v1/recipes/1// Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deleteTag"><span class="type-signature"></span>deleteTag<span class="signature">(req, res)</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Supprime un tag existant de la base de données.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Objet de requête Express</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Objet de réponse Express</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="controllers_tagControllers.js.html">controllers/tagControllers.js</a>, <a href="controllers_tagControllers.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - Retourne un code 204 validant la suppression.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// DELETE /api/v1/tags/1// Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`</code></pre>
 
 
 
@@ -4945,7 +5132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="controllers_tagControllers.js.html">controllers/tagControllers.js</a>, <a href="controllers_tagControllers.js.html#line145">line 145</a>
+        <a href="controllers_tagControllers.js.html">controllers/tagControllers.js</a>, <a href="controllers_tagControllers.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -4998,7 +5185,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>// PUT /api/v1/tags/1{ "name": "Tag test renommé"}</code></pre>
+    <pre class="prettyprint"><code>// PUT /api/v1/tags/1// Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`{ "name": "Tag test renommé"}</code></pre>
 
 
 
@@ -5205,13 +5392,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Oct 17 2025 11:24:25 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Oct 17 2025 11:31:46 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

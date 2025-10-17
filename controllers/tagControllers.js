@@ -100,6 +100,7 @@ exports.getTagsFromRecipe = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant un message de validation et les informations du tag ajouté.
  * @example
  * // POST /api/v1/tags/
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *  "name": "Tag test"
  * }
@@ -138,6 +139,7 @@ exports.addTag = async (req, res) => {
  * @returns {Promise<void>} - Retourne un JSON contenant un message de validation et les informations du tag mis à jour.
  * @example
  * // PUT /api/v1/tags/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  * {
  *  "name": "Tag test renommé"
  * }
@@ -174,6 +176,35 @@ exports.updateTag = async (req, res) => {
     );
 
     return res.status(201).json({ message: "Tag mis à jour", updatedTag });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Supprime un tag existant de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 validant la suppression.
+ * @example
+ * // DELETE /api/v1/tags/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.deleteTag = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedTag = await db.result(
+      "DELETE FROM tags WHERE id_tag = $1",
+      id
+    );
+
+    if (deletedTag.rowCount === 0) {
+      return res.status(404).json({ message: "Tag introuvable" });
+    }
+
+    return res.status(204).json({ message: "Tag supprimé" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
