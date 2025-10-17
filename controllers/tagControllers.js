@@ -209,3 +209,43 @@ exports.deleteTag = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Lie un ou plusieurs tags à une recette.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant tous les liens créés.
+ * @example
+ * // POST /api/v1/tags/link/1+4+5+2
+ * // Le premier id doit être l'id de la recette suivi des id des tags à lui ajouter.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.linkTagsToRecipe = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    const inputs = splitIds
+      .slice(1)
+      .map((_, idx) => `($1, $${idx + 2})`)
+      .join(", ");
+
+    const values = splitIds.map((id, idx) => parseInt(id));
+
+    const addedTags = await db.many(
+      `INSERT INTO recipes_has_tags (fk_id_recipe, fk_id_tag)
+      VALUES ${inputs}
+      RETURNING *`,
+      values
+    );
+
+    return res.status(201).json(addedTags);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

@@ -316,3 +316,12 @@ Nécessite un token d'authentification d'un compte administrateur
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Lier un ou plusieurs tags à une recette
+
+**POST** `/api/v1/tags/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle lié les autres tags, suivi des id de tag à ajouter. Chaque id doit être séparé du suivant par un `+` 
