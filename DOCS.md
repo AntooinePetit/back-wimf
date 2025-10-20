@@ -445,3 +445,17 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id du tag à laquelle délier le régime, suivi de l'id du régime à délier. Les deux id doivent être séparé par un `+`.
+
+### Ajouter un régime à la base de données
+
+**POST** `/api/v1/diets`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+```json
+{
+  "name": "Régime test"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur

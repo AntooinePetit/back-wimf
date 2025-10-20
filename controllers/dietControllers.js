@@ -133,3 +133,42 @@ exports.unlinkDietFromTag = async (req, res) => {
     return res.status("500").json({ message: err.message });
   }
 };
+
+/**
+ * Ajoute un régime à la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les informations du régime créé.
+ * @example
+ * // POST /api/v1/diets
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ * {
+ *    "name": "Régime de test"
+ * }
+ */
+exports.addDiet = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const existingDietName = await db.oneOrNone(
+      `SELECT * FROM diets WHERE name_diet ILIKE $1`,
+      name
+    );
+
+    if (existingDietName) {
+      return res.status(409).json({
+        message: "Ce régime est déjà présent dans la base de données",
+      });
+    }
+
+    const addedDiet = await db.oneOrNone(
+      "INSERT INTO diets(name_diet) VALUES($1) RETURNING *",
+      name
+    );
+
+    return res.status(201).json(addedDiet);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
