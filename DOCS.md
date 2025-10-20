@@ -115,7 +115,7 @@ Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
 
 **POST** `/api/v1/recipes/`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -203,7 +203,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **PUT** `/api/v1/recipes/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -217,7 +217,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **DELETE** `/api/v1/recipes/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
@@ -237,7 +237,7 @@ Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
 
 **POST** `/api/v1/ingredients`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -252,7 +252,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **PUT** `/api/v1/ingredients/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -267,7 +267,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **DELETE** `/api/v1/ingredients/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
@@ -289,7 +289,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **POST** `/api/v1/tags/`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -303,7 +303,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **PUT** `/api/v1/tag/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -317,7 +317,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **DELETE** `/api/v1/tag/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
@@ -325,7 +325,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **POST** `/api/v1/tags/link/:ids`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle lier le ou les tags, suivi du ou des id de tag à ajouter. Chaque id doit être séparé du suivant par un `+`.
@@ -334,7 +334,7 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle lier le 
 
 **DELETE** `/api/v1/tags/link/:ids`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle délier le tag, suivi de l'id du tag à délier. Les deux id doivent être séparé par un `+`.
@@ -345,7 +345,7 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 
 **GET** `/api/v1/ustensils`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
@@ -353,7 +353,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **GET** `/api/v1/ustensils/search/:search`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
@@ -366,7 +366,7 @@ Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
 
 **POST** `/api/v1/ustensils`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -380,7 +380,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **PUT** `/api/v1/ustensils/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 ```json
 {
@@ -394,7 +394,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **DELETE** `/api/v1/ustensils/:id`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
@@ -402,7 +402,7 @@ Nécessite un token d'authentification d'un compte administrateur
 
 **POST** `/api/v1/ustensils/link/:ids`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle lier le ou les ustensiles, suivi du ou des id d'ustensile à ajouter. Chaque id doit être séparé du suivant par un `+`.
@@ -411,7 +411,7 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle lier le 
 
 **DELETE** `/api/v1/ustensils/link/:ids`
 
-Headers : `Authorization: Bearer <votre_jeton_jwt>`
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle délier l'ustensile, suivi de l'id de l'ustensile à délier. Les deux id doivent être séparé par un `+`.
@@ -427,3 +427,12 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 **GET** `/api/v1/diet/search/:search`
 
 Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
+
+### Lier un ou des régimes à un tag
+
+**POST** `/api/v1/diets/link/tag/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id du tag auquel lier le ou les régimes, suivi du ou des id de régime à ajouter. Chaque id doit être séparé du suivant par un `+`.

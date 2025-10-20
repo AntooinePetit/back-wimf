@@ -54,3 +54,43 @@ exports.searchDiet = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Lie un ou plusieurs régimes à un tag.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant tous les liens créés.
+ * @example
+ * // POST /api/v1/diets/link/tag/1+4+5+2
+ * // Le premier id doit être l'id du tag suivi des id des régimes à lui ajouter.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ */
+exports.linkDietToTag = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    const inputs = splitIds
+      .slice(1)
+      .map((_, idx) => `($1, $${idx + 2})`)
+      .join(", ");
+
+    const values = splitIds.map((id, idx) => parseInt(id));
+
+    const addedDiets = await db.many(
+      `INSERT INTO tags_has_diets (fk_id_tag, fk_id_diet)
+      VALUES ${inputs}
+      RETURNING *`,
+      values
+    );
+
+    return res.status(201).json(addedDiets);
+  } catch (err) {
+    return res.status(500).json({message: err.message})
+  }
+}

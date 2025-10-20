@@ -8,7 +8,7 @@ const db = require("../db");
  * @returns {Promise<void>} - Retourne un json contenant tous les ustensiles disponibles dans la base de données.
  * @example
  * // GET /api/v1/ustensils
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
 exports.getAllUstensils = async (req, res) => {
   try {
@@ -28,7 +28,7 @@ exports.getAllUstensils = async (req, res) => {
  * @returns {Promise<void>} - Retourne un json contenant les informations des ustensiles recherchés.
  * @example
  * // GET /api/v1/ustensils/search/couteau
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
 exports.searchUstensil = async (req, res) => {
   try {
@@ -101,7 +101,7 @@ exports.getUstensilsFromRecipe = async (req, res) => {
  * @returns {Promise<void>} - Retourne un json contenant les informations de l'ustensile créé.
  * @example
  * // POST /api/v1/ustensil
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  * {
  *   "name": "Ustensile test"
  * }
@@ -140,7 +140,7 @@ exports.addUstensil = async (req, res) => {
  * @returns {Promise<void>} - Retourne un json contenant les informations de l'ustensile mis à jour.
  * @example
  * // PUT /api/v1/ustensil/1
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  * {
  *   "name": "Ustensile test mis à jour"
  * }
@@ -192,7 +192,7 @@ exports.updateUstensil = async (req, res) => {
  * @returns {Promise<void>} - Retourne un code 204 validant la suppression.
  * @example
  * // DELETE /api/v1/ustensils/1
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
 exports.deleteUstensil = async (req, res) => {
   try {
@@ -222,7 +222,7 @@ exports.deleteUstensil = async (req, res) => {
  * @example
  * // POST /api/v1/ustensils/link/1+4+5+2
  * // Le premier id doit être l'id de la recette suivi des id des ustensiles à lui ajouter.
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
 exports.linkUstensilsToRecipe = async (req, res) => {
   try {
@@ -262,7 +262,7 @@ exports.linkUstensilsToRecipe = async (req, res) => {
  * @example
  * // DELETE /api/v1/ustensils/link/1+4
  * // Le premier id doit être l'id de la recette et le deuxième l'id de l'ustensile à délier.
- * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
 
 exports.unlinkUstensilFromRecipe = async (req, res) => {
