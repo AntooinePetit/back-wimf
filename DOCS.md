@@ -537,3 +537,10 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à consulter
+
+### Ajouter un ingrédient à la liste des bannissements d'un utilisateur
+
+**POST** `/api/v1/banned/:ids`
+
+Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui ajouter les ingrédients
+La première valeur de `:ids` doit être l'id de l'utilisateur auquel ajouter les ingrédients à la liste des bannissements, suivi du ou des id d'ingrédient à ajouter. Chaque id doit être séparé du suivant par un `+`.

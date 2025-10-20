@@ -11,7 +11,11 @@ router.get(
   authMiddleware,
   bannedControllers.getBannedIngredientsFromUser
 ); // Récupérer tous les ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
-// router.post("/:id"); // Ajouter un ingrédient à la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
-// router.delete("/:id"); // Retirer un ingrédient de la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
+router.post(
+  "/:ids",
+  authMiddleware,
+  bannedControllers.addBannedIngredientToUser
+); // Ajouter un ingrédient à la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
+// router.delete("/:ids"); // Retirer un ingrédient de la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
 
 module.exports = router;

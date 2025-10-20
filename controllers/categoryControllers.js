@@ -52,7 +52,7 @@ exports.linkCategoriesToRecipe = async (req, res) => {
 
     const values = splitIds.map((id, idx) => parseInt(id));
 
-    const addedCategories = await db.many(
+    const addedCategories = await db.manyOrNone(
       `INSERT INTO recipes_has_recipe_categories (fk_id_recipe, fk_id_category)
       VALUES ${inputs}
       RETURNING *`,

@@ -43,3 +43,61 @@ exports.getBannedIngredientsFromUser = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Ajoute un ou plusieurs ingrédients à la liste des bannissement d'un utilisateur.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant tous les liens créés.
+ * @example
+ * // POST /api/v1/banned/1+4+5+2
+ * // Le premier id doit être l'id de l'utilisateur suivi des id des ingrédients à ajouter à la liste des bannissements.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.addBannedIngredientToUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
+
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    // SI l'utilisateur connecté EST member ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur connecté EST moderator ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur n'est pas connecté
+    if (
+      !userConnected ||
+      (userConnected.rights_user != "Administrator" &&
+        req.user.id != splitIds[0])
+    ) {
+      return res.status(401).json({
+        message:
+          "Tu n'as pas le droit d'ajouter cet ingrédient à la liste de bannissement de cet utilisateur",
+      });
+    }
+
+    const inputs = splitIds
+      .slice(1)
+      .map((_, idx) => `($1, $${idx + 2})`)
+      .join(", ");
+
+    const values = splitIds.map((id, idx) => parseInt(id));
+
+    const addedBannedIngredients = await db.manyOrNone(
+      `INSERT INTO banned_ingredients (fk_id_user, fk_id_ingredient)
+      VALUES ${inputs}
+      RETURNING *`,
+      values
+    );
+    return res.status(201).json(addedBannedIngredients);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

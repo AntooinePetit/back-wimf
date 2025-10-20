@@ -297,7 +297,7 @@ exports.linkDietToUser = async (req, res) => {
 
     const values = splitIds.map((id, idx) => parseInt(id));
 
-    const addedDiets = await db.many(
+    const addedDiets = await db.manyOrNone(
       `INSERT INTO users_has_diets (fk_id_user, fk_id_diet)
       VALUES ${inputs}
       RETURNING *`,
