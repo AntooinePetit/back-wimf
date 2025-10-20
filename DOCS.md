@@ -523,3 +523,7 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle délier la catégorie, suivi de l'id de la catégorie à délier. Les deux id doivent être séparé par un `+`.
+
+### Obtenir les informations de toutes les recettes d'une catégorie choisie
+
+**GET** `/api/v1/categories/:id`

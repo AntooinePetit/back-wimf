@@ -94,11 +94,40 @@ exports.unlinkCategoryFromRecipe = async (req, res) => {
 
     if (deletedDiet.rowCount === 0) {
       return res.status(404).json({
-        message: "Aucun lien entre cette catégorie et cette recette n'a été trouvé",
+        message:
+          "Aucun lien entre cette catégorie et cette recette n'a été trouvé",
       });
     }
 
     return res.status(204).json({ message: "Lien supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Permet de récupérer tous les id des recettes correspondant à la catégorie choisie
+ * 
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les id de toutes les recettes correspondant à la catégorie.
+ * @example
+ * // GET /api/v1/categories/1
+ */
+exports.getAllRecipesFromCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const recipes = await db.manyOrNone(
+      `SELECT c.name_recipe_category, r.id_recipe 
+      FROM recipes_has_recipe_categories AS rc
+      INNER JOIN recipe_categories AS c ON rc.fk_id_category = c.id_recipe_category
+      INNER JOIN recipes AS r ON rc.fk_id_recipe = r.id_recipe
+      WHERE rc.fk_id_category = $1`,
+      id
+    );
+
+    return res.status(200).json(recipes);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

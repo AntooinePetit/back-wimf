@@ -17,6 +17,6 @@ router.delete(
   adminMiddleware,
   categoryControllers.unlinkCategoryFromRecipe
 ); // Délier une recette et une catégorie
-// router.get('/:id') // Récupérer les recettes liées à une catégorie
+router.get('/:id', categoryControllers.getAllRecipesFromCategory) // Récupérer les recettes liées à une catégorie
 
 module.exports = router;
