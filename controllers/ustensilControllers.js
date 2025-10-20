@@ -264,7 +264,6 @@ exports.linkUstensilsToRecipe = async (req, res) => {
  * // Le premier id doit être l'id de la recette et le deuxième l'id de l'ustensile à délier.
  * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
  */
-
 exports.unlinkUstensilFromRecipe = async (req, res) => {
   try {
     const { ids } = req.params;
@@ -283,7 +282,8 @@ exports.unlinkUstensilFromRecipe = async (req, res) => {
 
     if (deletedUstensils.rowCount === 0) {
       return res.status(404).json({
-        message: "Aucun lien entre cette recette et cet ustensile n'a été trouvé",
+        message:
+          "Aucun lien entre cette recette et cet ustensile n'a été trouvé",
       });
     }
 

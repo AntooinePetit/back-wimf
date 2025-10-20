@@ -10,8 +10,12 @@ const dietControllers = require("../controllers/dietControllers");
 
 router.get("/", dietControllers.getAllDiets); // Récupérer tous les régimes
 router.get("/search/:search", dietControllers.searchDiet); // Rechercher un régime
-router.post('/link/tag/:ids', adminMiddleware, dietControllers.linkDietToTag) // Lier un régime à un tag
-// router.delete('/link/tag/:ids', adminMiddleware) // Délier un régime d'un tag
+router.post("/link/tag/:ids", adminMiddleware, dietControllers.linkDietToTag); // Lier un régime à un tag
+router.delete(
+  "/link/tag/:ids",
+  adminMiddleware,
+  dietControllers.unlinkDietFromTag
+); // Délier un régime d'un tag
 // router.post('/', adminMiddleware) // Ajouter un régime
 // router.put('/:id', adminMiddleware) // Modifier un régime
 // router.delete('/:id', adminMiddleware) // Supprimer un régime

@@ -91,6 +91,45 @@ exports.linkDietToTag = async (req, res) => {
 
     return res.status(201).json(addedDiets);
   } catch (err) {
-    return res.status(500).json({message: err.message})
+    return res.status(500).json({ message: err.message });
   }
-}
+};
+
+/**
+ * Delie un régime d'un tag.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 pour valider la suppression.
+ * @example
+ * // DELETE /api/v1/diets/link/tag/1+4
+ * // Le premier id doit être l'id du tag et le deuxième l'id du régime à délier.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ */
+exports.unlinkDietFromTag = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => parseInt(id.trim()))
+      .filter(Boolean);
+
+    const deletedUstensils = await db.result(
+      `DELETE FROM tags_has_diets
+      WHERE fk_id_tag = $1
+      AND fk_id_diet = $2`,
+      splitIds
+    );
+
+    if (deletedUstensils.rowCount === 0) {
+      return res.status(404).json({
+        message: "Aucun lien entre ce tag et ce régime n'a été trouvé",
+      });
+    }
+
+    return res.status(204).json({ message: "Lien supprimé" });
+  } catch (err) {
+    return res.status("500").json({ message: err.message });
+  }
+};
