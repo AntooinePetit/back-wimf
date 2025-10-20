@@ -499,3 +499,9 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui délier le ou les régimes
 La première valeur de `:ids` doit être l'id de l'utilisateur auquel délier le régime, suivi de l'id du régime à supprimer. Les deux id doivent être séparé par un `+`.
+
+## Catégories de recettes (Entrée, Brunch, etc...)
+
+### Récupérer toutes les catégories et leurs recettes liées
+
+**GET** `/api/v1/categories`

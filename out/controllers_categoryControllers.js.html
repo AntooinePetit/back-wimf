@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: controllers/categoryControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,44 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: controllers/categoryControllers.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const db = require("../db");
 
+/**
+ * Récupère les informations de toutes les catégories et les recettes liées.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise&lt;void>} - Retourne un json contenant toutes les catégories ainsi que les id des recettes qui y sont liés.
+ * @example
+ * // GET /api/v1/categories
+ */
+exports.getAllCategoriesAndRecipes = async (req, res) => {
+  try {
+    const categoriesAndRecipes = await db.manyOrNone(
+      `SELECT c.name_recipe_category, r.id_recipe 
+      FROM recipes_has_recipe_categories AS rc
+      INNER JOIN recipe_categories AS c ON rc.fk_id_category = c.id_recipe_category
+      INNER JOIN recipes AS r ON rc.fk_id_recipe = r.id_recipe
+      ORDER BY c.name_recipe_category`
+    );
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    return res.status(200).json(categoriesAndRecipes);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
