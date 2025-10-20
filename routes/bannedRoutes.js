@@ -16,6 +16,10 @@ router.post(
   authMiddleware,
   bannedControllers.addBannedIngredientToUser
 ); // Ajouter un ingrédient à la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
-// router.delete("/:ids"); // Retirer un ingrédient de la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
+router.delete(
+  "/:ids",
+  authMiddleware,
+  bannedControllers.deleteBannedIngredientFromUser
+); // Retirer un ingrédient de la liste des ingrédients bannis d'un utilisateur si admin ou utilisateur connecté
 
 module.exports = router;

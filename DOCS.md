@@ -544,3 +544,10 @@ Nécessite un token d'authentification d'un compte administrateur ou de l'utilis
 
 Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui ajouter les ingrédients
 La première valeur de `:ids` doit être l'id de l'utilisateur auquel ajouter les ingrédients à la liste des bannissements, suivi du ou des id d'ingrédient à ajouter. Chaque id doit être séparé du suivant par un `+`.
+
+### Retirer un ingrédient de la liste des bannissements d'un utilisateur
+
+**DELETE** `/api/v1/banned/:ids`
+
+Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui ajouter les ingrédients
+La première valeur de `:ids` doit être l'id de l'utilisateur auquel retirer l'ingrédient de la liste des bannissements, suivi de l'id de l'ingrédient à supprimer. Les deux id doivent être séparé par un `+`.
