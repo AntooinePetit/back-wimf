@@ -18,6 +18,7 @@ const recipeRoutes = require("./routes/recipeRoutes");
 const ingredientRoutes = require("./routes/ingredientRoutes");
 const tagRoutes = require("./routes/tagRoutes");
 const ustensilRoutes = require("./routes/ustensilRoutes");
+const dietRoutes = require('./routes/dietRoutes')
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 
@@ -29,6 +30,8 @@ app.use("/api/v1/ingredients", ingredientRoutes);
 app.use("/api/v1/tags", tagRoutes);
 // Ustensiles
 app.use("/api/v1/ustensils", ustensilRoutes);
+// Régimes
+app.use('/api/v1/diets', dietRoutes)
 // Utilisateurs
 app.use("/api/v1/users", userRoutes);
 // Authentification
