@@ -19,7 +19,7 @@ router.delete(
 router.post("/", adminMiddleware, dietControllers.addDiet); // Ajouter un régime
 router.put("/:id", adminMiddleware, dietControllers.updateDiet); // Modifier un régime
 router.delete("/:id", adminMiddleware, dietControllers.deleteDiet); // Supprimer un régime
-// router.post('/link/user/:ids', authMiddleware) // Lier un régime à un utilisateur
+router.post("/link/user/:ids", authMiddleware, dietControllers.linkDietToUser); // Lier un régime à un utilisateur
 // router.delete('/link/user/:ids', authMiddleware) // Délier un régime d'un utilisateur
 
 module.exports = router;

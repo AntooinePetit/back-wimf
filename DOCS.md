@@ -481,3 +481,12 @@ Nécessite un token d'authentification d'un compte administrateur
 Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Lier un ou plusieurs régimes à un utilisateur
+
+**POST** `/api/v1/diets/link/user/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui lier le ou les régimes
+La première valeur de `:ids` doit être l'id de l'utilisateur auquel lier le ou les régimes, suivi du ou des id de régime à ajouter. Chaque id doit être séparé du suivant par un `+`.

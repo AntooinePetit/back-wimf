@@ -251,3 +251,60 @@ exports.deleteDiet = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Lie un ou plusieurs régimes à un utilisateur.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant tous les liens créés.
+ * @example
+ * // POST /api/v1/diets/link/user/1+4+5+2
+ * // Le premier id doit être l'id de l'utilisateur suivi des id des régimes à lui ajouter.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ */
+exports.linkDietToUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
+
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    // SI l'utilisateur connecté EST member ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur connecté EST moderator ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur n'est pas connecté
+    if (
+      !userConnected ||
+      (userConnected.rights_user != "Administrator" &&
+        req.user.id != splitIds[0])
+    ) {
+      return res.status(401).json({
+        message: "Tu n'as pas le droit d'ajouter un régime à cet utilisateur",
+      });
+    }
+
+    const inputs = splitIds
+      .slice(1)
+      .map((_, idx) => `($1, $${idx + 2})`)
+      .join(", ");
+
+    const values = splitIds.map((id, idx) => parseInt(id));
+
+    const addedDiets = await db.many(
+      `INSERT INTO users_has_diets (fk_id_user, fk_id_diet)
+      VALUES ${inputs}
+      RETURNING *`,
+      values
+    );
+    return res.status(201).json(addedDiets);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
