@@ -490,3 +490,12 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui lier le ou les régimes
 La première valeur de `:ids` doit être l'id de l'utilisateur auquel lier le ou les régimes, suivi du ou des id de régime à ajouter. Chaque id doit être séparé du suivant par un `+`.
+
+### Délier un régime d'un utilisateur
+
+**DELETE** `/api/v1/diets/link/user/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui délier le ou les régimes
+La première valeur de `:ids` doit être l'id de l'utilisateur auquel délier le régime, suivi de l'id du régime à supprimer. Les deux id doivent être séparé par un `+`.

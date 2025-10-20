@@ -115,14 +115,14 @@ exports.unlinkDietFromTag = async (req, res) => {
       .map((id) => parseInt(id.trim()))
       .filter(Boolean);
 
-    const deletedUstensils = await db.result(
+    const deletedDiet = await db.result(
       `DELETE FROM tags_has_diets
       WHERE fk_id_tag = $1
       AND fk_id_diet = $2`,
       splitIds
     );
 
-    if (deletedUstensils.rowCount === 0) {
+    if (deletedDiet.rowCount === 0) {
       return res.status(404).json({
         message: "Aucun lien entre ce tag et ce régime n'a été trouvé",
       });
@@ -261,7 +261,7 @@ exports.deleteDiet = async (req, res) => {
  * @example
  * // POST /api/v1/diets/link/user/1+4+5+2
  * // Le premier id doit être l'id de l'utilisateur suivi des id des régimes à lui ajouter.
- * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
  */
 exports.linkDietToUser = async (req, res) => {
   try {
@@ -304,6 +304,64 @@ exports.linkDietToUser = async (req, res) => {
       values
     );
     return res.status(201).json(addedDiets);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Délie un régime à un utilisateur.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 pour confirmer la suppression du lien.
+ * @example
+ * // DELETE /api/v1/diets/link/user/1+4+5+2
+ * // Le premier id doit être l'id de l'utilisateur suivi de l'id du régime à lui retirer.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ */
+exports.unlinkDietFromUser = async (req, res) => {
+  try {
+    const userConnected = await db.oneOrNone(
+      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      req.user.id
+    );
+
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    // SI l'utilisateur connecté EST member ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur connecté EST moderator ET id de l'utilisateur connecté DIFFERENT DE id de l'utilisateur à qui ajouter un régime
+    // SI l'utilisateur n'est pas connecté
+    if (
+      !userConnected ||
+      (userConnected.rights_user != "Administrator" &&
+        req.user.id != splitIds[0])
+    ) {
+      return res.status(401).json({
+        message:
+          "Tu n'as pas le droit de supprimer un régime à cet utilisateur",
+      });
+    }
+
+    const deletedDiet = await db.result(
+      `DELETE FROM users_has_diets
+      WHERE fk_id_user = $1
+      AND fk_id_diet = $2`,
+      splitIds
+    );
+
+    if (deletedDiet.rowCount === 0) {
+      return res.status(404).json({
+        message: "Aucun lien entre cet utilisateur et ce régime n'a été trouvé",
+      });
+    }
+
+    return res.status(204).json({ message: "Lien supprimé" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
