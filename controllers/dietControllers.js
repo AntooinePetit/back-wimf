@@ -222,3 +222,32 @@ exports.updateDiet = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Supprime un régime de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 pour valider la suppression.
+ * @example
+ * // DELETE /api/v1/diets/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ */
+exports.deleteDiet = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedDiet = await db.result(
+      "DELETE FROM diets WHERE id_diet = $1",
+      id
+    );
+
+    if (deletedDiet.rowCount === 0) {
+      return res.status(404).json({ message: "Régime introuvable" });
+    }
+
+    return res.status(204).json({ message: "Régime supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

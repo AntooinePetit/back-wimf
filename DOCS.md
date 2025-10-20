@@ -473,3 +473,11 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Supprimer un régime de la base de données
+
+**DELETE** `/api/v1/diets/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+Nécessite un token d'authentification d'un compte administrateur

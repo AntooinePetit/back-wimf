@@ -18,7 +18,7 @@ router.delete(
 ); // Délier un régime d'un tag
 router.post("/", adminMiddleware, dietControllers.addDiet); // Ajouter un régime
 router.put("/:id", adminMiddleware, dietControllers.updateDiet); // Modifier un régime
-// router.delete('/:id', adminMiddleware) // Supprimer un régime
+router.delete("/:id", adminMiddleware, dietControllers.deleteDiet); // Supprimer un régime
 // router.post('/link/user/:ids', authMiddleware) // Lier un régime à un utilisateur
 // router.delete('/link/user/:ids', authMiddleware) // Délier un régime d'un utilisateur
 
