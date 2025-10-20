@@ -9,7 +9,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 const dietControllers = require("../controllers/dietControllers");
 
 router.get("/", dietControllers.getAllDiets); // Récupérer tous les régimes
-// router.get('/search/:search') // Rechercher un régime
+router.get("/search/:search", dietControllers.searchDiet); // Rechercher un régime
 // router.post('/link/:ids', adminMiddleware) // Lier un régime à un tag
 // router.delete('/link/:ids', adminMiddleware) // Délier un régime d'un tag
 // router.post('/', adminMiddleware) // Ajouter un régime

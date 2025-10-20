@@ -46,6 +46,42 @@ exports.getAllDiets = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Permet de rechercher un ou plusieurs régimes dans la base de données par leur nom.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise&lt;void>} - Retourne un json contenant les informations des régimes recherchés.
+ * @example
+ * // GET /api/v1/diets/search/végé
+ */
+exports.searchDiet = async (req, res) => {
+  try {
+    const { search } = req.params;
+
+    const splitSearch = search
+      .split("+")
+      .map((word) => word.trim())
+      .filter(Boolean);
+
+    const conditions = splitSearch
+      .map((_, idx) => `name_diet ILIKE $${idx + 1}`)
+      .join(" OR ");
+
+    const values = splitSearch.map((word) => `%${word}%`);
+
+    const searchResult = await db.any(
+      `SELECT * FROM diets
+      WHERE ${conditions}`,
+      values
+    );
+
+    return res.status(200).json(searchResult);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
 </code></pre>
         </article>
     </section>
@@ -56,13 +92,13 @@ exports.getAllDiets = async (req, res) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#addUstensil">addUstensil</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUstensil">deleteUstensil</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllDiets">getAllDiets</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getAllUstensils">getAllUstensils</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#getUstensilsFromRecipe">getUstensilsFromRecipe</a></li><li><a href="global.html#linkTagsToRecipe">linkTagsToRecipe</a></li><li><a href="global.html#linkUstensilsToRecipe">linkUstensilsToRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#searchUstensil">searchUstensil</a></li><li><a href="global.html#unlinkTagToRecipe">unlinkTagToRecipe</a></li><li><a href="global.html#unlinkUstensilFromRecipe">unlinkUstensilFromRecipe</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#updateUstensil">updateUstensil</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addIngredient">addIngredient</a></li><li><a href="global.html#addRecipe">addRecipe</a></li><li><a href="global.html#addTag">addTag</a></li><li><a href="global.html#addUstensil">addUstensil</a></li><li><a href="global.html#adminMiddleware">adminMiddleware</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#deleteIngredient">deleteIngredient</a></li><li><a href="global.html#deleteRecipe">deleteRecipe</a></li><li><a href="global.html#deleteTag">deleteTag</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#deleteUstensil">deleteUstensil</a></li><li><a href="global.html#forgotPass">forgotPass</a></li><li><a href="global.html#getAllDiets">getAllDiets</a></li><li><a href="global.html#getAllIngredients">getAllIngredients</a></li><li><a href="global.html#getAllRecipes">getAllRecipes</a></li><li><a href="global.html#getAllTags">getAllTags</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getAllUstensils">getAllUstensils</a></li><li><a href="global.html#getOneRecipe">getOneRecipe</a></li><li><a href="global.html#getOneUser">getOneUser</a></li><li><a href="global.html#getTagsFromRecipe">getTagsFromRecipe</a></li><li><a href="global.html#getUstensilsFromRecipe">getUstensilsFromRecipe</a></li><li><a href="global.html#linkTagsToRecipe">linkTagsToRecipe</a></li><li><a href="global.html#linkUstensilsToRecipe">linkUstensilsToRecipe</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#resetPassMiddleware">resetPassMiddleware</a></li><li><a href="global.html#resetPassword">resetPassword</a></li><li><a href="global.html#searchDiet">searchDiet</a></li><li><a href="global.html#searchIngredients">searchIngredients</a></li><li><a href="global.html#searchRecipes">searchRecipes</a></li><li><a href="global.html#searchTag">searchTag</a></li><li><a href="global.html#searchUstensil">searchUstensil</a></li><li><a href="global.html#unlinkTagToRecipe">unlinkTagToRecipe</a></li><li><a href="global.html#unlinkUstensilFromRecipe">unlinkUstensilFromRecipe</a></li><li><a href="global.html#updateIngredient">updateIngredient</a></li><li><a href="global.html#updateRecipe">updateRecipe</a></li><li><a href="global.html#updateTag">updateTag</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#updateUstensil">updateUstensil</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Oct 20 2025 09:40:55 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Oct 20 2025 09:47:39 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

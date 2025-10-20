@@ -422,3 +422,8 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 
 **GET** `/api/v1/diets`
 
+### Rechercher un ou plusieurs régimes par leur nom
+
+**GET** `/api/v1/diet/search/:search`
+
+Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
