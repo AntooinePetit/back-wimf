@@ -20,6 +20,7 @@ const tagRoutes = require("./routes/tagRoutes");
 const ustensilRoutes = require("./routes/ustensilRoutes");
 const dietRoutes = require("./routes/dietRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const bannedRoutes = require("./routes/bannedRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 
@@ -35,6 +36,8 @@ app.use("/api/v1/ustensils", ustensilRoutes);
 app.use("/api/v1/diets", dietRoutes);
 // Catégories de recettes
 app.use("/api/v1/categories", categoryRoutes);
+// Ingrédients bannis
+app.use("/api/v1/banned", bannedRoutes);
 // Utilisateurs
 app.use("/api/v1/users", userRoutes);
 // Authentification
