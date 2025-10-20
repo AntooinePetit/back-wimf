@@ -5,7 +5,7 @@ const db = require("../db");
  *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @returns {Promise<void>} - Retourne un json contenant tous les ustensils disponibles dans la base de données.
+ * @returns {Promise<void>} - Retourne un json contenant tous les ustensiles disponibles dans la base de données.
  * @example
  * // GET /api/v1/ustensils
  * // Headers : `Authorization: Bearer <votre_jeton_jwt>`

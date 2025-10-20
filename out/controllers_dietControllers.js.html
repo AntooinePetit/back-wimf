@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: middlewares/authMiddleware.js</title>
+    <title>JSDoc: Source: controllers/dietControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: middlewares/authMiddleware.js</h1>
+    <h1 class="page-title">Source: controllers/dietControllers.js</h1>
 
     
 
@@ -26,36 +26,26 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const jwt = require("jsonwebtoken");
+            <pre class="prettyprint source linenums"><code>const db = require("../db");
 
 /**
- * Vérifie le token de connexion de l'utilisateur
- * 
- * @async
+ * Récupère les informations de tous les régimes de la base de données.
+ *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @param {Function} next - Fonction qui renvoie au middleware suivant
- * @returns {void}
+ * @returns {Promise&lt;void>} - Retourne un json contenant tous les régimes disponibles dans la base de données.
+ * @example
+ * // GET /api/v1/diets
  */
-const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Accès refusé, token manquant" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
+exports.getAllDiets = async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT);
-    req.user = decoded;
-    next();
+    const diets = await db.manyOrNone("SELECT * FROM diets");
+
+    return res.status(200).json(diets);
   } catch (err) {
-    res.status(401).json({ message: "Token invalide ou expiré" });
+    return res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = authMiddleware;
 </code></pre>
         </article>
     </section>

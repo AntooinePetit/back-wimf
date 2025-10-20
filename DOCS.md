@@ -415,3 +415,10 @@ Headers : `Authorization: Bearer <votre_jeton_jwt>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle délier l'ustensile, suivi de l'id de l'ustensile à délier. Les deux id doivent être séparé par un `+`.
+
+## Régimes
+
+### Obtenir les informations de tous les régimes
+
+**GET** `/api/v1/diets`
+
