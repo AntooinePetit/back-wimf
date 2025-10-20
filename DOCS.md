@@ -527,3 +527,13 @@ La première valeur de `:ids` doit être l'id de la recette à laquelle délier 
 ### Obtenir les informations de toutes les recettes d'une catégorie choisie
 
 **GET** `/api/v1/categories/:id`
+
+## Ingrédients bannis par un utilisateur
+
+### Récupérer les informations de tous les ingrédients bannis d'un utilisateur choisi
+
+**GET** `/api/v1/banned/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt>`
+
+Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à consulter
