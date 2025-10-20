@@ -514,3 +514,12 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle lier la ou les catégories, suivi du ou des id de catégorie à ajouter. Chaque id doit être séparé du suivant par un `+`.
+
+### Délier une catégorie d'une recette
+
+**DELETE** `/api/v1/categories/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle délier la catégorie, suivi de l'id de la catégorie à délier. Les deux id doivent être séparé par un `+`.

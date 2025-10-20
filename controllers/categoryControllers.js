@@ -64,3 +64,42 @@ exports.linkCategoriesToRecipe = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Delie une catégorie d'une recette.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 204 pour valider la suppression.
+ * @example
+ * // DELETE /api/v1/categories/link/1+4
+ * // Le premier id doit être l'id de la recette et le deuxième l'id de la catégorie à délier.
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ */
+exports.unlinkCategoryFromRecipe = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const splitIds = ids
+      .split("+")
+      .map((id) => parseInt(id.trim()))
+      .filter(Boolean);
+
+    const deletedDiet = await db.result(
+      `DELETE FROM recipes_has_recipe_categories
+      WHERE fk_id_recipe = $1
+      AND fk_id_category = $2`,
+      splitIds
+    );
+
+    if (deletedDiet.rowCount === 0) {
+      return res.status(404).json({
+        message: "Aucun lien entre cette catégorie et cette recette n'a été trouvé",
+      });
+    }
+
+    return res.status(204).json({ message: "Lien supprimé" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
