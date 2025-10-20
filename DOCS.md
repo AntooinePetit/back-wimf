@@ -505,3 +505,12 @@ La première valeur de `:ids` doit être l'id de l'utilisateur auquel délier le
 ### Récupérer toutes les catégories et leurs recettes liées
 
 **GET** `/api/v1/categories`
+
+### Lier une ou plusieurs catégories à une recette
+
+**POST** `/api/v1/categories/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle lier la ou les catégories, suivi du ou des id de catégorie à ajouter. Chaque id doit être séparé du suivant par un `+`.
