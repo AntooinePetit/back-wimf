@@ -172,3 +172,53 @@ exports.addDiet = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+/**
+ * Met à jour un régime de la base de données.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les informations du régime mis à jour.
+ * @example
+ * // POST /api/v1/diets/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+ * {
+ *    "name": "Régime de test mis à jour"
+ * }
+ */
+exports.updateDiet = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const { id } = req.params;
+
+    const existingDiet = await db.oneOrNone(
+      "SELECT * FROM diets WHERE id_diet = $1",
+      id
+    );
+
+    if (!existingDiet) {
+      return res.status(404).json({ message: "Régime introuvable" });
+    }
+
+    const existingDietName = await db.oneOrNone(
+      "SELECT * FROM diets WHERE name_diet = $1 AND id_diet != $2",
+      [name, id]
+    );
+
+    if (existingDietName) {
+      return res.status(409).json({ message: "Ce régime existe déjà" });
+    }
+
+    const updatedDiet = await db.one(
+      `UPDATE diets
+      SET name_diet = $1
+      WHERE id_diet = $2
+      RETURNING *`,
+      [name, id]
+    );
+
+    return res.status(200).json(updatedDiet);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

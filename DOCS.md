@@ -459,3 +459,17 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 ```
 
 Nécessite un token d'authentification d'un compte administrateur
+
+### Mettre à jour un régime de la base de données
+
+**PUT** `/api/v1/diets/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+```json
+{
+  "name": "Régime test mis à jour"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur
