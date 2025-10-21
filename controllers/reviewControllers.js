@@ -78,7 +78,7 @@ exports.deleteReview = async (req, res) => {
 
     if (!review) {
       return res.status(404).json({
-        message: "Cette review n'existe pas",
+        message: "Review introuvable",
       });
     }
 
@@ -100,6 +100,46 @@ exports.deleteReview = async (req, res) => {
     );
 
     return res.status(204).json({ message: "Ingrédient débanni" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.reportReview = async (req, res) => {
+  try {
+    const idReview = req.params.id;
+    const idUser = req.user.id;
+
+    const userConnected = await db.oneOrNone(
+      `SELECT username_user, email_user FROM users WHERE id_user = $1`,
+      idUser
+    );
+
+    const review = await db.oneOrNone(
+      `SELECT * FROM recipe_reviews WHERE id_recipe_review = $1`,
+      idReview
+    );
+
+    if (!review) {
+      return res.status(404).json({ message: "Review introuvable" });
+    }
+
+    const reviewWriter = await db.oneOrNone(
+      `SELECT * FROM users WHERE id_user = $1`,
+      review.fk_id_user
+    );
+
+    if (!reviewWriter) {
+      return res
+        .status(404)
+        .json({ message: "Auteur de la review introuvable" });
+    }
+
+    const moderators = await db.manyOrNone(
+      `SELECT username_user, email_user FROM users WHERE rights_user = "Moderator" OR rights_user = "Administrator"`
+    );
+
+    // TODO: Trouver comment envoyer un email (nodemailer) et rédiger email de signalement à destinations des modérateurs et un email de confirmation de signalement à l'utilisateur à l'origine du signalement
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

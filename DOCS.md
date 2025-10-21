@@ -233,7 +233,11 @@ Nécessite un token d'authentification d'un compte administrateur
 
 Les mots doivent être séparés à l'aide d'un `+` dans la recherche.
 
-### Ajouter un ingrédient à la base de donnée
+### Récupérer les ingrédients d'une recette donnée
+
+**GET** `/api/v1/ingredients/:id`
+
+### Ajouter un ingrédient à la base de données
 
 **POST** `/api/v1/ingredients`
 

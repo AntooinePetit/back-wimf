@@ -64,6 +64,41 @@ exports.searchIngredients = async (req, res) => {
 };
 
 /**
+ * Récupère les ingrédients appartenant à une recette.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant tous les ingrédients appartenant à la recette donnée.
+ * @example
+ * // GET /api/v1/ingredients/1
+ */
+exports.getIngrdientsFromRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const ingredients = await db.manyOrNone(
+      `SELECT i.name_ingredient, ri.quantity, ri.mesurements FROM recipes_has_ingredients AS ri
+      INNER JOIN ingredients AS i ON i.id_ingredient = ri.fk_id_ingredient
+      WHERE fk_id_recipe = $1`,
+      id
+    );
+
+    return res.status(200).json(ingredients);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+/**
  * Permet d'ajouter un ingrédient à la base de donnée.
  *
  * @param {Object} req - Objet de requête Express
@@ -193,7 +228,7 @@ exports.deleteIngredient = async (req, res) => {
       return res.status(404).json({ message: "Ingrédient introuvable" });
     }
 
-    return res.status(204).json({message: "Ingrédient supprimé"});
+    return res.status(204).json({ message: "Ingrédient supprimé" });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

@@ -4,6 +4,7 @@ const router = express.Router();
 const adminMiddleware = require("../middlewares/adminMiddleware");
 // Intégrer le controller des recettes
 const recipeControllers = require("../controllers/recipeControllers");
+
 // TODO: Ajouter une route pour récupérer toutes les recettes correspondants à un tag précis.
 router.get("/", recipeControllers.getAllRecipes); // Récupérer toutes les recettes
 router.get("/:id", recipeControllers.getOneRecipe); // Récupérer une seule recette
