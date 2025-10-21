@@ -165,7 +165,6 @@ exports.updateUser = async (req, res) => {
       passwordHash = await bcrypt.hash(password, salt);
     }
 
-    // TODO: Mettre à jour la colonne "updated_at"
     const date = new Date();
 
     const updatedUser = await db.one(
