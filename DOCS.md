@@ -566,3 +566,9 @@ La première valeur de `:ids` doit être l'id de l'utilisateur auquel retirer l'
 ```
 
 Nécessite un token d'authentification
+
+### Supprimer une review
+
+**DELETE** `/api/v1/reviews/:id`
+
+Nécessite un token d'authentification d'un compte administrateur, modérateur ou de l'utilisateur propriétaire de la review
