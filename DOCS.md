@@ -551,3 +551,18 @@ La première valeur de `:ids` doit être l'id de l'utilisateur auquel ajouter le
 
 Nécessite un token d'authentification d'un compte administrateur ou de l'utilisateur à qui ajouter les ingrédients
 La première valeur de `:ids` doit être l'id de l'utilisateur auquel retirer l'ingrédient de la liste des bannissements, suivi de l'id de l'ingrédient à supprimer. Les deux id doivent être séparé par un `+`.
+
+## Reviews (commentaires et notes)
+
+### Ajouter une review
+
+**POST** `/api/v1/reviews/:id`
+
+```json
+{
+  "comment": "Super recette !",
+  "note": 4
+}
+```
+
+Nécessite un token d'authentification

@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 // Implémenter les controllers
 const reviewControllers = require("../controllers/reviewControllers");
 
-// router.post("/:ids", authMiddleware); // Poster une review sur une recette
+router.post("/:id", authMiddleware, reviewControllers.postReview); // Poster une review sur une recette
 // router.delete("/:ids", authMiddleware); // Supprimer une review d'une recette
 // router.post("/report/:ids"); // Signaler une review (envoi de mail à un email de modération ?)
 // router.get("/recipe/:id"); // Récupérer toutes les reviews d'une recette

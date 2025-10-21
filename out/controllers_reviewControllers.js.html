@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: middlewares/authMiddleware.js</title>
+    <title>JSDoc: Source: controllers/reviewControllers.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: middlewares/authMiddleware.js</h1>
+    <h1 class="page-title">Source: controllers/reviewControllers.js</h1>
 
     
 
@@ -26,36 +26,58 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const jwt = require("jsonwebtoken");
+            <pre class="prettyprint source linenums"><code>const db = require("../db");
 
 /**
- * Vérifie le token de connexion de l'utilisateur
- * 
- * @async
+ * Permet d'ajouter un commentaire, une note ou les deux à une recette.
+ *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
- * @param {Function} next - Fonction qui renvoie au middleware suivant
- * @returns {void}
+ * @returns {Promise&lt;void>} - Retourne un JSON contenant les informations de la review créé.
+ * @example
+ * // POST /api/v1/reviews/1
+ * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt>`
+ * {
+ *  "comment": "Super recette !",
+ *  "note": 4
+ * }
  */
-const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Accès refusé, token manquant" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
+exports.postReview = async (req, res) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT);
-    req.user = decoded;
-    next();
+    const idRecipe = req.params.id;
+    const idUser = req.user.id;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      idRecipe
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const { comment, note } = req.body;
+
+    if (!comment &amp;&amp; !note) {
+      return res.status(400).json({
+        message: "Au moins un commentaire ou une note est nécessaire",
+      });
+    }
+
+    const date = new Date();
+
+    const addedReview = await db.one(
+      `INSERT INTO recipe_reviews (fk_id_user, fk_id_recipe, comment_review, note_review, date_review)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *`,
+      [idUser, idRecipe, comment ?? null, note ?? null, date]
+    );
+
+    return res.status(201).json(addedReview);
   } catch (err) {
-    res.status(401).json({ message: "Token invalide ou expiré" });
+    return res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = authMiddleware;
 </code></pre>
         </article>
     </section>
