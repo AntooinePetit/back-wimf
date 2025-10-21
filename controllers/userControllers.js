@@ -133,7 +133,30 @@ exports.updateUser = async (req, res) => {
     const { username, email, password, rights, nutritionalValues, calories } =
       req.body;
 
-    // TODO: Ajouter une sécurité pour que éviter les duplicata email et nom d'utilisateur
+    const existingEmail = await db.oneOrNone(
+      "SELECT * FROM users WHERE email_user = $1 AND id_user != $2",
+      [email, req.params.id]
+    );
+
+    const existingUsername = await db.oneOrNone(
+      "SELECT * FROM users WHERE username_user = $1 AND id_user != $2",
+      [username, req.params.id]
+    );
+
+    if (existingEmail || existingUsername) {
+      const conflicts = [
+        existingEmail && "Email",
+        existingUsername && "Nom d'utilisateur",
+      ]
+        .filter(Boolean)
+        .join(" et ");
+
+      return res.status(409).json({
+        message: `${conflicts} indisponible${
+          conflicts.includes("et") ? "s" : ""
+        }`,
+      });
+    }
 
     let passwordHash;
 
@@ -143,6 +166,7 @@ exports.updateUser = async (req, res) => {
     }
 
     // TODO: Mettre à jour la colonne "updated_at"
+    const date = new Date();
 
     const updatedUser = await db.one(
       `UPDATE users 
@@ -152,8 +176,9 @@ exports.updateUser = async (req, res) => {
                   password_user = $3,
                   rights_user = $4,
                   nutritional_values_user = $5,
-                  calories_user = $6
-                WHERE id_user = $7
+                  calories_user = $6,
+                  updated_at = $7
+                WHERE id_user = $8
                 RETURNING id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user`,
       [
         username ?? user.username_user,
@@ -162,6 +187,7 @@ exports.updateUser = async (req, res) => {
         rights ?? user.rights_user,
         nutritionalValues ?? user.nutritional_values_user,
         calories ?? user.calories_user,
+        date,
         req.params.id,
       ]
     );

@@ -7,7 +7,6 @@ const ingredientControllers = require("../controllers/ingredientControllers");
 
 router.get("/", ingredientControllers.getAllIngredients); // Récupérer tous les ingrédients
 router.get("/search/:search", ingredientControllers.searchIngredients); // Rechercher un/des ingrédient(s) par le nom
-// TODO: Ajouter une route pour récupérer les ingrédients d'une recette
 router.get("/:id", ingredientControllers.getIngrdientsFromRecipe); // Récupérer les ingrédients d'une recette
 // Utilisation de middleware d'authentification admin en dessous
 router.post("/", adminMiddleware, ingredientControllers.addIngredient); // Ajouter un ingrédient à la liste
