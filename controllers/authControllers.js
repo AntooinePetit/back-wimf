@@ -1,6 +1,7 @@
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const emailForgotPass = require("../utils/mailerForgotPass");
 
 /**
  * Enregistre un nouvel utilisateur dans la base de donnée
@@ -100,6 +101,7 @@ exports.login = async (req, res) => {
       process.env.JWT,
       { expiresIn: "7d" }
     );
+
     res.json(token);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -138,10 +140,12 @@ exports.forgotPass = async (req, res) => {
     const token = jwt.sign(
       { id: user.id_user, purpose: "password_reset" },
       process.env.JWT,
-      { expiresIn: "1h" }
+      { expiresIn: "15m" }
     );
 
-    res.json(token);
+    emailForgotPass(email, user.username_user, token);
+
+    res.status(200).json({ message: "Email envoyé" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
