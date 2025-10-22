@@ -185,7 +185,7 @@ exports.resetPassword = async (req, res) => {
 
       const updateDate = new Date();
 
-      const userReseted = await db.one(
+      const userReset = await db.one(
         `UPDATE users 
                   SET "password_user" = $1,
                       "updated_at" = $2  
@@ -194,7 +194,7 @@ exports.resetPassword = async (req, res) => {
         [passwordHash, updateDate, req.user.id]
       );
 
-      res.json(userReseted);
+      res.json(userReset);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });

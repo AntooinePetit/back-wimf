@@ -372,115 +372,131 @@ describe("Auth Controllers", () => {
   //   }); // /it
   // }); // /describe forgotPass
 
-  // describe("resetPassword", () => {
-  //   let req, res;
+  describe("resetPassword", () => {
+    let req, res;
 
-  //   beforeEach(() => {
-  //     req = {
-  //       body: {
-  //         email: "test@mail.com",
-  //         password: "password1234",
-  //       },
-  //       user: {
-  //         id: "1",
-  //       },
-  //     };
-  //     res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn(),
-  //     };
-  //   }); // /beforeEach
+    beforeEach(() => {
+      req = {
+        body: {
+          email: "test@mail.com",
+          password: "password1234",
+        },
+        user: {
+          id: "1",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      jest.useFakeTimers();
+      jest.setSystemTime(mockDate);
+    }); // /beforeEach
 
-  //   afterEach(() => {
-  //     jest.clearAllMocks();
-  //   }); // /afterEach
+    afterEach(() => {
+      jest.clearAllMocks();
+      jest.useRealTimers();
+    }); // /afterEach
 
-  //   it("should reset user's password", async () => {
-  //     const mockUserToReset = {
-  //       _id: "1",
-  //       email: "test@mail.com",
-  //       username: "testuser",
-  //       password: "password123",
-  //       save: jest.fn().mockResolvedValue({
-  //         _id: "1",
-  //         email: "test@mail.com",
-  //         username: "testuser",
-  //         password: "mock-hash",
-  //       }),
-  //     };
-  //     User.findById.mockResolvedValue(mockUserToReset);
+    it("should reset user's password", async () => {
+      const mockUserToReset = {
+        email_user: "test@mail.com",
+      };
 
-  //     bcrypt.genSalt.mockResolvedValue("mock-salt");
-  //     bcrypt.hash.mockResolvedValue("mock-hash");
+      db.oneOrNone.mockResolvedValue(mockUserToReset);
 
-  //     await resetPassword(req, res);
+      bcrypt.genSalt.mockResolvedValue("mock-salt");
+      bcrypt.hash.mockResolvedValue("mock-hash");
 
-  //     expect(User.findById).toHaveBeenCalledWith("1");
-  //     expect(bcrypt.genSalt).toHaveBeenCalledWith(12);
-  //     expect(bcrypt.hash).toHaveBeenCalledWith("password1234", "mock-salt");
-  //     expect(mockUserToReset.password).toBe("mock-hash");
-  //     expect(mockUserToReset.save).toHaveBeenCalled();
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       _id: "1",
-  //       email: "test@mail.com",
-  //       username: "testuser",
-  //       password: "mock-hash",
-  //     });
-  //   }); // /it
+      const mockUserReset = {
+        id_user: 1,
+        username_user: "testuser",
+        email_user: "test@mail.com",
+      };
 
-  //   it("should return error if user not found in database", async () => {
-  //     User.findById.mockResolvedValue(null);
+      db.one.mockResolvedValue(mockUserReset);
 
-  //     await resetPassword(req, res);
+      await resetPassword(req, res);
 
-  //     expect(User.findById).toHaveBeenCalledWith("1");
-  //     expect(res.status).toHaveBeenCalledWith(404);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Utilisateur introuvable",
-  //     });
-  //   }); // /it
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        `SELECT email_user FROM users WHERE id_user = $1`,
+        "1"
+      );
+      expect(bcrypt.genSalt).toHaveBeenCalled();
+      expect(bcrypt.hash).toHaveBeenCalledWith("password1234", "mock-salt");
+      expect(db.one).toHaveBeenCalledWith(
+        `UPDATE users 
+                  SET "password_user" = $1,
+                      "updated_at" = $2  
+                  WHERE id_user = $3
+                  RETURNING id_user, username_user, email_user`,
+        ["mock-hash", mockDate, "1"]
+      );
+      expect(res.json).toHaveBeenCalledWith({
+        id_user: 1,
+        username_user: "testuser",
+        email_user: "test@mail.com",
+      });
+    }); // /it
 
-  //   it("should handle error if wrong email", async () => {
-  //     const mockUserToReset = {
-  //       _id: "1",
-  //       email: "tost@mail.com",
-  //     };
-  //     User.findById.mockResolvedValue(mockUserToReset);
+    it("should return error if user not found in database", async () => {
+      db.oneOrNone.mockResolvedValue(null);
 
-  //     await resetPassword(req, res);
+      await resetPassword(req, res);
 
-  //     expect(User.findById).toHaveBeenCalledWith("1");
-  //     expect(res.status).toHaveBeenCalledWith(401);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Tu n'es pas autorisé à réaliser cette action",
-  //     });
-  //   }); // /it
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Utilisateur introuvable",
+      });
+    }); // /it
 
-  //   it("should handle save error", async () => {
-  //     const mockUserToReset = {
-  //       _id: "1",
-  //       email: "test@mail.com",
-  //       username: "testuser",
-  //       save: jest.fn().mockRejectedValue(new Error("Save error")),
-  //     };
-  //     User.findById.mockResolvedValue(mockUserToReset);
+    it("should handle error if wrong email", async () => {
+      const mockUserToReset = {
+        email_user: "test2@mail.com",
+      };
+      db.oneOrNone.mockResolvedValue(mockUserToReset);
 
-  //     await resetPassword(req, res);
+      await resetPassword(req, res);
 
-  //     expect(User.findById).toHaveBeenCalledWith("1");
-  //     expect(mockUserToReset.save).toHaveBeenCalled();
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({ message: "Save error" });
-  //   }); // /it
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        `SELECT email_user FROM users WHERE id_user = $1`,
+        "1"
+      );
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Tu n'es pas autorisé à réaliser cette action",
+      });
+    }); // /it
 
-  //   it("should handle database error", async () => {
-  //     User.findById.mockRejectedValue(new Error("Database error"));
+    it("should handle save error", async () => {
+      const mockUserToReset = {
+        email_user: "test@mail.com",
+      };
 
-  //     await resetPassword(req, res);
+      db.oneOrNone.mockResolvedValue(mockUserToReset);
 
-  //     expect(User.findById).toHaveBeenCalledWith("1");
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-  //   }); // /it
-  // }); // /describe resetPassword
+      bcrypt.genSalt.mockResolvedValue("mock-salt");
+      bcrypt.hash.mockResolvedValue("mock-hash");
+
+      db.one.mockRejectedValue(new Error("Update error"));
+
+      await resetPassword(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.one).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await resetPassword(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+  }); // /describe resetPassword
 }); // /describe Auth Controller
