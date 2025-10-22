@@ -101,131 +101,61 @@ describe("Auth Controllers", () => {
         },
         token: "mock-token",
       });
+    }); // /it
+
+    it("should return 409 if email or username is alrady taken", async () => {
+      const mockExistingUser = {
+        id_user: 1,
+        username_user: "testuser",
+        email_user: "test@mail.com",
+      };
+
+      db.oneOrNone.mockResolvedValue(mockExistingUser);
+
+      await register(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Tu ne peux pas utiliser ce nom d'utilisateur ou cet email.",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await register(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle database insertion error", async () => {
+      const mockNewUser = {
+        id_user: 1,
+        username_user: "testuser",
+        email_user: "test@mail.com",
+      };
+
+      db.oneOrNone.mockResolvedValue(null);
+
+      bcrypt.genSalt.mockResolvedValue("mock-salt");
+      bcrypt.hash.mockResolvedValue("mock-hash");
+
+      db.one.mockRejectedValue(new Error("Database insert error"));
+
+      await register(req, res);
+
+      expect(db.one).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Database insert error",
+      });
     });
   }); // /describe Register
-  // describe("Register", () => {
-  //   let req, res;
 
-  //   beforeEach(() => {
-  //     req = {
-  //       body: {
-  //         username: "testuser",
-  //         email: "test@mail.com",
-  //         password: "password123",
-  //       },
-  //     };
-  //     res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn(),
-  //     };
-  //     process.env.JWT = "test-secret";
-  //   }); // /beforeEach
-
-  //   afterEach(() => {
-  //     jest.clearAllMocks();
-  //   }); // /afterEach
-
-  //   it("should register and connect new user", async () => {
-  //     const mockNewUser = {
-  //       _id: "1",
-  //       username: "testuser",
-  //       email: "test@mail.com",
-  //       password: "password123",
-  //       save: jest.fn().mockResolvedValue(),
-  //     };
-  //     User.findOne.mockResolvedValue(null);
-  //     User.mockImplementation(() => mockNewUser);
-
-  //     jwt.sign.mockReturnValue("mock-token");
-
-  //     await register(req, res);
-
-  //     expect(User.findOne).toHaveBeenCalledWith({
-  //       $or: [{ email: "test@mail.com" }, { username: "testuser" }],
-  //     });
-  //     expect(User).toHaveBeenCalledWith({
-  //       email: "test@mail.com",
-  //       username: "testuser",
-  //       password: "password123",
-  //     });
-  //     expect(mockNewUser.save).toHaveBeenCalled();
-  //     expect(jwt.sign).toHaveBeenCalledWith(
-  //       {
-  //         id: "1",
-  //         username: "testuser",
-  //       },
-  //       "test-secret",
-  //       { expiresIn: "7d" }
-  //     );
-  //     expect(res.status).toHaveBeenCalledWith(201);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Utilisateur connecté avec succès",
-  //       user: {
-  //         id: "1",
-  //         username: "testuser",
-  //         email: "test@mail.com",
-  //       },
-  //       token: "mock-token",
-  //     });
-  //   }); // /it
-
-  //   it("should return 200 if user infos are already taken", async () => {
-  //     const mockExistingUser = {
-  //       _id: "1",
-  //     };
-  //     User.findOne.mockResolvedValue(mockExistingUser);
-
-  //     await register(req, res);
-
-  //     expect(User.findOne).toHaveBeenCalledWith({
-  //       $or: [{ email: "test@mail.com" }, { username: "testuser" }],
-  //     });
-  //     expect(res.status).toHaveBeenCalledWith(200);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Tu ne peux pas utiliser ce nom d'utilisateur ou cet email.",
-  //     });
-  //   }); // /it
-
-  //   it("should handle server error", async () => {
-  //     User.findOne.mockRejectedValue(new Error("Database error"));
-
-  //     await register(req, res);
-
-  //     expect(User.findOne).toHaveBeenCalledWith({
-  //       $or: [{ email: "test@mail.com" }, { username: "testuser" }],
-  //     });
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-  //   }); // /it
-
-  //   it("should handle save error", async () => {
-  //     const mockNewUser = {
-  //       _id: "1",
-  //       username: "testuser",
-  //       email: "test@mail.com",
-  //       password: "password123",
-  //       save: jest.fn().mockRejectedValue(new Error("Save error")),
-  //     };
-  //     User.findOne.mockResolvedValue(null);
-  //     User.mockImplementation(() => mockNewUser);
-
-  //     await register(req, res);
-
-  //     expect(User.findOne).toHaveBeenCalledWith({
-  //       $or: [{ email: "test@mail.com" }, { username: "testuser" }],
-  //     });
-  //     expect(User).toHaveBeenCalledWith({
-  //       email: "test@mail.com",
-  //       username: "testuser",
-  //       password: "password123",
-  //     });
-  //     expect(mockNewUser.save).toHaveBeenCalled();
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({ message: "Save error" });
-  //   }); // /it
-  // }); // /desribe Register
-
-  // describe("Login", () => {
+ // describe("Login", () => {
   //   let req, res;
 
   //   beforeEach(() => {
