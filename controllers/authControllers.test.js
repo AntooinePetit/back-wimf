@@ -6,15 +6,103 @@ const {
   resetPassword,
 } = require("./authControllers");
 // Import des models et dépendances
+const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 jest.mock("jsonwebtoken");
 jest.mock("bcrypt");
 
+// const mockNewUser = {
+//   id_user: 1,
+//   username_user: "testuser",
+//   email_user: "test@mail.com",
+//   password_user: "hashed_password123",
+//   created_at: "2025-10-09T13:33:02.815Z",
+//   updated_at: "2025-10-09T13:33:02.815Z",
+//   rights_user: "Member",
+//   nutritional_values_user: true,
+//   caloris_user: true,
+// };
+
 // TODO: Ré-écrire les tests pour correspondre aux nouveaux controllers en psql
 
 describe("Auth Controllers", () => {
+  const mockDate = new Date("2025-10-09T13:33:02.815Z");
+
+  describe("Register", () => {
+    let req, res;
+
+    beforeEach(() => {
+      req = {
+        body: {
+          username: "testuser",
+          email: "test@mail.com",
+          password: "password123",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      process.env.JWT = "test-secret";
+      jest.useFakeTimers();
+      jest.setSystemTime(mockDate);
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+      jest.useRealTimers();
+    }); // /afterEach
+
+    it("should register and connect new user", async () => {
+      const mockNewUser = {
+        id_user: 1,
+        username_user: "testuser",
+        email_user: "test@mail.com",
+      };
+
+      db.oneOrNone.mockResolvedValue(null);
+
+      bcrypt.genSalt.mockResolvedValue("mock-salt");
+      bcrypt.hash.mockResolvedValue("mock-hash");
+
+      db.one.mockResolvedValue(mockNewUser);
+
+      jwt.sign.mockReturnValue("mock-token");
+
+      await register(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM users WHERE email_user = $1 OR username_user = $2",
+        ["test@mail.com", "testuser"]
+      );
+      expect(bcrypt.genSalt).toHaveBeenCalledWith(12);
+      expect(bcrypt.hash).toHaveBeenCalledWith("password123", "mock-salt");
+      expect(db.one).toHaveBeenCalledWith(
+        `INSERT INTO users (username_user, email_user, password_user, created_at, updated_at, "rights_user") VALUES ($1, $2, $3, $4, $5, 'Member') RETURNING id_user, username_user, email_user`,
+        ["testuser", "test@mail.com", "mock-hash", mockDate, mockDate]
+      );
+      expect(jwt.sign).toHaveBeenCalledWith(
+        {
+          id: 1,
+          username: "testuser",
+        },
+        "test-secret",
+        { expiresIn: "7d" }
+      );
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Utilisateur connecté avec succès",
+        user: {
+          id: 1,
+          username: "testuser",
+          email: "test@mail.com",
+        },
+        token: "mock-token",
+      });
+    });
+  }); // /describe Register
   // describe("Register", () => {
   //   let req, res;
 
@@ -454,4 +542,4 @@ describe("Auth Controllers", () => {
   //     expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
   //   }); // /it
   // }); // /describe resetPassword
-});// /describe Auth Controller
+}); // /describe Auth Controller

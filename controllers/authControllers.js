@@ -133,6 +133,8 @@ exports.forgotPass = async (req, res) => {
         .status(404)
         .json({ message: "Cet email n'est lié à aucun compte" });
 
+    // TODO: Envoie de mail pour le mot de passe oublié
+
     const token = jwt.sign(
       { id: user.id_user, purpose: "password_reset" },
       process.env.JWT,
