@@ -5,7 +5,7 @@ const {
   forgotPass,
   resetPassword,
 } = require("./authControllers");
-// Import des models et dépendances
+// Import des dépendances
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -14,8 +14,6 @@ const emailForgotPass = require("../utils/mailerForgotPass");
 jest.mock("jsonwebtoken");
 jest.mock("bcrypt");
 jest.mock("../utils/mailerForgotPass.js");
-
-// TODO: Ré-écrire les tests pour correspondre aux nouveaux controllers en psql
 
 describe("Auth Controllers", () => {
   const mockDate = new Date("2025-10-09T13:33:02.815Z");
