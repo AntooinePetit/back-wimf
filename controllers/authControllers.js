@@ -83,7 +83,7 @@ exports.login = async (req, res) => {
 
   try {
     const user = await db.oneOrNone(
-      "SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1",
+      "SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user ILIKE $1",
       email
     );
 
@@ -126,7 +126,7 @@ exports.forgotPass = async (req, res) => {
 
   try {
     const user = await db.oneOrNone(
-      "SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1",
+      "SELECT id_user, email_user, username_user FROM users WHERE email_user ILIKE $1",
       email
     );
 
@@ -134,8 +134,6 @@ exports.forgotPass = async (req, res) => {
       return res
         .status(404)
         .json({ message: "Cet email n'est lié à aucun compte" });
-
-    // TODO: Envoie de mail pour le mot de passe oublié
 
     const token = jwt.sign(
       { id: user.id_user, purpose: "password_reset" },

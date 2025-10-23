@@ -9,21 +9,11 @@ const {
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const emailForgotPass = require("../utils/mailerForgotPass");
 
 jest.mock("jsonwebtoken");
 jest.mock("bcrypt");
-
-// const mockNewUser = {
-//   id_user: 1,
-//   username_user: "testuser",
-//   email_user: "test@mail.com",
-//   password_user: "hashed_password123",
-//   created_at: "2025-10-09T13:33:02.815Z",
-//   updated_at: "2025-10-09T13:33:02.815Z",
-//   rights_user: "Member",
-//   nutritional_values_user: true,
-//   caloris_user: true,
-// };
+jest.mock("../utils/mailerForgotPass.js");
 
 // TODO: Ré-écrire les tests pour correspondre aux nouveaux controllers en psql
 
@@ -191,7 +181,7 @@ describe("Auth Controllers", () => {
       await login(req, res);
 
       expect(db.oneOrNone).toHaveBeenCalledWith(
-        `SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user = $1`,
+        `SELECT id_user, email_user, password_user, username_user FROM users WHERE email_user ILIKE $1`,
         "test@mail.com"
       );
       expect(bcrypt.compare).toHaveBeenCalledWith(
@@ -284,93 +274,127 @@ describe("Auth Controllers", () => {
     });
   }); // /describe Login
 
-  // describe("forgotPass", () => {
-  //   let req, res;
+  describe("forgotPass", () => {
+    let req, res;
 
-  //   beforeEach(() => {
-  //     req = {
-  //       body: {
-  //         email: "test@mail.com",
-  //       },
-  //     };
-  //     res = {
-  //       status: jest.fn().mockReturnThis(),
-  //       json: jest.fn(),
-  //     };
-  //     process.env.JWT = "test-secret";
-  //   }); // /beforeEach
+    beforeEach(() => {
+      req = {
+        body: {
+          email: "test@mail.com",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      process.env.JWT = "test-secret";
+    }); // /beforeEach
 
-  //   afterEach(() => {
-  //     jest.clearAllMocks();
-  //   }); // /afterEach
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
 
-  //   it("should return a password reset token", async () => {
-  //     const mockUser = {
-  //       _id: "1",
-  //       email: "test@mail.com",
-  //     };
-  //     User.findOne.mockResolvedValue(mockUser);
+    it("should send a mail and return a 200 code", async () => {
+      const mockUser = {
+        id_user: 1,
+        email_user: "test@mail.com",
+        username_user: "testuser",
+      };
 
-  //     jwt.sign.mockReturnValue("mock-token");
+      db.oneOrNone.mockResolvedValue(mockUser);
 
-  //     await forgotPass(req, res);
+      jwt.sign.mockReturnValue("mock-token");
 
-  //     expect(User.findOne).toHaveBeenCalledWith({ email: "test@mail.com" });
-  //     expect(jwt.sign).toHaveBeenCalledWith(
-  //       { id: "1", purpose: "password_reset" },
-  //       "test-secret",
-  //       { expiresIn: "1h" }
-  //     );
-  //     expect(res.json).toHaveBeenCalledWith("mock-token");
-  //   }); // /it
+      emailForgotPass.mockResolvedValueOnce();
 
-  //   it("should return error if user not found", async () => {
-  //     User.findOne.mockResolvedValue(null);
+      await forgotPass(req, res);
 
-  //     await forgotPass(req, res);
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        `SELECT id_user, email_user, username_user FROM users WHERE email_user ILIKE $1`,
+        "test@mail.com"
+      );
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { id: 1, purpose: "password_reset" },
+        "test-secret",
+        { expiresIn: "15m" }
+      );
+      expect(emailForgotPass).toHaveBeenCalledWith(
+        "test@mail.com",
+        "testuser",
+        "mock-token"
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({ message: "Email envoyé" });
+    });
 
-  //     expect(User.findOne).toHaveBeenCalledWith({ email: "test@mail.com" });
-  //     expect(res.status).toHaveBeenCalledWith(404);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Cet email n'est lié à aucun compte",
-  //     });
-  //   }); // /it
+    it("should return error if user not found", async () => {
+      db.oneOrNone.mockResolvedValue(null);
 
-  //   it("should handle token generation error", async () => {
-  //     const mockUser = {
-  //       _id: "1",
-  //       email: "test@mail.com",
-  //     };
-  //     User.findOne.mockResolvedValue(mockUser);
+      await forgotPass(req, res);
 
-  //     jwt.sign.mockImplementation(() => {
-  //       throw new Error("Token generation error");
-  //     });
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Cet email n'est lié à aucun compte",
+      });
+    }); // /it
 
-  //     await forgotPass(req, res);
+    it("should handle token generation error", async () => {
+      const mockUser = {
+        id_user: 1,
+        email_user: "test@mail.com",
+      };
+      db.oneOrNone.mockResolvedValue(mockUser);
 
-  //     expect(User.findOne).toHaveBeenCalledWith({ email: "test@mail.com" });
-  //     expect(jwt.sign).toHaveBeenCalledWith(
-  //       { id: "1", purpose: "password_reset" },
-  //       "test-secret",
-  //       { expiresIn: "1h" }
-  //     );
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({
-  //       message: "Token generation error",
-  //     });
-  //   });
+      jwt.sign.mockImplementation(() => {
+        throw new Error("Token generation error");
+      });
 
-  //   it("should handle database error", async () => {
-  //     User.findOne.mockRejectedValue(new Error("Database error"));
+      await forgotPass(req, res);
 
-  //     await forgotPass(req, res);
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(jwt.sign).toHaveBeenCalledWith(
+        { id: 1, purpose: "password_reset" },
+        "test-secret",
+        { expiresIn: "15m" }
+      );
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Token generation error",
+      });
+    });
 
-  //     expect(User.findOne).toHaveBeenCalledWith({ email: "test@mail.com" });
-  //     expect(res.status).toHaveBeenCalledWith(500);
-  //     expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-  //   }); // /it
-  // }); // /describe forgotPass
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await forgotPass(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle mail send error", async () => {
+      const mockUser = {
+        id_user: 1,
+        email_user: "test@mail.com",
+      };
+
+      db.oneOrNone.mockResolvedValue(mockUser);
+
+      jwt.sign.mockReturnValue("mock-token");
+
+      emailForgotPass.mockRejectedValue(new Error("SMTP error"));
+
+      await forgotPass(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(jwt.sign).toHaveBeenCalled();
+      expect(emailForgotPass).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "SMTP error" });
+    }); // it
+  }); // /describe forgotPass
 
   describe("resetPassword", () => {
     let req, res;
