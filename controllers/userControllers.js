@@ -52,7 +52,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getOneUser = async (req, res) => {
   try {
     const userConnected = await db.oneOrNone(
-      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      "SELECT rights_user FROM users WHERE id_user = $1",
       req.user.id
     );
 
@@ -65,12 +65,14 @@ exports.getOneUser = async (req, res) => {
     }
 
     if (
-      (userConnected.rights_user === "Member" &&
-        userConnected.email_user != user.email_user) ||
       !userConnected ||
-      (userConnected.rights_user === "Moderator" &&
-        user.rights_user != "Member") ||
-      user.rights_user === "Administrator"
+      (userConnected.rights_user === "Member" &&
+        req.user.id !== user.id_user) ||
+      (req.user.id !== user.id_user &&
+        { Member: 1, Moderator: 2, Administrator: 3 }[user.rights_user] >=
+          { Member: 1, Moderator: 2, Administrator: 3 }[
+            userConnected.rights_user
+          ])
     ) {
       return res
         .status(401)
@@ -84,7 +86,7 @@ exports.getOneUser = async (req, res) => {
 };
 
 /**
- * Met à jour les informations d'un utilisateur donné si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à modifier. Si l'utilisateur à mettre à jour a des autorisations plus importantes ou égales que l'utilisateur connecté, une erreur est renvoyée.
+ * Met à jour les informations d'un utilisateur donné si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à modifier. Si l'utilisateur à mettre à jour a des autorisations plus importantes ou égales à l'utilisateur connecté, une erreur est renvoyée.
  *
  * @async
  * @param {Object} req - Objet de requête Express
@@ -104,7 +106,7 @@ exports.getOneUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const userConnected = await db.oneOrNone(
-      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      "SELECT rights_user FROM users WHERE id_user = $1",
       req.user.id
     );
 
@@ -117,12 +119,14 @@ exports.updateUser = async (req, res) => {
     }
 
     if (
-      (userConnected.rights_user === "Member" &&
-        userConnected.email_user != user.email_user) ||
       !userConnected ||
-      (userConnected.rights_user === "Moderator" &&
-        user.rights_user != "Member") ||
-      user.rights_user === "Administrator"
+      (userConnected.rights_user === "Member" &&
+        req.user.id !== user.id_user) ||
+      (req.user.id !== user.id_user &&
+        { Member: 1, Moderator: 2, Administrator: 3 }[user.rights_user] >=
+          { Member: 1, Moderator: 2, Administrator: 3 }[
+            userConnected.rights_user
+          ])
     ) {
       return res
         .status(401)
@@ -196,7 +200,7 @@ exports.updateUser = async (req, res) => {
 };
 
 /**
- * Supprime un utilisateur de la base de donnée si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à supprimer. Si l'utilisateur à supprimer a des autorisations plus importantes ou égales que l'utilisateur connecté, une erreur est renvoyée.
+ * Supprime un utilisateur de la base de donnée si l'utilisateur connecté est soit modérateur ou administrateur, soit propriétaire du compte à supprimer. Si l'utilisateur à supprimer a des autorisations plus importantes ou égales à l'utilisateur connecté, une erreur est renvoyée.
  * @async
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
@@ -209,7 +213,7 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const userConnected = await db.oneOrNone(
-      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      "SELECT rights_user FROM users WHERE id_user = $1",
       req.user.id
     );
 
@@ -219,12 +223,14 @@ exports.deleteUser = async (req, res) => {
     );
 
     if (
-      (userConnected.rights_user === "Member" &&
-        userConnected.email_user != userToDelete.email_user) ||
       !userConnected ||
-      (userConnected.rights_user === "Moderator" &&
-        userToDelete.rights_user != "Member") ||
-      userToDelete.rights_user === "Administrator"
+      (userConnected.rights_user === "Member" &&
+        req.user.id !== user.id_user) ||
+      (req.user.id !== user.id_user &&
+        { Member: 1, Moderator: 2, Administrator: 3 }[user.rights_user] >=
+          { Member: 1, Moderator: 2, Administrator: 3 }[
+            userConnected.rights_user
+          ])
     ) {
       return res
         .status(401)

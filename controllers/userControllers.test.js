@@ -114,5 +114,120 @@ describe("User controllers", () => {
     }); // /it
   }); // /describe getAllUsers
 
-  
+  describe("getOneUser", () => {
+    let req, res;
+
+    beforeEach(() => {
+      req = {
+        user: {
+          id: 1,
+        },
+        params: {
+          id: 2,
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      jest.useFakeTimers();
+      jest.setSystemTime(mockDate);
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+      jest.useRealTimers();
+    }); // /afterEach
+
+    it("should get searched user", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Member",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      await getOneUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT rights_user FROM users WHERE id_user = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT id_user, username_user, email_user, created_at, updated_at, rights_user, nutritional_values_user, calories_user FROM users WHERE id_user = $1",
+        2
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockUser);
+    }); // /it
+
+    it("should return 404 if user not found", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(null);
+
+      await getOneUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Utilisateur introuvable",
+      });
+    }); // /it
+
+    it("should return 401 if user has no right to access informations", async () => {
+      const mockUserConnected = {
+        rights_user: "Member",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Moderator",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      await getOneUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Tu n'as pas le droit de consulter ce profil",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await getOneUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    });
+  }); // /describre getOneUser
 }); // /describe User controllers
