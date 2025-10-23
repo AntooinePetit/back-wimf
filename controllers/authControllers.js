@@ -143,7 +143,7 @@ exports.forgotPass = async (req, res) => {
       { expiresIn: "15m" }
     );
 
-    emailForgotPass(email, user.username_user, token);
+    await emailForgotPass(email, user.username_user, token);
 
     res.status(200).json({ message: "Email envoyé" });
   } catch (err) {

@@ -22,13 +22,13 @@ async function emailForgotPass(email, username, token) {
     Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
   };
 
-  return transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(`Erreur : ${error}`);
-  } else {
-    console.log('Email envoyé : ' + info.response);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    return info; // optionnel : tu peux retourner l’info si ton contrôleur en a besoin
+  } catch (error) {
+    // Important : on relance l’erreur pour que le contrôleur puisse la gérer
+    throw new Error("Échec de l'envoi de l'email");
   }
-})
 }
 
 module.exports = emailForgotPass;
