@@ -386,8 +386,7 @@ describe("User controllers", () => {
 
       db.oneOrNone
         .mockResolvedValueOnce(mockUserConnected)
-        .mockResolvedValueOnce(mockUser)
-
+        .mockResolvedValueOnce(mockUser);
 
       db.one.mockResolvedValue(mockUpdatedUser);
 
@@ -706,4 +705,205 @@ describe("User controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
     }); // /it
   }); // /describe updateUser
+
+  describe("deleteUser", () => {
+    let req, res;
+
+    beforeEach(() => {
+      req = {
+        user: {
+          id: 1,
+        },
+        params: {
+          id: 2,
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should delete user from database", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        password_user: "password123",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Member",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+      const mockResult = {
+        rowCount: 1,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT rights_user FROM users WHERE id_user = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT rights_user FROM users WHERE id_user = $1",
+        2
+      );
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Utilisateur supprimé",
+      });
+    }); // /it
+
+    it("should return 401 if user has no rights to delete", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        password_user: "password123",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Moderator",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Tu n'as pas le droit de supprimer cet utilisateur",
+      });
+    }); // /it
+
+    it("should return 401 if member tries to delete another user", async () => {
+      const mockUserConnected = {
+        rights_user: "Member",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        password_user: "password123",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Member",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Tu n'as pas le droit de supprimer cet utilisateur",
+      });
+    });
+
+    it("should return 404 if user to delete can't be found", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        password_user: "password123",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Member",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+      const mockResult = {
+        rowCount: 0,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Utilisateur introuvable",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle deletion error", async () => {
+      const mockUserConnected = {
+        rights_user: "Moderator",
+      };
+      const mockUser = {
+        id_user: 2,
+        username_user: "testUser",
+        password_user: "password123",
+        email_user: "user@mail.com",
+        created_at: "2025-10-10T08:53:29.914Z",
+        updated_at: "2025-10-10T08:53:29.914Z",
+        rights_user: "Member",
+        nutritional_values_user: true,
+        calories_user: true,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockUserConnected)
+        .mockResolvedValueOnce(mockUser);
+
+      db.result.mockRejectedValue(new Error("Deletion error"));
+
+      await deleteUser(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Deletion error" });
+    });
+  }); // /describe deleteUser
 }); // /describe User controllers

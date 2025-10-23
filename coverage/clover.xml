@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761229031949" clover="3.2.0">
-  <project timestamp="1761229031949" name="All files">
-    <metrics statements="118" coveredstatements="103" conditionals="73" coveredconditionals="63" methods="9" coveredmethods="7" elements="200" coveredelements="173" complexity="0" loc="118" ncloc="118" packages="2" files="3" classes="3"/>
+<coverage generated="1761230557715" clover="3.2.0">
+  <project timestamp="1761230557716" name="All files">
+    <metrics statements="118" coveredstatements="113" conditionals="73" coveredconditionals="72" methods="9" coveredmethods="8" elements="200" coveredelements="193" complexity="0" loc="118" ncloc="118" packages="2" files="3" classes="3"/>
     <package name="controllers">
-      <metrics statements="110" coveredstatements="100" conditionals="73" coveredconditionals="63" methods="8" coveredmethods="7"/>
+      <metrics statements="110" coveredstatements="110" conditionals="73" coveredconditionals="72" methods="8" coveredmethods="8"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
         <metrics statements="54" coveredstatements="54" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -62,7 +62,7 @@
         <line num="202" count="2" type="stmt"/>
       </file>
       <file name="userControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\userControllers.js">
-        <metrics statements="56" coveredstatements="46" conditionals="59" coveredconditionals="50" methods="4" coveredmethods="3"/>
+        <metrics statements="56" coveredstatements="56" conditionals="59" coveredconditionals="59" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="15" count="1" type="stmt"/>
@@ -109,16 +109,16 @@
         <line num="202" count="2" type="stmt"/>
         <line num="204" count="2" type="stmt"/>
         <line num="219" count="1" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
-        <line num="221" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="231" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="241" count="0" type="stmt"/>
-        <line num="246" count="0" type="stmt"/>
-        <line num="250" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="251" count="0" type="stmt"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="256" count="0" type="stmt"/>
+        <line num="220" count="6" type="stmt"/>
+        <line num="221" count="6" type="stmt"/>
+        <line num="226" count="5" type="stmt"/>
+        <line num="231" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="243" count="2" type="stmt"/>
+        <line num="248" count="3" type="stmt"/>
+        <line num="252" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="253" count="1" type="stmt"/>
+        <line num="256" count="2" type="stmt"/>
+        <line num="258" count="2" type="stmt"/>
       </file>
     </package>
     <package name="utils">

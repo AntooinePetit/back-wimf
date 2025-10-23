@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.14% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>46/56</span>
+                <span class='fraction'>56/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.74% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>50/59</span>
+                <span class='fraction'>59/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.14% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>46/56</span>
+                <span class='fraction'>56/56</span>
             </div>
         
             
@@ -321,7 +321,9 @@
 <a name='L256'></a><a href='#L256'>256</a>
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,18 +542,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -561,22 +563,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const db = require("../db");
@@ -797,44 +801,46 @@ exports.updateUser = async (req, res) =&gt; {
  * // Header: Authorization: Bearer &lt;votre_jeton_jwt&gt;
  */
 // Suppression d'un utilisateur
-exports.deleteUser = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const userConnected = <span class="cstat-no" title="statement not covered" >await db.oneOrNone(</span>
+exports.deleteUser = async (req, res) =&gt; {
+  try {
+    const userConnected = await db.oneOrNone(
       "SELECT rights_user FROM users WHERE id_user = $1",
       req.user.id
     );
 &nbsp;
-    const userToDelete = <span class="cstat-no" title="statement not covered" >await db.oneOrNone(</span>
-      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+    const userToDelete = await db.oneOrNone(
+      "SELECT rights_user FROM users WHERE id_user = $1",
       req.params.id
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (</span>
+    if (
       !userConnected ||
       (userConnected.rights_user === "Member" &amp;&amp;
-        req.user.id !== user.id_user) ||
-      (req.user.id !== user.id_user &amp;&amp;
-        { Member: 1, Moderator: 2, Administrator: 3 }[user.rights_user] &gt;=
+        req.user.id !== userToDelete.id_user) ||
+      (req.user.id !== userToDelete.id_user &amp;&amp;
+        { Member: 1, Moderator: 2, Administrator: 3 }[
+          userToDelete.rights_user
+        ] &gt;=
           { Member: 1, Moderator: 2, Administrator: 3 }[
             userConnected.rights_user
           ])
     ) {
-<span class="cstat-no" title="statement not covered" >      return res</span>
+      return res
         .status(401)
         .json({ message: "Tu n'as pas le droit de supprimer cet utilisateur" });
     }
 &nbsp;
-    const userDeleted = <span class="cstat-no" title="statement not covered" >await db.result(</span>
+    const userDeleted = await db.result(
       "DELETE FROM users WHERE id_user = $1",
       req.params.id
     );
-<span class="cstat-no" title="statement not covered" >    if (userDeleted.rowCount === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      res.status(404).json({ message: "Utilisateur introuvable" });</span>
+    if (userDeleted.rowCount === 0) {
+      res.status(404).json({ message: "Utilisateur introuvable" });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    res.status(204).json({ message: "Utilisateur supprimé" });</span>
+    res.status(204).json({ message: "Utilisateur supprimé" });
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: err.message });</span>
+    res.status(500).json({ message: err.message });
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -844,7 +850,7 @@ exports.deleteUser = <span class="fstat-no" title="function not covered" >as</sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-23T14:17:11.884Z
+                at 2025-10-23T14:42:37.631Z
             </div>
         <script src="../prettify.js"></script>
         <script>

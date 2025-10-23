@@ -224,16 +224,18 @@ exports.deleteUser = async (req, res) => {
     );
 
     const userToDelete = await db.oneOrNone(
-      "SELECT rights_user, email_user FROM users WHERE id_user = $1",
+      "SELECT rights_user FROM users WHERE id_user = $1",
       req.params.id
     );
 
     if (
       !userConnected ||
       (userConnected.rights_user === "Member" &&
-        req.user.id !== user.id_user) ||
-      (req.user.id !== user.id_user &&
-        { Member: 1, Moderator: 2, Administrator: 3 }[user.rights_user] >=
+        req.user.id !== userToDelete.id_user) ||
+      (req.user.id !== userToDelete.id_user &&
+        { Member: 1, Moderator: 2, Administrator: 3 }[
+          userToDelete.rights_user
+        ] >=
           { Member: 1, Moderator: 2, Administrator: 3 }[
             userConnected.rights_user
           ])
