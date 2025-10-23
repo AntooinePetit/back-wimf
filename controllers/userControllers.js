@@ -136,15 +136,21 @@ exports.updateUser = async (req, res) => {
     const { username, email, password, rights, nutritionalValues, calories } =
       req.body;
 
-    const existingEmail = await db.oneOrNone(
-      "SELECT * FROM users WHERE email_user = $1 AND id_user != $2",
-      [email, req.params.id]
-    );
+    let existingEmail, existingUsername;
 
-    const existingUsername = await db.oneOrNone(
-      "SELECT * FROM users WHERE username_user = $1 AND id_user != $2",
-      [username, req.params.id]
-    );
+    if (email) {
+      existingEmail = await db.oneOrNone(
+        "SELECT * FROM users WHERE email_user ILIKE $1 AND id_user != $2",
+        [email, req.params.id]
+      );
+    }
+
+    if (username) {
+      existingUsername = await db.oneOrNone(
+        "SELECT * FROM users WHERE username_user ILIKE $1 AND id_user != $2",
+        [username, req.params.id]
+      );
+    }
 
     if (existingEmail || existingUsername) {
       const conflicts = [
