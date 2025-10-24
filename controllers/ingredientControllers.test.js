@@ -72,4 +72,64 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
     }); // /it
   }); // /describe getAllIngredients
+
+  describe("searchIngredients", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          search: "Fromage",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should return ingredients' informations corresponding to search", async () => {
+      const mockSearchResults = [
+        {
+          name_ingredient: "Fromage frais",
+          name_ingredient_category: "Produits laitiers",
+        },
+      ];
+
+      db.any.mockResolvedValue(mockSearchResults);
+
+      await searchIngredients(req, res);
+
+      expect(db.any).toHaveBeenCalledWith(
+        `SELECT i.name_ingredient, c.name_ingredient_category 
+      FROM ingredients AS i 
+      LEFT JOIN ingredient_categories AS c 
+      ON i.fk_id_ingredient_category = c.id_ingredient_category
+      WHERE i.name_ingredient ILIKE $1`,
+        ["%Fromage%"]
+      );
+    }); // /it
+
+    it("should return an empty array if no ingredients match search", async () => {
+      db.any.mockResolvedValue([]);
+
+      await searchIngredients(req, res);
+
+      expect(db.any).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith([]);
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.any.mockRejectedValue(new Error("Database error"));
+
+      await searchIngredients(req, res);
+
+      expect(db.any).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    });
+  }); // /describe searchIngredients
 }); // /describe Ingredient controllers

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.64% </span>
+                <span class="strong">37.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/59</span>
+                <span class='fraction'>22/59</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/9</span>
+                <span class='fraction'>5/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.96% </span>
+                <span class="strong">36.2% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/58</span>
+                <span class='fraction'>21/58</span>
             </div>
         
             
@@ -333,33 +333,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -567,23 +567,23 @@ exports.getAllIngredients = async (req, res) =&gt; {
  * @example
  * // GET /api/v1/ingredients/search/moutarde+dijon
  */
-exports.searchIngredients = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const { search } = <span class="cstat-no" title="statement not covered" >req.params;</span>
+exports.searchIngredients = async (req, res) =&gt; {
+  try {
+    const { search } = req.params;
 &nbsp;
     // Coupe à chaque "+" dans les paramètres, puis assure qu'il n'y a aucun espace autour de chaque mot, et ne compte pas les mots "vides" (par exemple si la recherche est "moutarde++dijon", supprime le contenu entre les deux '+')
-    const splitSearch = <span class="cstat-no" title="statement not covered" >search</span>
+    const splitSearch = search
       .split("+")
-      .map(<span class="fstat-no" title="function not covered" >(w</span>ord) =&gt; <span class="cstat-no" title="statement not covered" >word.trim())</span>
+      .map((word) =&gt; word.trim())
       .filter(Boolean);
 &nbsp;
-    const conditions = <span class="cstat-no" title="statement not covered" >splitSearch</span>
-      .map(<span class="fstat-no" title="function not covered" >(_</span>, idx) =&gt; <span class="cstat-no" title="statement not covered" >`i.name_ingredient ILIKE $${idx + 1}`)</span>
-      .join(" AND ");
+    const conditions = splitSearch
+      .map((_, idx) =&gt; `i.name_ingredient ILIKE $${idx + 1}`)
+      .join(" OR ");
 &nbsp;
-    const values = <span class="cstat-no" title="statement not covered" >splitSearch.map(<span class="fstat-no" title="function not covered" >(w</span>ord) =&gt; <span class="cstat-no" title="statement not covered" >`%${word}%`)</span>;</span>
+    const values = splitSearch.map((word) =&gt; `%${word}%`);
 &nbsp;
-    const searchResult = <span class="cstat-no" title="statement not covered" >await db.any(</span>
+    const searchResult = await db.any(
       `SELECT i.name_ingredient, c.name_ingredient_category 
       FROM ingredients AS i 
       LEFT JOIN ingredient_categories AS c 
@@ -592,9 +592,9 @@ exports.searchIngredients = <span class="fstat-no" title="function not covered" 
       values
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    res.status(200).json(searchResult);</span>
+    res.status(200).json(searchResult);
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    return res.status(500).json({ message: err.message });</span>
+    return res.status(500).json({ message: err.message });
   }
 };
 &nbsp;
@@ -775,7 +775,7 @@ exports.deleteIngredient = <span class="fstat-no" title="function not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T12:30:26.671Z
+                at 2025-10-24T12:55:50.574Z
             </div>
         <script src="../prettify.js"></script>
         <script>

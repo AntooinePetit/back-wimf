@@ -44,7 +44,7 @@ exports.searchIngredients = async (req, res) => {
 
     const conditions = splitSearch
       .map((_, idx) => `i.name_ingredient ILIKE $${idx + 1}`)
-      .join(" AND ");
+      .join(" OR ");
 
     const values = splitSearch.map((word) => `%${word}%`);
 
