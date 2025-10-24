@@ -11,7 +11,7 @@ const db = require("../db");
  */
 exports.getAllRecipes = async (req, res) => {
   try {
-    const recipes = await db.many("SELECT * FROM recipes");
+    const recipes = await db.any("SELECT * FROM recipes");
 
     res.json(recipes);
   } catch (err) {
