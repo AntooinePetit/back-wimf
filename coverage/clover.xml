@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761301335292" clover="3.2.0">
-  <project timestamp="1761301335293" name="All files">
-    <metrics statements="175" coveredstatements="153" conditionals="103" coveredconditionals="100" methods="18" coveredmethods="12" elements="296" coveredelements="265" complexity="0" loc="175" ncloc="175" packages="2" files="4" classes="4"/>
+<coverage generated="1761306425302" clover="3.2.0">
+  <project timestamp="1761306425302" name="All files">
+    <metrics statements="175" coveredstatements="160" conditionals="103" coveredconditionals="102" methods="18" coveredmethods="13" elements="296" coveredelements="275" complexity="0" loc="175" ncloc="175" packages="2" files="4" classes="4"/>
     <package name="controllers">
-      <metrics statements="167" coveredstatements="150" conditionals="103" coveredconditionals="100" methods="17" coveredmethods="12"/>
+      <metrics statements="167" coveredstatements="157" conditionals="103" coveredconditionals="102" methods="17" coveredmethods="13"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
         <metrics statements="54" coveredstatements="54" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -62,7 +62,7 @@
         <line num="202" count="2" type="stmt"/>
       </file>
       <file name="recipeControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\recipeControllers.js">
-        <metrics statements="57" coveredstatements="40" conditionals="30" coveredconditionals="28" methods="9" coveredmethods="4"/>
+        <metrics statements="57" coveredstatements="47" conditionals="30" coveredconditionals="30" methods="9" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
@@ -102,13 +102,13 @@
         <line num="273" count="2" type="stmt"/>
         <line num="275" count="2" type="stmt"/>
         <line num="289" count="1" type="stmt"/>
-        <line num="290" count="0" type="stmt"/>
-        <line num="291" count="0" type="stmt"/>
-        <line num="293" count="0" type="stmt"/>
-        <line num="298" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="299" count="0" type="stmt"/>
-        <line num="302" count="0" type="stmt"/>
-        <line num="304" count="0" type="stmt"/>
+        <line num="290" count="3" type="stmt"/>
+        <line num="291" count="3" type="stmt"/>
+        <line num="293" count="3" type="stmt"/>
+        <line num="298" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="299" count="1" type="stmt"/>
+        <line num="302" count="1" type="stmt"/>
+        <line num="304" count="1" type="stmt"/>
         <line num="317" count="1" type="stmt"/>
         <line num="318" count="0" type="stmt"/>
         <line num="319" count="0" type="stmt"/>

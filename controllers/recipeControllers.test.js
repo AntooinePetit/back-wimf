@@ -1435,4 +1435,64 @@ describe("Recipe controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
     }); // /it
   }); // /describe updateRecipe
+
+  describe("deleteRecipe", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          id: 1,
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should delete recipe from database", async () => {
+      const mockResult = {
+        rowCount: 1,
+      };
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteRecipe(req, res);
+
+      expect(db.result).toHaveBeenCalledWith(
+        `DELETE FROM recipes WHERE id_recipe = $1`,
+        1
+      );
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({ message: "Recette supprimée" });
+    }); // /it
+
+    it("should return 404 if recipe can't be found", async () => {
+      const mockResult = {
+        rowCount: 0,
+      };
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteRecipe(req, res);
+
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "Recette introuvable" });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.result.mockRejectedValue(new Error("Database error"));
+
+      await deleteRecipe(req, res);
+
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    });
+  }); // /describre deleteRecipe
 }); // /describe Recipe controllers

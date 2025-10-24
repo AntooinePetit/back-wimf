@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.96% </span>
+                <span class="strong">81.03% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/58</span>
+                <span class='fraction'>47/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/30</span>
+                <span class='fraction'>30/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/9</span>
+                <span class='fraction'>5/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.17% </span>
+                <span class="strong">82.45% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/57</span>
+                <span class='fraction'>47/57</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -693,21 +693,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1033,22 +1033,22 @@ exports.updateRecipe = async (req, res) =&gt; {
  * // DELETE /api/v1/recipes/1
  * // Headers : `Authorization: Bearer &lt;votre_jeton_jwt&gt;`
  */
-exports.deleteRecipe = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const { id } = <span class="cstat-no" title="statement not covered" >req.params;</span>
+exports.deleteRecipe = async (req, res) =&gt; {
+  try {
+    const { id } = req.params;
 &nbsp;
-    const deletedRecipe = <span class="cstat-no" title="statement not covered" >await db.result(</span>
+    const deletedRecipe = await db.result(
       `DELETE FROM recipes WHERE id_recipe = $1`,
       id
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (deletedRecipe.rowCount === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(404).json({ message: "Recette introuvable" });</span>
+    if (deletedRecipe.rowCount === 0) {
+      return res.status(404).json({ message: "Recette introuvable" });
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    res.status(204).json({ message: "Recette supprimée" });</span>
+    res.status(204).json({ message: "Recette supprimée" });
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: err.message });</span>
+    res.status(500).json({ message: err.message });
   }
 };
 &nbsp;
@@ -1093,7 +1093,7 @@ exports.searchRecipes = <span class="fstat-no" title="function not covered" >as<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T10:22:15.217Z
+                at 2025-10-24T11:47:05.221Z
             </div>
         <script src="../prettify.js"></script>
         <script>
