@@ -12,7 +12,7 @@ const db = require("../db");
 exports.getAllIngredients = async (req, res) => {
   try {
     const ingredients =
-      await db.many(`SELECT i.name_ingredient, c.name_ingredient_category 
+      await db.any(`SELECT i.name_ingredient, c.name_ingredient_category 
       FROM ingredients AS i 
       LEFT JOIN ingredient_categories AS c 
       ON i.fk_id_ingredient_category = c.id_ingredient_category`);
@@ -72,7 +72,7 @@ exports.searchIngredients = async (req, res) => {
  * @example
  * // GET /api/v1/ingredients/1
  */
-exports.getIngrdientsFromRecipe = async (req, res) => {
+exports.getIngredientsFromRecipe = async (req, res) => {
   try {
     const { id } = req.params;
 

@@ -185,13 +185,13 @@ describe("Recipe controllers", () => {
       expect(res.json).toHaveBeenCalledWith(mockRecipes);
     }); // /it
 
-    it("should return null if no recipes in database", async () => {
-      db.any.mockResolvedValue(null);
+    it("should return an empty array if no recipes in database", async () => {
+      db.any.mockResolvedValue([]);
 
       await getAllRecipes(req, res);
 
       expect(db.any).toHaveBeenCalled();
-      expect(res.json).toHaveBeenCalledWith(null);
+      expect(res.json).toHaveBeenCalledWith([]);
     });
 
     it("should handle database errors", async () => {
