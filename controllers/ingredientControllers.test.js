@@ -242,4 +242,105 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
     }); // /it
   }); // /describe getIngredientsFromRecipe
+
+  describe("addIngredient", () => {
+    beforeEach(() => {
+      req = {
+        body: {
+          name: "Ingrédient test",
+          category: 1,
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should add an ingredient to database", async () => {
+      const mockAddedIngredient = {
+        name_ingredient: "Ingrédient test",
+        fk_id_ingredient_category: 1,
+      };
+
+      db.oneOrNone.mockResolvedValue(null);
+
+      db.one.mockResolvedValue(mockAddedIngredient);
+
+      await addIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM ingredients WHERE name_ingredient ILIKE $1",
+        "Ingrédient test"
+      );
+      expect(db.one).toHaveBeenCalledWith(
+        `INSERT INTO 
+      ingredients(name_ingredient, fk_id_ingredient_category)
+      VALUES ($1, $2)
+      RETURNING *`,
+        ["Ingrédient test", 1]
+      );
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ingrédient ajouté",
+        addedIngredient: mockAddedIngredient,
+      });
+    }); // /it
+
+    it("should return 409 if ingredient's name already in database", async () => {
+      const existingIngredient = {
+        name_ingredient: "Ingrédient test",
+      };
+      db.oneOrNone.mockResolvedValue(existingIngredient);
+
+      await addIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Cet ingrédient existe déjà",
+      });
+    }); // /it
+
+    it("should return 400 if name or category not sent", async () => {
+      req = {
+        body: {},
+      };
+
+      await addIngredient(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Le nom et la catégorie doivent être renseignés",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await addIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle insertion error", async () => {
+      db.oneOrNone.mockResolvedValue(null);
+
+      db.one.mockRejectedValue(new Error("Insertion error"));
+
+      await addIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.one).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Insertion error" });
+    }); // /it
+  }); // /describe addIngredient
 }); // /describe Ingredient controllers
