@@ -646,6 +646,793 @@ describe("Recipe controllers", () => {
       expect(db.one).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({ message: "Insertion error" });
-    });
+    }); // /it
   }); // /describe addRecipe
+
+  describe("updateRecipe", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: "Recette de test renommée",
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should update recipe", async () => {
+      const mockExistingRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test",
+        preparation_time: 20,
+        cooking_time: 12,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 32,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+      const mockUpdatedRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test renommée",
+        preparation_time: 20,
+        cooking_time: 12,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 32,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockResolvedValue(mockUpdatedRecipe);
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes WHERE id_recipe = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes WHERE name_recipe ILIKE $1 AND id_recipe != $2",
+        ["Recette de test renommée", 1]
+      );
+      expect(db.one).toHaveBeenCalledWith(
+        `UPDATE recipes
+        SET
+          name_recipe = $1,
+          preparation_time = $2,
+          cooking_time = $3,
+          resting_time = $4,
+          instructions = $5,
+          total_time = $6,
+          "nutritional_values_recipe" = $7,
+          servings_recipe = $8
+        WHERE id_recipe = $9
+        RETURNING *`,
+        [
+          "Recette de test renommée",
+          20,
+          12,
+          0,
+          {
+            steps: [
+              "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+              "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+              "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+              "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+            ],
+          },
+          32,
+          {
+            totalFat: {
+              name: "Matières grasses totales",
+              quantity: 10,
+              unit: "g",
+            },
+            saturatedFat: {
+              name: "Acides gras saturés",
+              quantity: 4,
+              unit: "g",
+            },
+            cholesterol: {
+              name: "Cholestérol",
+              quantity: 53,
+              unit: "mg",
+            },
+            sodium: {
+              name: "Sodium",
+              quantity: 85,
+              unit: "mg",
+            },
+            totalCarbohydrate: {
+              name: "Glucides totaux",
+              quantity: 15,
+              unit: "g",
+            },
+            dietaryFiber: {
+              name: "Fibres alimentaires",
+              quantity: 1,
+              unit: "g",
+            },
+            totalSugars: {
+              name: "Sucres totaux",
+              quantity: 10,
+              unit: "g",
+            },
+            protein: {
+              name: "Protéines",
+              quantity: 10,
+              unit: "g",
+            },
+            calcium: {
+              name: "Calcium",
+              quantity: 19,
+              unit: "mg",
+            },
+            iron: {
+              name: "Fer",
+              quantity: 1,
+              unit: "mg",
+            },
+            potassium: {
+              name: "Potassium",
+              quantity: 183,
+              unit: "mg",
+            },
+            calories: {
+              name: "Calories",
+              quantity: 193,
+              unit: "kcal",
+            },
+          },
+          10,
+          1,
+        ]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Recette mise à jour",
+        recipeUpdated: mockUpdatedRecipe,
+      });
+    }); // /it
+
+    it("should update any data individually", async () => {
+      req.body = {
+        preparationTime: 32,
+        restingTime: 28,
+        cookingTime: 20,
+      };
+      const mockExistingRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test",
+        preparation_time: 20,
+        cooking_time: 12,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 32,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+      const mockUpdatedRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test renommée",
+        preparation_time: 32,
+        cooking_time: 20,
+        resting_time: 28,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 80,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockResolvedValue(mockUpdatedRecipe);
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.one).toHaveBeenCalledWith(
+        `UPDATE recipes
+        SET
+          name_recipe = $1,
+          preparation_time = $2,
+          cooking_time = $3,
+          resting_time = $4,
+          instructions = $5,
+          total_time = $6,
+          "nutritional_values_recipe" = $7,
+          servings_recipe = $8
+        WHERE id_recipe = $9
+        RETURNING *`,
+        [
+          "Recette de test",
+          32,
+          20,
+          28,
+          {
+            steps: [
+              "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+              "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+              "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+              "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+            ],
+          },
+          80,
+          {
+            totalFat: {
+              name: "Matières grasses totales",
+              quantity: 10,
+              unit: "g",
+            },
+            saturatedFat: {
+              name: "Acides gras saturés",
+              quantity: 4,
+              unit: "g",
+            },
+            cholesterol: {
+              name: "Cholestérol",
+              quantity: 53,
+              unit: "mg",
+            },
+            sodium: {
+              name: "Sodium",
+              quantity: 85,
+              unit: "mg",
+            },
+            totalCarbohydrate: {
+              name: "Glucides totaux",
+              quantity: 15,
+              unit: "g",
+            },
+            dietaryFiber: {
+              name: "Fibres alimentaires",
+              quantity: 1,
+              unit: "g",
+            },
+            totalSugars: {
+              name: "Sucres totaux",
+              quantity: 10,
+              unit: "g",
+            },
+            protein: {
+              name: "Protéines",
+              quantity: 10,
+              unit: "g",
+            },
+            calcium: {
+              name: "Calcium",
+              quantity: 19,
+              unit: "mg",
+            },
+            iron: {
+              name: "Fer",
+              quantity: 1,
+              unit: "mg",
+            },
+            potassium: {
+              name: "Potassium",
+              quantity: 183,
+              unit: "mg",
+            },
+            calories: {
+              name: "Calories",
+              quantity: 193,
+              unit: "kcal",
+            },
+          },
+          10,
+          1,
+        ]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Recette mise à jour",
+        recipeUpdated: mockUpdatedRecipe,
+      });
+    }); // /it
+
+    it("should return 404 if recipe to update can't be found", async () => {
+      db.oneOrNone.mockResolvedValueOnce(null);
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "Recette introuvable" });
+    }); // /it
+
+    it("should return 409 if recipe name is alredy taken", async () => {
+      const mockExistingRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test",
+        preparation_time: 20,
+        cooking_time: 12,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 32,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+      const mockExistingRecipeName = {
+        name_recipe: "Recette de test renommée",
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(mockExistingRecipeName);
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ce nom de recette n'est pas disponible",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle update error", async () => {
+      const mockExistingRecipe = {
+        id_recipe: 1,
+        name_recipe: "Recette de test",
+        preparation_time: 20,
+        cooking_time: 12,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Pour cuire les œufs durs, dépose-les dans une casserole et recouvre-les d’eau froide, à environ 2,5 cm au-dessus de leur hauteur. Porte l’eau à ébullition, puis retire la casserole du feu. Couvre et laisse reposer 10 à 12 minutes selon la taille des œufs. Égoutte ensuite les œufs et plonge-les dans de l’eau froide pour stopper la cuisson. Écale-les soigneusement.",
+            "Coupe les œufs durs en deux dans le sens de la longueur et retire délicatement les jaunes. Dépose-les dans un bol.",
+            "Ajoute la mayonnaise, la relish de cornichons et la moutarde. Écrase le tout à la fourchette jusqu’à obtenir une texture lisse. Assaisonne de sel et de poivre selon ton goût, puis ajuste la quantité de mayonnaise ou de moutarde si nécessaire.",
+            "À l’aide d’une cuillère ou d’une poche à douille, garnis les blancs d’œufs avec le mélange. Saupoudre de paprika juste avant de servir.",
+          ],
+        },
+        total_time: 32,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockRejectedValue(new Error("Update error"));
+
+      await updateRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.one).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
+    }); // /it
+  }); // /describe updateRecipe
 }); // /describe Recipe controllers
