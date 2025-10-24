@@ -233,3 +233,5 @@ exports.deleteIngredient = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+// TODO: Ajouter 2 controllers : lier et délier un ingrédient à une recette

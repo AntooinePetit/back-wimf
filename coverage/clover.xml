@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761310550668" clover="3.2.0">
-  <project timestamp="1761310550668" name="All files">
-    <metrics statements="233" coveredstatements="191" conditionals="117" coveredconditionals="102" methods="27" coveredmethods="22" elements="377" coveredelements="315" complexity="0" loc="233" ncloc="233" packages="2" files="5" classes="5"/>
+<coverage generated="1761314486094" clover="3.2.0">
+  <project timestamp="1761314486094" name="All files">
+    <metrics statements="233" coveredstatements="199" conditionals="117" coveredconditionals="104" methods="27" coveredmethods="23" elements="377" coveredelements="326" complexity="0" loc="233" ncloc="233" packages="2" files="5" classes="5"/>
     <package name="controllers">
-      <metrics statements="225" coveredstatements="188" conditionals="117" coveredconditionals="102" methods="26" coveredmethods="22"/>
+      <metrics statements="225" coveredstatements="196" conditionals="117" coveredconditionals="104" methods="26" coveredmethods="23"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
         <metrics statements="54" coveredstatements="54" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -62,7 +62,7 @@
         <line num="202" count="2" type="stmt"/>
       </file>
       <file name="ingredientControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\ingredientControllers.js">
-        <metrics statements="58" coveredstatements="21" conditionals="14" coveredconditionals="0" methods="9" coveredmethods="5"/>
+        <metrics statements="58" coveredstatements="29" conditionals="14" coveredconditionals="2" methods="9" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
@@ -81,14 +81,14 @@
         <line num="60" count="2" type="stmt"/>
         <line num="62" count="1" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
+        <line num="76" count="3" type="stmt"/>
+        <line num="77" count="3" type="stmt"/>
+        <line num="79" count="3" type="stmt"/>
+        <line num="84" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="97" count="1" type="stmt"/>
         <line num="115" count="1" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
         <line num="117" count="0" type="stmt"/>
