@@ -27,7 +27,7 @@ describe("Recipe controllers", () => {
       jest.clearAllMocks();
     }); // /afterEach
 
-    it("should return all recipes", async () => {
+    it("should return all recipes informations", async () => {
       const mockRecipes = [
         {
           id_recipe: 1,
@@ -186,13 +186,13 @@ describe("Recipe controllers", () => {
     }); // /it
 
     it("should return null if no recipes in database", async () => {
-      db.any.mockResolvedValue(null)
+      db.any.mockResolvedValue(null);
 
-      await getAllRecipes(req, res)
+      await getAllRecipes(req, res);
 
-      expect(db.any).toHaveBeenCalled()
-      expect(res.json).toHaveBeenCalledWith(null)
-    })
+      expect(db.any).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith(null);
+    });
 
     it("should handle database errors", async () => {
       db.any.mockRejectedValue(new Error("Database error"));
@@ -204,4 +204,135 @@ describe("Recipe controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
     }); // /it
   }); // /describe getAllRecipes
+
+  describe("getOneRecipe", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          id: 1,
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should return recipe informations", async () => {
+      const mockRecipe = {
+        id_recipe: 1,
+        name_recipe: "Boulettes apéritives au cocktail",
+        preparation_time: 20,
+        cooking_time: 80,
+        resting_time: 0,
+        instructions: {
+          steps: [
+            "Préchauffe le four à 175 °C.",
+            "Dans un grand bol, mélange le bœuf haché, la chapelure, l’oignon, l’eau et l’œuf. Façonne de petites boulettes et dépose-les sur une feuille de papier cuisson. Enfourne 20 à 25 minutes dans le four préchauffé, en retournant les boulettes à mi-cuisson.",
+            "Dans une grande poêle, fais chauffer à feu doux la sauce de canneberge gélifiée, la sauce chili, le sucre brun et le jus de citron, jusqu’à ce que la sauce soit homogène.",
+            "Ajoute les boulettes dans la poêle, mélange, puis laisse mijoter environ 1 heure avant de servir.",
+          ],
+        },
+        total_time: 100,
+        nutritional_values_recipe: {
+          totalFat: {
+            name: "Matières grasses totales",
+            quantity: 10,
+            unit: "g",
+          },
+          saturatedFat: {
+            name: "Acides gras saturés",
+            quantity: 4,
+            unit: "g",
+          },
+          cholesterol: {
+            name: "Cholestérol",
+            quantity: 53,
+            unit: "mg",
+          },
+          sodium: {
+            name: "Sodium",
+            quantity: 85,
+            unit: "mg",
+          },
+          totalCarbohydrate: {
+            name: "Glucides totaux",
+            quantity: 15,
+            unit: "g",
+          },
+          dietaryFiber: {
+            name: "Fibres alimentaires",
+            quantity: 1,
+            unit: "g",
+          },
+          totalSugars: {
+            name: "Sucres totaux",
+            quantity: 10,
+            unit: "g",
+          },
+          protein: {
+            name: "Protéines",
+            quantity: 10,
+            unit: "g",
+          },
+          calcium: {
+            name: "Calcium",
+            quantity: 19,
+            unit: "mg",
+          },
+          iron: {
+            name: "Fer",
+            quantity: 1,
+            unit: "mg",
+          },
+          potassium: {
+            name: "Potassium",
+            quantity: 183,
+            unit: "mg",
+          },
+          calories: {
+            name: "Calories",
+            quantity: 193,
+            unit: "kcal",
+          },
+        },
+        servings_recipe: 10,
+      };
+      db.oneOrNone.mockResolvedValue(mockRecipe);
+
+      await getOneRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes WHERE id_recipe = $1",
+        1
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockRecipe);
+    }); // /it
+
+    it("should return 404 if no recipe's found", async () => {
+      db.oneOrNone.mockResolvedValue(null);
+
+      await getOneRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "Recette introuvable" });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await getOneRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+  }); // /describe getOneRecipe
 }); // /describe Recipe controllers
