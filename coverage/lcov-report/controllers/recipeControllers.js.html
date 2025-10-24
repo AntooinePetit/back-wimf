@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.03% </span>
+                <span class="strong">46.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/58</span>
+                <span class='fraction'>27/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.66% </span>
+                <span class="strong">13.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/30</span>
+                <span class='fraction'>4/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>3/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.57% </span>
+                <span class="strong">47.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/57</span>
+                <span class='fraction'>27/57</span>
             </div>
         
             
@@ -543,7 +543,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -552,25 +552,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -584,11 +582,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -883,8 +883,8 @@ exports.getOneRecipe = async (req, res) =&gt; {
  *  "servings": 10
  * }
  */
-exports.addRecipe = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
+exports.addRecipe = async (req, res) =&gt; {
+  try {
     const {
       name,
       preparationTime,
@@ -893,23 +893,23 @@ exports.addRecipe = <span class="fstat-no" title="function not covered" >as</spa
       instructions,
       nutritionalValues,
       servings,
-    } = <span class="cstat-no" title="statement not covered" >req.body;</span>
+    } = req.body;
 &nbsp;
-    const existingRecipe = <span class="cstat-no" title="statement not covered" >await db.oneOrNone(</span>
+    const existingRecipe = await db.oneOrNone(
       "SELECT * FROM recipes WHERE name_recipe ILIKE $1",
       name
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (existingRecipe != null) {</span>
-<span class="cstat-no" title="statement not covered" >      return res</span>
+    if (existingRecipe != null) {
+      return res
         .status(409)
         .json({ message: "Ce nom de recette est déjà utilisé" });
     }
 &nbsp;
     const totalTime =
-<span class="cstat-no" title="statement not covered" >      parseInt(preparationTime) + parseInt(cookingTime) + parseInt(restingTime);</span>
+      parseInt(preparationTime) + parseInt(cookingTime) + parseInt(restingTime);
 &nbsp;
-    const recipeCreated = <span class="cstat-no" title="statement not covered" >await db.one(</span>
+    const recipeCreated = await db.one(
       `INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
       RETURNING *`,
@@ -925,11 +925,11 @@ exports.addRecipe = <span class="fstat-no" title="function not covered" >as</spa
       ]
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    res</span>
+    res
       .status(201)
       .json({ message: "Recette ajoutée avec succès", recipeCreated });
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: err.message });</span>
+    res.status(500).json({ message: err.message });
   }
 };
 &nbsp;
@@ -1093,7 +1093,7 @@ exports.searchRecipes = <span class="fstat-no" title="function not covered" >as<
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T09:08:49.745Z
+                at 2025-10-24T09:40:08.412Z
             </div>
         <script src="../prettify.js"></script>
         <script>
