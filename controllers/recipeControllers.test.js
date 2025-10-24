@@ -1493,6 +1493,209 @@ describe("Recipe controllers", () => {
       expect(db.result).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
-    });
+    }); // /it
   }); // /describre deleteRecipe
+
+  describe("searchRecipes", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          search: "Recette+de+test",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should return recipes corresponding to search value", async () => {
+      const mockSearchResults = [
+        {
+          id_recipe: 1,
+          name_recipe: "Recette de test",
+          preparation_time: 20,
+          cooking_time: 80,
+          resting_time: 0,
+          instructions: {
+            steps: [
+              "Préchauffe le four à 175 °C.",
+              "Dans un grand bol, mélange le bœuf haché, la chapelure, l’oignon, l’eau et l’œuf. Façonne de petites boulettes et dépose-les sur une feuille de papier cuisson. Enfourne 20 à 25 minutes dans le four préchauffé, en retournant les boulettes à mi-cuisson.",
+              "Dans une grande poêle, fais chauffer à feu doux la sauce de canneberge gélifiée, la sauce chili, le sucre brun et le jus de citron, jusqu’à ce que la sauce soit homogène.",
+              "Ajoute les boulettes dans la poêle, mélange, puis laisse mijoter environ 1 heure avant de servir.",
+            ],
+          },
+          total_time: 100,
+          nutritional_values_recipe: {
+            totalFat: {
+              name: "Matières grasses totales",
+              quantity: 10,
+              unit: "g",
+            },
+            saturatedFat: {
+              name: "Acides gras saturés",
+              quantity: 4,
+              unit: "g",
+            },
+            cholesterol: {
+              name: "Cholestérol",
+              quantity: 53,
+              unit: "mg",
+            },
+            sodium: {
+              name: "Sodium",
+              quantity: 85,
+              unit: "mg",
+            },
+            totalCarbohydrate: {
+              name: "Glucides totaux",
+              quantity: 15,
+              unit: "g",
+            },
+            dietaryFiber: {
+              name: "Fibres alimentaires",
+              quantity: 1,
+              unit: "g",
+            },
+            totalSugars: {
+              name: "Sucres totaux",
+              quantity: 10,
+              unit: "g",
+            },
+            protein: {
+              name: "Protéines",
+              quantity: 10,
+              unit: "g",
+            },
+            calcium: {
+              name: "Calcium",
+              quantity: 19,
+              unit: "mg",
+            },
+            iron: {
+              name: "Fer",
+              quantity: 1,
+              unit: "mg",
+            },
+            potassium: {
+              name: "Potassium",
+              quantity: 183,
+              unit: "mg",
+            },
+            calories: {
+              name: "Calories",
+              quantity: 193,
+              unit: "kcal",
+            },
+          },
+          servings_recipe: 10,
+        },
+        {
+          id_recipe: 3,
+          name_recipe: "Test numéro 2",
+          preparation_time: 10,
+          cooking_time: 0,
+          resting_time: 0,
+          instructions: {
+            steps: [
+              "Hache finement le saumon fumé.",
+              "Dans un bol, travaille le fromage frais jusqu’à obtenir une texture lisse. Ajoute le saumon, les oignons nouveaux, l’aneth, la sauce Worcestershire et la sauce piquante. Mélange jusqu’à ce que la préparation soit bien homogène.",
+            ],
+          },
+          total_time: 10,
+          nutritional_values_recipe: {
+            totalFat: {
+              name: "Matières grasses totales",
+              quantity: 14,
+              unit: "g",
+            },
+            saturatedFat: {
+              name: "Acides gras saturés",
+              quantity: 9,
+              unit: "g",
+            },
+            cholesterol: {
+              name: "Cholestérol",
+              quantity: 48,
+              unit: "mg",
+            },
+            sodium: {
+              name: "Sodium",
+              quantity: 340,
+              unit: "mg",
+            },
+            totalCarbohydrate: {
+              name: "Glucides totaux",
+              quantity: 1,
+              unit: "g",
+            },
+            protein: {
+              name: "Protéines",
+              quantity: 8,
+              unit: "g",
+            },
+            calcium: {
+              name: "Calcium",
+              quantity: 34,
+              unit: "mg",
+            },
+            iron: {
+              name: "Fer",
+              quantity: 1,
+              unit: "mg",
+            },
+            potassium: {
+              name: "Potassium",
+              quantity: 99,
+              unit: "mg",
+            },
+            calories: {
+              name: "Calories",
+              quantity: 164,
+              unit: "kcal",
+            },
+          },
+          servings_recipe: 12,
+        },
+      ];
+
+      db.any.mockResolvedValue(mockSearchResults);
+
+      await searchRecipes(req, res);
+
+      expect(db.any).toHaveBeenCalledWith(
+        `SELECT * FROM recipes WHERE name_recipe ILIKE $1 OR name_recipe ILIKE $2 OR name_recipe ILIKE $3`,
+        ["%Recette%", "%de%", "%test%"]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockSearchResults);
+    }); // /it
+
+    it("should return an empty array if no recipes correspond to search value", async () => {
+      db.any.mockResolvedValue(null);
+
+      await searchRecipes(req, res);
+
+      expect(db.any).toHaveBeenCalledWith(
+        `SELECT * FROM recipes WHERE name_recipe ILIKE $1 OR name_recipe ILIKE $2 OR name_recipe ILIKE $3`,
+        ["%Recette%", "%de%", "%test%"]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(null);
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.any.mockRejectedValue(new Error("Database error"));
+
+      await searchRecipes(req, res);
+
+      expect(db.any).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    });
+  }); // /describe search recipe
 }); // /describe Recipe controllers
