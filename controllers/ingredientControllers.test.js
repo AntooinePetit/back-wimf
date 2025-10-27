@@ -476,4 +476,66 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
     }); // /it
   }); // /describe updateIngredient
+
+  describe("deleteIngredient", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          id: 1,
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should delete ingredient from database", async () => {
+      const mockResult = {
+        rowCount: 1,
+      };
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteIngredient(req, res);
+
+      expect(db.result).toHaveBeenCalledWith(
+        "DELETE FROM ingredients WHERE id_ingredient = $1",
+        1
+      );
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({ message: "Ingrédient supprimé" });
+    }); // /it
+
+    it("should return 404 if ingredient can't be found", async () => {
+      const mockResult = {
+        rowCount: 0,
+      };
+
+      db.result.mockResolvedValue(mockResult);
+
+      await deleteIngredient(req, res);
+
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ingrédient introuvable",
+      });
+    }); // :it
+
+    it("should handle database error", async () => {
+      db.result.mockRejectedValue(new Error("Database error"));
+
+      await deleteIngredient(req, res);
+
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+  }); // /describe deleteIngredient
 }); // /describe Ingredient controllers
