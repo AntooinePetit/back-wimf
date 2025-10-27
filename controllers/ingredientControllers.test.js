@@ -343,4 +343,137 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Insertion error" });
     }); // /it
   }); // /describe addIngredient
+
+  describe("updateIngredient", () => {
+    beforeEach(() => {
+      req = {
+        body: {
+          name: "Ingrédient mis à jour",
+          category: 2,
+        },
+        params: {
+          id: 1,
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should update ingredient's informations", async () => {
+      const mockIngredientToUpdate = {
+        name_ingredient: "Ingrédient test",
+        fk_id_ingredient_category: 1,
+      };
+      const mockUpdatedIngredient = {
+        name_ingredient: "Ingrédient mis à jour",
+        fk_id_ingredient_category: 2,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockIngredientToUpdate)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockResolvedValue(mockUpdatedIngredient);
+
+      await updateIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM ingredients WHERE id_ingredient = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM ingredients WHERE name_ingredient ILIKE $1 AND id_ingredient != $2",
+        ["Ingrédient mis à jour", 1]
+      );
+      expect(db.one).toHaveBeenCalledWith(
+        `UPDATE ingredients
+      SET 
+      name_ingredient = $1,
+      fk_id_ingredient_category = $2
+      WHERE id_ingredient = $3
+      RETURNING *`,
+        ["Ingrédient mis à jour", 2, 1]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ingrédient mis à jour",
+        updatedIngredient: mockUpdatedIngredient,
+      });
+    }); // /it
+
+    it("should return 404 if ingredient can't be found", async () => {
+      db.oneOrNone.mockResolvedValue(null);
+
+      await updateIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ingrédient introuvable",
+      });
+    }); // /it
+
+    it("should return 409 if ingredient's name is already in database", async () => {
+      const mockIngredientToUpdate = {
+        name_ingredient: "Ingrédient test",
+        fk_id_ingredient_category: 1,
+      };
+      const mockExistingIngredientName = {
+        name_ingredient: "Ingrédient mis à jour",
+        fk_id_ingredient_category: 2,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockIngredientToUpdate)
+        .mockResolvedValueOnce(mockExistingIngredientName);
+
+      await updateIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        message:
+          "Ce nom d'ingrédient est déjà enregistré dans la base de donnée",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await updateIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+
+    it("should handle Update error", async () => {
+      const mockIngredientToUpdate = {
+        name_ingredient: "Ingrédient test",
+        fk_id_ingredient_category: 1,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockIngredientToUpdate)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockRejectedValue(new Error("Update error"));
+
+      await updateIngredient(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.one).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Update error" });
+    }); // /it
+  }); // /describe updateIngredient
 }); // /describe Ingredient controllers

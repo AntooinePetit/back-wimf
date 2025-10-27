@@ -141,7 +141,9 @@ exports.forgotPass = async (req, res) => {
       { expiresIn: "15m" }
     );
 
-    await emailForgotPass(email, user.username_user, token);
+    const info = await emailForgotPass(email, user.username_user, token);
+
+    console.log(info)
 
     res.status(200).json({ message: "Email envoyé" });
   } catch (err) {

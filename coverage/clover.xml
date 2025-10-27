@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761317006998" clover="3.2.0">
-  <project timestamp="1761317006998" name="All files">
-    <metrics statements="233" coveredstatements="209" conditionals="117" coveredconditionals="110" methods="27" coveredmethods="24" elements="377" coveredelements="343" complexity="0" loc="233" ncloc="233" packages="2" files="5" classes="5"/>
+<coverage generated="1761554010526" clover="3.2.0">
+  <project timestamp="1761554010526" name="All files">
+    <metrics statements="233" coveredstatements="221" conditionals="117" coveredconditionals="114" methods="27" coveredmethods="25" elements="377" coveredelements="360" complexity="0" loc="233" ncloc="233" packages="2" files="5" classes="5"/>
     <package name="controllers">
-      <metrics statements="225" coveredstatements="206" conditionals="117" coveredconditionals="110" methods="26" coveredmethods="24"/>
+      <metrics statements="225" coveredstatements="218" conditionals="117" coveredconditionals="114" methods="26" coveredmethods="25"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
         <metrics statements="54" coveredstatements="54" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -62,7 +62,7 @@
         <line num="202" count="2" type="stmt"/>
       </file>
       <file name="ingredientControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\ingredientControllers.js">
-        <metrics statements="58" coveredstatements="39" conditionals="14" coveredconditionals="8" methods="9" coveredmethods="7"/>
+        <metrics statements="58" coveredstatements="51" conditionals="14" coveredconditionals="12" methods="9" coveredmethods="8"/>
         <line num="1" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
@@ -101,18 +101,18 @@
         <line num="142" count="1" type="stmt"/>
         <line num="146" count="2" type="stmt"/>
         <line num="164" count="1" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="174" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="175" count="0" type="stmt"/>
-        <line num="178" count="0" type="stmt"/>
-        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="190" count="0" type="stmt"/>
-        <line num="200" count="0" type="stmt"/>
-        <line num="204" count="0" type="stmt"/>
+        <line num="165" count="5" type="stmt"/>
+        <line num="166" count="5" type="stmt"/>
+        <line num="167" count="5" type="stmt"/>
+        <line num="169" count="5" type="stmt"/>
+        <line num="174" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="175" count="1" type="stmt"/>
+        <line num="178" count="3" type="stmt"/>
+        <line num="183" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="184" count="1" type="stmt"/>
+        <line num="190" count="2" type="stmt"/>
+        <line num="200" count="1" type="stmt"/>
+        <line num="204" count="2" type="stmt"/>
         <line num="218" count="1" type="stmt"/>
         <line num="219" count="0" type="stmt"/>
         <line num="220" count="0" type="stmt"/>

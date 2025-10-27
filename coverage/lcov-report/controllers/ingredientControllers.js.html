@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.79% </span>
+                <span class="strong">88.13% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/59</span>
+                <span class='fraction'>52/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/14</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/9</span>
+                <span class='fraction'>8/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.24% </span>
+                <span class="strong">87.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/58</span>
+                <span class='fraction'>51/58</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -464,34 +464,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,11 +497,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -700,33 +700,33 @@ exports.addIngredient = async (req, res) =&gt; {
  *   "category": 14
  * }
  */
-exports.updateIngredient = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const { name, category } = <span class="cstat-no" title="statement not covered" >req.body;</span>
-    const { id } = <span class="cstat-no" title="statement not covered" >req.params;</span>
+exports.updateIngredient = async (req, res) =&gt; {
+  try {
+    const { name, category } = req.body;
+    const { id } = req.params;
 &nbsp;
-    const ingredientToUpdate = <span class="cstat-no" title="statement not covered" >await db.oneOrNone(</span>
+    const ingredientToUpdate = await db.oneOrNone(
       "SELECT * FROM ingredients WHERE id_ingredient = $1",
       id
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!ingredientToUpdate) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(404).json({ message: "Ingrédient introuvable" });</span>
+    if (!ingredientToUpdate) {
+      return res.status(404).json({ message: "Ingrédient introuvable" });
     }
 &nbsp;
-    const existingIngredient = <span class="cstat-no" title="statement not covered" >await db.oneOrNone(</span>
+    const existingIngredient = await db.oneOrNone(
       "SELECT * FROM ingredients WHERE name_ingredient ILIKE $1 AND id_ingredient != $2",
       [name, id]
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (existingIngredient) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(409).json({</span>
+    if (existingIngredient) {
+      return res.status(409).json({
         message:
           "Ce nom d'ingrédient est déjà enregistré dans la base de donnée",
       });
     }
 &nbsp;
-    const updatedIngredient = <span class="cstat-no" title="statement not covered" >await db.one(</span>
+    const updatedIngredient = await db.one(
       `UPDATE ingredients
       SET 
       name_ingredient = $1,
@@ -736,11 +736,11 @@ exports.updateIngredient = <span class="fstat-no" title="function not covered" >
       [name, category, id]
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return res</span>
+    return res
       .status(200)
       .json({ message: "Ingrédient mis à jour", updatedIngredient });
   } catch (err) {
-<span class="cstat-no" title="statement not covered" >    return res.status(500).json({ message: err.message });</span>
+    return res.status(500).json({ message: err.message });
   }
 };
 &nbsp;
@@ -781,7 +781,7 @@ exports.deleteIngredient = <span class="fstat-no" title="function not covered" >
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-24T14:43:26.914Z
+                at 2025-10-27T08:33:30.452Z
             </div>
         <script src="../prettify.js"></script>
         <script>
