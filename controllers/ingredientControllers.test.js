@@ -7,6 +7,7 @@ const {
   updateIngredient,
   deleteIngredient,
   linkIngredientToRecipe,
+  unLinkIngredientFromRecipe,
 } = require("./ingredientControllers");
 // Import de la base de données pour mock
 const db = require("../db");
@@ -728,4 +729,67 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
     }); // /it
   }); // /describe linkIngredientTorecipe
+
+  describe("unlinkIngredientFromRecipe", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          ids: "1+1",
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should delete the link between ingredient and recipe", async () => {
+      const mockResult = {
+        rowCount: 1,
+      };
+      db.result.mockResolvedValue(mockResult);
+
+      await unLinkIngredientFromRecipe(req, res);
+
+      expect(db.result).toHaveBeenCalledWith(
+        `DELETE FROM recipes_has_ingredients
+      WHERE fk_id_recipe = $1
+      AND fk_id_ingredient = $2`,
+        [1, 1]
+      );
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.json).toHaveBeenCalledWith({ message: "Lien supprimé" });
+    }); // /it
+
+    it("should return 404 if link can't be found", async () => {
+      const mockResult = {
+        rowCount: 0,
+      };
+      db.result.mockResolvedValue(mockResult);
+
+      await unLinkIngredientFromRecipe(req, res);
+
+      expect(db.result).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message:
+          "Aucun lien entre cette recette et cet ingrédient n'a été trouvé",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.result.mockRejectedValue(new Error("Database error"))
+
+      await unLinkIngredientFromRecipe(req, res)
+
+      expect(db.result).toHaveBeenCalled()
+      expect(res.status).toHaveBeenCalledWith(500)
+      expect(res.json).toHaveBeenCalledWith({message: "Database error"})
+    }) // /it
+  }); // /describe unlinkIngredientFromRecipe
 }); // /describe Ingredient controllers
