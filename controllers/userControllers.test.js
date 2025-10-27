@@ -10,6 +10,7 @@ const db = require("../db");
 const bcrypt = require("bcrypt");
 
 jest.mock("bcrypt");
+jest.mock("../db.js");
 
 describe("User controllers", () => {
   const mockDate = new Date("2025-10-09T13:33:02.815Z");

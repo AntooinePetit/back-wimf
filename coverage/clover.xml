@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761560388237" clover="3.2.0">
-  <project timestamp="1761560388237" name="All files">
-    <metrics statements="260" coveredstatements="255" conditionals="129" coveredconditionals="128" methods="30" coveredmethods="29" elements="419" coveredelements="412" complexity="0" loc="260" ncloc="260" packages="2" files="5" classes="5"/>
+<coverage generated="1761564008945" clover="3.2.0">
+  <project timestamp="1761564008945" name="All files">
+    <metrics statements="272" coveredstatements="267" conditionals="133" coveredconditionals="132" methods="31" coveredmethods="30" elements="436" coveredelements="429" complexity="0" loc="272" ncloc="272" packages="3" files="6" classes="6"/>
     <package name="controllers">
       <metrics statements="252" coveredstatements="252" conditionals="129" coveredconditionals="128" methods="29" coveredmethods="29"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
@@ -267,6 +267,24 @@
         <line num="253" count="1" type="stmt"/>
         <line num="256" count="2" type="stmt"/>
         <line num="258" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="middlewares">
+      <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+      <file name="authMiddleware.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\middlewares\authMiddleware.js">
+        <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="15" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
       </file>
     </package>
     <package name="utils">

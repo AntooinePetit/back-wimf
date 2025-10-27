@@ -114,14 +114,13 @@ Nécessite un token d'authentification d'un compte modérateur ou administrateur
 
 **GET** `/api/v1/recipes/:id`
 
-  <!-- 
 ## Exécution des tests
 
 ```bash
 npm test
 ```
 
-<!-- 
+<!--
 
 ## Contribution
 
