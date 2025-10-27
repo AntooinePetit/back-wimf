@@ -6,6 +6,7 @@ const {
   searchIngredients,
   updateIngredient,
   deleteIngredient,
+  linkIngredientToRecipe,
 } = require("./ingredientControllers");
 // Import de la base de données pour mock
 const db = require("../db");
@@ -538,4 +539,193 @@ describe("Ingredient controllers", () => {
       expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
     }); // /it
   }); // /describe deleteIngredient
+
+  describe("linkIngredientToRecipe", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          id_ingredient: 1,
+          quantity: 25,
+          mesurements: "g",
+        },
+      };
+
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should had new link to database", async () => {
+      const mockExistingRecipe = {
+        name_recipe: "Recette test",
+      };
+      const mockExistingIngredient = {
+        name_ingredient: "Ingrédient test",
+      };
+      const mockLink = {
+        fk_id_recipe: 1,
+        fk_id_ingredient: 1,
+        quantity: 25,
+        mesurements: "g",
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(mockExistingIngredient)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockResolvedValue(mockLink);
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes WHERE id_recipe = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM ingredients WHERE id_ingredient = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes_has_ingredients WHERE fk_id_recipe = $1 AND fk_id_ingredient = $2",
+        [1, 1]
+      );
+      expect(db.one).toHaveBeenCalledWith(
+        `INSERT INTO recipes_has_ingredients (fk_id_recipe, fk_id_ingredient, quantity, mesurements)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+        [1, 1, 25, "g"]
+      );
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(mockLink);
+    }); // /it
+
+    it("should had new link to database even if quantity and/or mesurements are null", async () => {
+      req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          id_ingredient: 1,
+        },
+      };
+      const mockExistingRecipe = {
+        name_recipe: "Recette test",
+      };
+      const mockExistingIngredient = {
+        name_ingredient: "Ingrédient test",
+      };
+      const mockLink = {
+        fk_id_recipe: 1,
+        fk_id_ingredient: 1,
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(mockExistingIngredient)
+        .mockResolvedValueOnce(null);
+
+      db.one.mockResolvedValue(mockLink);
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes WHERE id_recipe = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM ingredients WHERE id_ingredient = $1",
+        1
+      );
+      expect(db.oneOrNone).toHaveBeenCalledWith(
+        "SELECT * FROM recipes_has_ingredients WHERE fk_id_recipe = $1 AND fk_id_ingredient = $2",
+        [1, 1]
+      );
+      expect(db.one).toHaveBeenCalledWith(
+        `INSERT INTO recipes_has_ingredients (fk_id_recipe, fk_id_ingredient, quantity, mesurements)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+        [1, 1, null, null]
+      );
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(mockLink);
+    });
+
+    it("should return 404 if recipe can't be found", async () => {
+      db.oneOrNone.mockResolvedValue(null);
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "Recette introuvable" });
+    }); // /it
+
+    it("should return 404 if ingredient can't be found", async () => {
+      const mockExistingRecipe = {
+        name_recipe: "Recette test",
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(null);
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Ingrédient introuvable",
+      });
+    }); // /it
+
+    it("should return 409 if link already exists", async () => {
+      const mockExistingRecipe = {
+        name_recipe: "Recette test",
+      };
+      const mockExistingIngredient = {
+        name_ingredient: "Ingrédient test",
+      };
+      const mockLink = {
+        fk_id_recipe: 1,
+        fk_id_ingredient: 1,
+        quantity: 25,
+        mesurements: "g",
+      };
+
+      db.oneOrNone
+        .mockResolvedValueOnce(mockExistingRecipe)
+        .mockResolvedValueOnce(mockExistingIngredient)
+        .mockResolvedValueOnce(mockLink);
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(409);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Cet ingrédient est déjà intégré à cette recette",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.oneOrNone.mockRejectedValue(new Error("Database error"));
+
+      await linkIngredientToRecipe(req, res);
+
+      expect(db.oneOrNone).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+  }); // /describe linkIngredientTorecipe
 }); // /describe Ingredient controllers

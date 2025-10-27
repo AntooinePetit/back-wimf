@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761554893828" clover="3.2.0">
-  <project timestamp="1761554893829" name="All files">
-    <metrics statements="234" coveredstatements="229" conditionals="117" coveredconditionals="116" methods="27" coveredmethods="26" elements="378" coveredelements="371" complexity="0" loc="234" ncloc="234" packages="2" files="5" classes="5"/>
+<coverage generated="1761559042453" clover="3.2.0">
+  <project timestamp="1761559042453" name="All files">
+    <metrics statements="250" coveredstatements="245" conditionals="127" coveredconditionals="126" methods="28" coveredmethods="27" elements="405" coveredelements="398" complexity="0" loc="250" ncloc="250" packages="2" files="5" classes="5"/>
     <package name="controllers">
-      <metrics statements="226" coveredstatements="226" conditionals="117" coveredconditionals="116" methods="26" coveredmethods="26"/>
+      <metrics statements="242" coveredstatements="242" conditionals="127" coveredconditionals="126" methods="27" coveredmethods="27"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
         <metrics statements="55" coveredstatements="55" conditionals="14" coveredconditionals="13" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -63,7 +63,7 @@
         <line num="204" count="2" type="stmt"/>
       </file>
       <file name="ingredientControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\ingredientControllers.js">
-        <metrics statements="58" coveredstatements="58" conditionals="14" coveredconditionals="14" methods="9" coveredmethods="9"/>
+        <metrics statements="74" coveredstatements="74" conditionals="24" coveredconditionals="24" methods="10" coveredmethods="10"/>
         <line num="1" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
@@ -122,6 +122,22 @@
         <line num="228" count="1" type="stmt"/>
         <line num="231" count="1" type="stmt"/>
         <line num="233" count="1" type="stmt"/>
+        <line num="254" count="1" type="stmt"/>
+        <line num="255" count="6" type="stmt"/>
+        <line num="256" count="6" type="stmt"/>
+        <line num="257" count="6" type="stmt"/>
+        <line num="259" count="6" type="stmt"/>
+        <line num="264" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="265" count="1" type="stmt"/>
+        <line num="268" count="4" type="stmt"/>
+        <line num="273" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="274" count="1" type="stmt"/>
+        <line num="277" count="3" type="stmt"/>
+        <line num="282" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="283" count="1" type="stmt"/>
+        <line num="288" count="2" type="stmt"/>
+        <line num="295" count="2" type="stmt"/>
+        <line num="297" count="1" type="stmt"/>
       </file>
       <file name="recipeControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\recipeControllers.js">
         <metrics statements="57" coveredstatements="57" conditionals="30" coveredconditionals="30" methods="9" coveredmethods="9"/>

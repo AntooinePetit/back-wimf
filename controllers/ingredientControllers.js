@@ -271,7 +271,7 @@ exports.linkIngredientToRecipe = async (req, res) => {
     );
 
     if (!existingIngredient) {
-      return res.status(404).json({ message: "Ingredient introuvable" });
+      return res.status(404).json({ message: "Ingrédient introuvable" });
     }
 
     const ingredientInRecipe = await db.oneOrNone(
@@ -285,14 +285,14 @@ exports.linkIngredientToRecipe = async (req, res) => {
         .json({ message: "Cet ingrédient est déjà intégré à cette recette" });
     }
 
-    const addedIngredients = await db.many(
+    const link = await db.one(
       `INSERT INTO recipes_has_ingredients (fk_id_recipe, fk_id_ingredient, quantity, mesurements)
       VALUES ($1, $2, $3, $4)
       RETURNING *`,
       [id, id_ingredient, quantity ?? null, mesurements ?? null]
     );
 
-    return res.status(201).json(addedIngredients);
+    return res.status(201).json(link);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
