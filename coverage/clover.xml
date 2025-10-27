@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761564008945" clover="3.2.0">
-  <project timestamp="1761564008945" name="All files">
-    <metrics statements="272" coveredstatements="267" conditionals="133" coveredconditionals="132" methods="31" coveredmethods="30" elements="436" coveredelements="429" complexity="0" loc="272" ncloc="272" packages="3" files="6" classes="6"/>
+<coverage generated="1761572457434" clover="3.2.0">
+  <project timestamp="1761572457434" name="All files">
+    <metrics statements="292" coveredstatements="287" conditionals="141" coveredconditionals="140" methods="32" coveredmethods="31" elements="465" coveredelements="458" complexity="0" loc="292" ncloc="292" packages="3" files="7" classes="7"/>
     <package name="controllers">
       <metrics statements="252" coveredstatements="252" conditionals="129" coveredconditionals="128" methods="29" coveredmethods="29"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
@@ -270,7 +270,30 @@
       </file>
     </package>
     <package name="middlewares">
-      <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+      <metrics statements="32" coveredstatements="32" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+      <file name="adminMiddleware.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\middlewares\adminMiddleware.js">
+        <metrics statements="20" coveredstatements="20" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="16" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="25" count="5" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="38" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+      </file>
       <file name="authMiddleware.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\middlewares\authMiddleware.js">
         <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>

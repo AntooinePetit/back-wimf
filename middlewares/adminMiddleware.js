@@ -17,13 +17,19 @@ const adminMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "Accès refusé, token manquant" });
   }
 
+  const token = authHeader.split(" ")[1];
+
+  let decoded;
+
   try {
-    const token = authHeader.split(" ")[1];
+    decoded = jwt.verify(token, process.env.JWT);
+  } catch (err) {
+    return res.status(401).json({ message: "Token invalide ou expiré" });
+  }
 
-    const decoded = jwt.verify(token, process.env.JWT);
+  const { id } = decoded;
 
-    const { id } = decoded;
-
+  try {
     const userConnected = await db.oneOrNone(
       "SELECT rights_user FROM users WHERE id_user = $1",
       id
@@ -41,7 +47,7 @@ const adminMiddleware = async (req, res, next) => {
 
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Token invalide ou expiré" });
+    return res.status(500).json({ message: err.message });
   }
 };
 
