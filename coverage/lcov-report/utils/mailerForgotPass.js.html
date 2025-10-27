@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,70 +97,70 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const nodemailer = require("nodemailer");
 &nbsp;
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
+async function emailForgotPass(email, username, token) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
+    },
+  });
 &nbsp;
-async function <span class="fstat-no" title="function not covered" >emailForgotPass(</span>email, username, token) {
-  const mailOptions = <span class="cstat-no" title="statement not covered" >{</span>
+  const mailOptions = {
     from: `"WIMF" ${process.env.GMAIL_USER}`,
     to: email,
     subject: "Réinitialisation du mot de passe - mot de passe oublié",
     text: `Bonjour ${username},
     
-    Nous avons reçu une demande réinitialisation de mot de passe pour ton compte WIMF. Si tu n'es pas à l'origine de cette demande, contente toi d'ignorer ce mail.
+Nous avons reçu une demande réinitialisation de mot de passe pour ton compte WIMF. Si tu n'es pas à l'origine de cette demande, contente toi d'ignorer ce mail.
     
-    Si tu es bien à l'origine de cette demande, voici ton lien de réinitialisation de mot de passe : https://www.wimf.com/reinitialisation/${token} !
+Si tu es bien à l'origine de cette demande, voici ton lien de réinitialisation de mot de passe : https://www.wimf.com/reinitialisation/${token} !
     
-    Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
+Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const info = <span class="cstat-no" title="statement not covered" >await transporter.sendMail(mailOptions);</span>
-<span class="cstat-no" title="statement not covered" >    return info; </span>// optionnel : tu peux retourner l’info si ton contrôleur en a besoin
+  try {
+    const info = await transporter.sendMail(mailOptions); // optionnel : tu peux retourner l’info si ton contrôleur en a besoin
+    return info;
   } catch (error) {
     // Important : on relance l’erreur pour que le contrôleur puisse la gérer
-<span class="cstat-no" title="statement not covered" >    throw new Error("Échec de l'envoi de l'email");</span>
+    throw new Error("Échec de l'envoi de l'email");
   }
 }
 &nbsp;
@@ -172,7 +172,7 @@ module.exports = emailForgotPass;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-27T14:39:12.640Z
+                at 2025-10-27T15:25:56.184Z
             </div>
         <script src="../prettify.js"></script>
         <script>

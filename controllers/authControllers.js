@@ -143,8 +143,6 @@ exports.forgotPass = async (req, res) => {
 
     const info = await emailForgotPass(email, user.username_user, token);
 
-    console.log(info)
-
     res.status(200).json({ message: "Email envoyé" });
   } catch (err) {
     res.status(500).json({ message: err.message });
