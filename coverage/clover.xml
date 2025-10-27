@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761572457434" clover="3.2.0">
-  <project timestamp="1761572457434" name="All files">
-    <metrics statements="292" coveredstatements="287" conditionals="141" coveredconditionals="140" methods="32" coveredmethods="31" elements="465" coveredelements="458" complexity="0" loc="292" ncloc="292" packages="3" files="7" classes="7"/>
+<coverage generated="1761575952727" clover="3.2.0">
+  <project timestamp="1761575952727" name="All files">
+    <metrics statements="304" coveredstatements="299" conditionals="143" coveredconditionals="142" methods="33" coveredmethods="32" elements="480" coveredelements="473" complexity="0" loc="304" ncloc="304" packages="3" files="8" classes="8"/>
     <package name="controllers">
       <metrics statements="252" coveredstatements="252" conditionals="129" coveredconditionals="128" methods="29" coveredmethods="29"/>
       <file name="authControllers.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\controllers\authControllers.js">
@@ -270,7 +270,7 @@
       </file>
     </package>
     <package name="middlewares">
-      <metrics statements="32" coveredstatements="32" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+      <metrics statements="44" coveredstatements="44" conditionals="14" coveredconditionals="14" methods="3" coveredmethods="3"/>
       <file name="adminMiddleware.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\middlewares\adminMiddleware.js">
         <metrics statements="20" coveredstatements="20" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -308,6 +308,21 @@
         <line num="24" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
+      </file>
+      <file name="resetPassMiddleware.js" path="C:\Users\Utilisateur\Desktop\WIMF\back\middlewares\resetPassMiddleware.js">
+        <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="14" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
       </file>
     </package>
     <package name="utils">

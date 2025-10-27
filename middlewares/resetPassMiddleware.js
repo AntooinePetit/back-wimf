@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
  * @param {Function} next - Fonction qui renvoie au middleware suivant
  * @returns {void}
  */
-const resetPassMiddleware = async (req, res, next) => {
+const resetPassMiddleware = (req, res, next) => {
   const resetPassHeader = req.headers.authorization;
 
   if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {

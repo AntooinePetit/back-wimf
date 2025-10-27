@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for middlewares/authMiddleware.js</title>
+    <title>Code coverage report for middlewares/resetPassMiddleware.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">middlewares</a> authMiddleware.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">middlewares</a> resetPassMiddleware.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -92,9 +92,7 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,22 +124,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const jwt = require("jsonwebtoken");
 &nbsp;
 /**
- * Vérifie le token de connexion de l'utilisateur
- * 
- * @async
+ * Middleware permettant de vérifier le token de réinitialisation de mot de passe
+ *
  * @param {Object} req - Objet de requête Express
  * @param {Object} res - Objet de réponse Express
  * @param {Function} next - Fonction qui renvoie au middleware suivant
  * @returns {void}
  */
-const authMiddleware = (req, res, next) =&gt; {
-  const authHeader = req.headers.authorization;
+const resetPassMiddleware = (req, res, next) =&gt; {
+  const resetPassHeader = req.headers.authorization;
 &nbsp;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Accès refusé, token manquant" });
+  if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Token manquant !" });
   }
 &nbsp;
-  const token = authHeader.split(" ")[1];
+  const token = resetPassHeader.split(" ")[1];
 &nbsp;
   try {
     const decoded = jwt.verify(token, process.env.JWT);
@@ -152,7 +149,7 @@ const authMiddleware = (req, res, next) =&gt; {
   }
 };
 &nbsp;
-module.exports = authMiddleware;
+module.exports = resetPassMiddleware;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
