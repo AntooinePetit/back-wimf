@@ -17,5 +17,10 @@ router.post(
   adminMiddleware,
   ingredientControllers.linkIngredientToRecipe
 ); // Ajouter un ingrédient à une recette
+router.delete(
+  "/link/:ids",
+  adminMiddleware,
+  ingredientControllers.unLinkIngredientFromRecipe
+); // Retirer un ingrédient d'une recette
 
 module.exports = router;

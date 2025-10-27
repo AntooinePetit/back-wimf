@@ -291,6 +291,15 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
+### Retirer un ingrédient d'une recette
+
+**DELETE** `/api/v1/ingredients/link/:ids`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+Nécessite un token d'authentification d'un compte administrateur
+La première valeur de `:ids` doit être l'id de la recette à laquelle retirer l'ingrédient, suivi de l'id de l'ingrédient à retirer. Les deux id doivent être séparé par un `+`.
+
 ## Tags
 
 ### Obtenir les informations de tous les tags
