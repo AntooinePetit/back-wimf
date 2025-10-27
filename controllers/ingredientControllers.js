@@ -235,3 +235,65 @@ exports.deleteIngredient = async (req, res) => {
 };
 
 // TODO: Ajouter 2 controllers : lier et délier un ingrédient à une recette
+
+/**
+ * Lie un ingrédient à une recette dans la base de données
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un code 201 avec les informations de l'ingrédient et ses mesures.
+ * @example
+ * // POST /api/v1/ingredients/link/1
+ * // Headers : `Authorization: Bearer <votre_jeton_jwt>`
+ * {
+ *   "id_ingredient": 1,
+ *   "quantity": 25,
+ *   "mesurements": "g"
+ * }
+ */
+exports.linkIngredientToRecipe = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id_ingredient, quantity, mesurements } = req.body;
+
+    const existingRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes WHERE id_recipe = $1",
+      id
+    );
+
+    if (!existingRecipe) {
+      return res.status(404).json({ message: "Recette introuvable" });
+    }
+
+    const existingIngredient = await db.oneOrNone(
+      "SELECT * FROM ingredients WHERE id_ingredient = $1",
+      id_ingredient
+    );
+
+    if (!existingIngredient) {
+      return res.status(404).json({ message: "Ingredient introuvable" });
+    }
+
+    const ingredientInRecipe = await db.oneOrNone(
+      "SELECT * FROM recipes_has_ingredients WHERE fk_id_recipe = $1 AND fk_id_ingredient = $2",
+      [id, id_ingredient]
+    );
+
+    if (ingredientInRecipe) {
+      return res
+        .status(409)
+        .json({ message: "Cet ingrédient est déjà intégré à cette recette" });
+    }
+
+    const addedIngredients = await db.many(
+      `INSERT INTO recipes_has_ingredients (fk_id_recipe, fk_id_ingredient, quantity, mesurements)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+      [id, id_ingredient, quantity ?? null, mesurements ?? null]
+    );
+
+    return res.status(201).json(addedIngredients);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

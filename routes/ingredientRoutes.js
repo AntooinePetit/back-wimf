@@ -12,5 +12,10 @@ router.get("/:id", ingredientControllers.getIngredientsFromRecipe); // Récupér
 router.post("/", adminMiddleware, ingredientControllers.addIngredient); // Ajouter un ingrédient à la liste
 router.put("/:id", adminMiddleware, ingredientControllers.updateIngredient); // Mettre à jour un ingrédient
 router.delete("/:id", adminMiddleware, ingredientControllers.deleteIngredient); // Supprimer un ingrédient
+router.post(
+  "/link/:id",
+  adminMiddleware,
+  ingredientControllers.linkIngredientToRecipe
+); // Ajouter un ingrédient à une recette
 
 module.exports = router;

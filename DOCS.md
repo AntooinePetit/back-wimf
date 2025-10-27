@@ -275,6 +275,22 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 
 Nécessite un token d'authentification d'un compte administrateur
 
+### Ajouter un ingrédient à une recette
+
+**POST** `/api/v1/ingredients/link/:id`
+
+Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
+
+```json
+{
+  "id_ingredient": 1,
+  "quantity": 25,
+  "mesurements": "g"
+}
+```
+
+Nécessite un token d'authentification d'un compte administrateur
+
 ## Tags
 
 ### Obtenir les informations de tous les tags
