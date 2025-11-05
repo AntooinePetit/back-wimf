@@ -20,6 +20,27 @@ exports.getAllRecipes = async (req, res) => {
 };
 
 /**
+ * Récupère 8 recettes au hasard.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant 8 recettes choisies au hasard dans la base de données.
+ * @example
+ * // GET /api/v1/recipes/random
+ */
+exports.getRandomRecipes = async (req, res) => {
+  try {
+    const recipes = await db.manyOrNone(
+      "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 8"
+    );
+
+    res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
  * Récupère une recette grâce à son ID
  *
  * @param {Object} req - Objet de requête Express
