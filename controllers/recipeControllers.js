@@ -138,15 +138,17 @@ exports.getOneRecipe = async (req, res) => {
  */
 exports.addRecipe = async (req, res) => {
   try {
-    const {
-      name,
-      preparationTime,
-      cookingTime,
-      restingTime,
-      instructions,
-      nutritionalValues,
-      servings,
-    } = req.body;
+    const { name, preparationTime, cookingTime, restingTime, servings } =
+      req.body;
+
+    const instructions = JSON.parse(req.body.instructions);
+    const nutritionalValues = JSON.parse(req.body.nutritionalValues);
+
+    let imageUrl = null;
+    if (req.file) {
+      // Chemin accessible publiquement (ex: /uploads/recipes/nom.jpg)
+      imageUrl = `/uploads/recipes/${req.file.filename}`;
+    }
 
     const existingRecipe = await db.oneOrNone(
       "SELECT * FROM recipes WHERE name_recipe ILIKE $1",
@@ -163,7 +165,7 @@ exports.addRecipe = async (req, res) => {
       parseInt(preparationTime) + parseInt(cookingTime) + parseInt(restingTime);
 
     const recipeCreated = await db.one(
-      `INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe) 
+      `INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe, image_recipe) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
       RETURNING *`,
       [
@@ -175,6 +177,7 @@ exports.addRecipe = async (req, res) => {
         totalTime,
         nutritionalValues,
         servings,
+        imageUrl,
       ]
     );
 

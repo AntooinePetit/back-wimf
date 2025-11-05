@@ -2,12 +2,26 @@ const express = require("express");
 const helmet = require("helmet");
 const app = express();
 require("dotenv").config();
+const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const port = process.env.PORT;
+
+// Vérification de l'existence du dossier uploads pour les images
+const uploadDirs = ["uploads", "uploads/recipes"];
+
+uploadDirs.forEach((dir) => {
+  const fullPath = path.join(__dirname, dir);
+  if (!fs.existsSync(fullPath)) {
+    fs.mkdirSync(fullPath, { recursive: true });
+    console.log(`📁 Dossier créé : ${fullPath}`);
+  }
+});
 
 // Base de données
 require("./db");
 
-// Middleware pour parse le JSON
+app.use(cors());
 app.use(express.json());
 
 // Helmet
@@ -45,6 +59,9 @@ app.use("/api/v1/diets", dietRoutes);
 app.use("/api/v1/banned", bannedRoutes);
 // Authentification
 app.use("/api/v1/auth", authRoutes);
+
+// Images
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send("Rien à voir ici");

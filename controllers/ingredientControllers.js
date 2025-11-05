@@ -234,8 +234,6 @@ exports.deleteIngredient = async (req, res) => {
   }
 };
 
-// TODO: Ajouter 2 controllers : lier et délier un ingrédient à une recette
-
 /**
  * Lie un ingrédient à une recette dans la base de données
  *
