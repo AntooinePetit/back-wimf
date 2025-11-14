@@ -300,6 +300,8 @@ Headers : `Authorization: Bearer <votre_jeton_jwt_admin>`
 Nécessite un token d'authentification d'un compte administrateur
 La première valeur de `:ids` doit être l'id de la recette à laquelle retirer l'ingrédient, suivi de l'id de l'ingrédient à retirer. Les deux id doivent être séparé par un `+`.
 
+<!-- TODO: Passer en revue les documentations et mettre à jour si nécessaire -->
+
 ## Tags
 
 ### Obtenir les informations de tous les tags

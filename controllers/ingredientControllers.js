@@ -86,7 +86,7 @@ exports.getIngredientsFromRecipe = async (req, res) => {
     }
 
     const ingredients = await db.manyOrNone(
-      `SELECT i.name_ingredient, ri.quantity, ri.mesurements FROM recipes_has_ingredients AS ri
+      `SELECT i.id_ingredient, i.name_ingredient, ri.quantity, ri.mesurements FROM recipes_has_ingredients AS ri
       INNER JOIN ingredients AS i ON i.id_ingredient = ri.fk_id_ingredient
       WHERE fk_id_recipe = $1`,
       id

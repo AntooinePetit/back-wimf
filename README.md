@@ -121,6 +121,7 @@ npm test
 ```
 
 <!--
+TODO: Rédiger le reste du README
 
 ## Contribution
 
