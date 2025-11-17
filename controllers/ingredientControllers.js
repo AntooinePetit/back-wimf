@@ -49,7 +49,7 @@ exports.searchIngredients = async (req, res) => {
     const values = splitSearch.map((word) => `%${word}%`);
 
     const searchResult = await db.any(
-      `SELECT i.name_ingredient, c.name_ingredient_category 
+      `SELECT i.id_ingredient, i.name_ingredient, c.name_ingredient_category 
       FROM ingredients AS i 
       LEFT JOIN ingredient_categories AS c 
       ON i.fk_id_ingredient_category = c.id_ingredient_category
