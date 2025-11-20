@@ -70,6 +70,8 @@ exports.getOneRecipe = async (req, res) => {
   }
 };
 
+
+
 /**
  * Crée une nouvelle recette.
  *
@@ -295,6 +297,44 @@ exports.updateRecipe = async (req, res) => {
     );
 
     res.status(200).json({ message: "Recette mise à jour", recipeUpdated });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+/**
+ * Recherche des recettes par IDs d'ingrédients.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les recettes triées par nombre d'ingrédients correspondants (du plus au moins).
+ * @example
+ * // GET /api/v1/recipes/search/ingredients/1+5+12
+ */
+exports.searchRecipesByIngredients = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const ingredientIds = ids
+      .split("+")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    if (ingredientIds.length === 0) {
+      return res.status(400).json({ message: "Aucun ID d'ingrédient valide fourni" });
+    }
+
+    const recipes = await db.any(
+      `SELECT r.*, COUNT(rhi.fk_id_ingredient) as match_count
+      FROM recipes r
+      INNER JOIN recipes_has_ingredients rhi ON r.id_recipe = rhi.fk_id_recipe
+      WHERE rhi.fk_id_ingredient = ANY($1)
+      GROUP BY r.id_recipe
+      ORDER BY match_count DESC`,
+      [ingredientIds]
+    );
+
+    res.status(200).json(recipes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

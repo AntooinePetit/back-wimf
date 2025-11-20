@@ -63,6 +63,41 @@ exports.searchIngredients = async (req, res) => {
   }
 };
 
+
+
+/**
+ * Récupère un ou plusieurs ingrédients par leurs IDs.
+ *
+ * @param {Object} req - Objet de requête Express
+ * @param {Object} res - Objet de réponse Express
+ * @returns {Promise<void>} - Retourne un JSON contenant les ingrédients (id et nom) correspondants aux IDs fournis.
+ * @example
+ * // GET /api/v1/ingredients/ingredient/1+5+12
+ */
+exports.getIngredientsByIds = async (req, res) => {
+  try {
+    const { ids } = req.params;
+
+    const ingredientIds = ids
+      .split("+")
+      .map((id) => parseInt(id.trim()))
+      .filter((id) => !isNaN(id));
+
+    if (ingredientIds.length === 0) {
+      return res.status(400).json({ message: "Aucun ID d'ingrédient valide fourni" });
+    }
+
+    const ingredients = await db.any(
+      "SELECT id_ingredient, name_ingredient FROM ingredients WHERE id_ingredient = ANY($1)",
+      [ingredientIds]
+    );
+
+    res.status(200).json(ingredients);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 /**
  * Récupère les ingrédients appartenant à une recette.
  *
