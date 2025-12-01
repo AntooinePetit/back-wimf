@@ -138,3 +138,120 @@ Exemple de sortie correcte :
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
+
+exports.createRecipeFromIngredients = async (req, res) => {
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const { ingredients } = req.body;
+
+    // Validation basique
+    if (
+      !ingredients ||
+      !Array.isArray(ingredients) ||
+      ingredients.length === 0
+    ) {
+      return res.status(400).json({ error: "Aucun ingrédient valide fourni." });
+    }
+
+    // Prompt IA
+    const contents = [
+      {
+        text: `
+Tu es un assistant culinaire expert.
+Tu dois générer UNE recette qui utilise UNIQUEMENT les ingrédients suivants :
+${JSON.stringify(ingredients, null, 2)}
+
+Répond STRICTEMENT avec un JSON valide et rien d'autre.
+N'ajoute aucun texte avant ou après.
+Format EXACT attendu :
+
+{
+  "name_recipe": "string",
+  "preparation_time": "string",
+  "cooking_time": "string",
+  "resting_time": "string",
+  "instructions": {
+    "steps": ["string", "string", "string"]
+  },
+  "servings_recipe": number,
+  "nutritional_values_recipe": {
+    "totalFat": {"name": "Matières grasses totales", "quantity": number, "unit": "g"},
+    "saturatedFat": {"name": "Acides gras saturés", "quantity": number, "unit": "g"},
+    "cholesterol": {"name": "Cholestérol", "quantity": number, "unit": "mg"},
+    "sodium": {"name": "Sodium", "quantity": number, "unit": "mg"},
+    "totalCarbohydrate": {"name": "Glucides totaux", "quantity": number, "unit": "g"},
+    "dietaryFiber": {"name": "Fibres alimentaires", "quantity": number, "unit": "g"},
+    "totalSugars": {"name": "Sucres totaux", "quantity": number, "unit": "g"},
+    "protein": {"name": "Protéines", "quantity": number, "unit": "g"},
+    "calcium": {"name": "Calcium", "quantity": number, "unit": "mg"},
+    "iron": {"name": "Fer", "quantity": number, "unit": "mg"},
+    "potassium": {"name": "Potassium", "quantity": number, "unit": "mg"},
+    "calories": {"name": "Calories", "quantity": number, "unit": "kcal"}
+  }
+}
+
+CONTRAINTES IMPORTANTES :
+- Le JSON doit être valide et complet.
+- SI une valeur nutritionnelle est incertaine → mettre "quantity": 0.
+- N'invente AUCUN ingrédient (uniquement ceux fournis).
+- N'ajoute AUCUNE clé supplémentaire.
+- Pas de markdown, pas de commentaires, pas de texte autour.
+      `,
+      },
+    ];
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents,
+      generationConfig: { temperature: 0.2 },
+    });
+
+    const resultText =
+      response.candidates?.[0]?.content?.parts?.[0]?.text || null;
+
+    if (!resultText) {
+      return res.status(500).json({ error: "Réponse IA vide ou invalide." });
+    }
+
+    // Nettoyage JSON
+    const cleanJsonText = resultText
+      .replace(/```json/i, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let recipeJson;
+    try {
+      recipeJson = JSON.parse(cleanJsonText);
+    } catch (err) {
+      return res.status(500).json({
+        error: "La réponse IA n'est pas un JSON valide.",
+        raw: resultText,
+      });
+    }
+
+    // Vérification basique du format attendu
+    const requiredKeys = [
+      "name_recipe",
+      "preparation_time",
+      "cooking_time",
+      "resting_time",
+      "instructions",
+      "servings_recipe",
+      "nutritional_values_recipe",
+    ];
+
+    for (const key of requiredKeys) {
+      if (!recipeJson[key]) {
+        return res.status(500).json({
+          error: `Clé manquante dans le JSON généré : ${key}`,
+          raw: recipeJson,
+        });
+      }
+    }
+
+    return res.json(recipeJson);
+  } catch (err) {
+    console.error("Erreur IA :", err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
+};
