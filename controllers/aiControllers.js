@@ -163,39 +163,60 @@ ${JSON.stringify(ingredients, null, 2)}
 
 Répond STRICTEMENT avec un JSON valide et rien d'autre.
 N'ajoute aucun texte avant ou après.
-Format EXACT attendu :
+
+FORMAT EXACT ATTENDU :
 
 {
-  "name_recipe": "string",
-  "preparation_time": "string",
-  "cooking_time": "string",
-  "resting_time": "string",
-  "instructions": {
-    "steps": ["string", "string", "string"]
-  },
-  "servings_recipe": number,
-  "nutritional_values_recipe": {
-    "totalFat": {"name": "Matières grasses totales", "quantity": number, "unit": "g"},
-    "saturatedFat": {"name": "Acides gras saturés", "quantity": number, "unit": "g"},
-    "cholesterol": {"name": "Cholestérol", "quantity": number, "unit": "mg"},
-    "sodium": {"name": "Sodium", "quantity": number, "unit": "mg"},
-    "totalCarbohydrate": {"name": "Glucides totaux", "quantity": number, "unit": "g"},
-    "dietaryFiber": {"name": "Fibres alimentaires", "quantity": number, "unit": "g"},
-    "totalSugars": {"name": "Sucres totaux", "quantity": number, "unit": "g"},
-    "protein": {"name": "Protéines", "quantity": number, "unit": "g"},
-    "calcium": {"name": "Calcium", "quantity": number, "unit": "mg"},
-    "iron": {"name": "Fer", "quantity": number, "unit": "mg"},
-    "potassium": {"name": "Potassium", "quantity": number, "unit": "mg"},
-    "calories": {"name": "Calories", "quantity": number, "unit": "kcal"}
+  "ingredients": [
+    {
+      "name_ingredient": "string",
+      "quantity": number,
+      "measurements": "string"
+    }
+  ],
+  "recipe": {
+    "name_recipe": "string",
+    "preparation_time": "string",
+    "cooking_time": "string",
+    "resting_time": "string",
+    "instructions": {
+      "steps": ["string", "string", "string"]
+    },
+    "servings_recipe": number,
+    "nutritional_values_recipe": {
+      "totalFat": {"name": "Matières grasses totales", "quantity": number, "unit": "g"},
+      "saturatedFat": {"name": "Acides gras saturés", "quantity": number, "unit": "g"},
+      "cholesterol": {"name": "Cholestérol", "quantity": number, "unit": "mg"},
+      "sodium": {"name": "Sodium", "quantity": number, "unit": "mg"},
+      "totalCarbohydrate": {"name": "Glucides totaux", "quantity": number, "unit": "g"},
+      "dietaryFiber": {"name": "Fibres alimentaires", "quantity": number, "unit": "g"},
+      "totalSugars": {"name": "Sucres totaux", "quantity": number, "unit": "g"},
+      "protein": {"name": "Protéines", "quantity": number, "unit": "g"},
+      "calcium": {"name": "Calcium", "quantity": number, "unit": "mg"},
+      "iron": {"name": "Fer", "quantity": number, "unit": "mg"},
+      "potassium": {"name": "Potassium", "quantity": number, "unit": "mg"},
+      "calories": {"name": "Calories", "quantity": number, "unit": "kcal"}
+    }
   }
 }
 
 CONTRAINTES IMPORTANTES :
-- Le JSON doit être valide et complet.
-- SI une valeur nutritionnelle est incertaine → mettre "quantity": 0.
-- N'invente AUCUN ingrédient (uniquement ceux fournis).
-- N'ajoute AUCUNE clé supplémentaire.
-- Pas de markdown, pas de commentaires, pas de texte autour.
+- Le JSON doit être parfaitement valide.
+- "ingredients" doit être un tableau d’objets, un pour chaque ingrédient fourni.
+- "name_ingredient" doit correspondre EXACTEMENT aux ingrédients fournis (en minuscules si nécessaire).
+- "quantity" : mettre 0 si la quantité n’est pas explicitable.
+- "measurements" : indiquer une unité réaliste ("g", "ml", "pièce", etc.). Si inconnu → "" (chaîne vide).
+- Dans "recipe", n'utilise QUE ces ingrédients.
+- Pour les valeurs nutritionnelles, si l’IA n’est pas certaine → mettre "quantity": 0.
+- AUCUNE clé supplémentaire.
+- AUCUN texte autour, strict JSON.
+
+### Règles pour les ingrédients :
+- Tu dois extraire tous les ingrédients mentionnés dans la recette.
+- S'il manque la quantité ou l'unité dans le texte, tu dois FAIRE UNE ESTIMATION COHÉRENTE pour une préparation de 2 personnes.
+- Il est strictement interdit d'utiliser quantity = 0 ou measurements = "" sauf si l’ingrédient ne peut vraiment pas être quantifié (ex : "sel" → mettre une estimation comme "1 pincée").
+- Toujours donner une unité logique (“g”, “ml”, “c.à.s”, “c.à.c”, “pincée”, “unité”, etc.).
+- Les quantités doivent être réalistes (pas 1 g ou 2000 g sans raison).
       `,
       },
     ];
@@ -230,15 +251,7 @@ CONTRAINTES IMPORTANTES :
     }
 
     // Vérification basique du format attendu
-    const requiredKeys = [
-      "name_recipe",
-      "preparation_time",
-      "cooking_time",
-      "resting_time",
-      "instructions",
-      "servings_recipe",
-      "nutritional_values_recipe",
-    ];
+    const requiredKeys = ["ingredients", "recipe"];
 
     for (const key of requiredKeys) {
       if (!recipeJson[key]) {
