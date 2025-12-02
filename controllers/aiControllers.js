@@ -176,9 +176,9 @@ FORMAT EXACT ATTENDU :
   ],
   "recipe": {
     "name_recipe": "string",
-    "preparation_time": "string",
-    "cooking_time": "string",
-    "resting_time": "string",
+    "preparation_time": number,
+    "cooking_time": number,
+    "resting_time": number,
     "instructions": {
       "steps": ["string", "string", "string"]
     },
