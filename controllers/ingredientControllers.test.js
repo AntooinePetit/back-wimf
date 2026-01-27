@@ -1,9 +1,10 @@
 // Import des fonctions
 const {
   getAllIngredients,
+  searchIngredients,
+  getIngredientsByIds,
   getIngredientsFromRecipe,
   addIngredient,
-  searchIngredients,
   updateIngredient,
   deleteIngredient,
   linkIngredientToRecipe,
@@ -95,6 +96,7 @@ describe("Ingredient controllers", () => {
     it("should return ingredients' informations corresponding to search", async () => {
       const mockSearchResults = [
         {
+          id_ingredient: 1,
           name_ingredient: "Fromage frais",
           name_ingredient_category: "Produits laitiers",
         },
@@ -105,7 +107,7 @@ describe("Ingredient controllers", () => {
       await searchIngredients(req, res);
 
       expect(db.any).toHaveBeenCalledWith(
-        `SELECT i.name_ingredient, c.name_ingredient_category 
+        `SELECT i.id_ingredient, i.name_ingredient, c.name_ingredient_category 
       FROM ingredients AS i 
       LEFT JOIN ingredient_categories AS c 
       ON i.fk_id_ingredient_category = c.id_ingredient_category
@@ -135,6 +137,64 @@ describe("Ingredient controllers", () => {
     }); // /it
   }); // /describe searchIngredients
 
+  describe("getIngredientsByIds", () => {
+    beforeEach(() => {
+      req = {
+        params: {
+          ids: "1+5+12",
+        },
+      };
+      res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+    }); // /beforeEach
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    }); // /afterEach
+
+    it("should return ingredients by their IDs", async () => {
+      const mockIngredients = [
+        { id_ingredient: 1, name_ingredient: "Ingredient 1" },
+        { id_ingredient: 5, name_ingredient: "Ingredient 5" },
+        { id_ingredient: 12, name_ingredient: "Ingredient 12" },
+      ];
+
+      db.any.mockResolvedValue(mockIngredients);
+
+      await getIngredientsByIds(req, res);
+
+      expect(db.any).toHaveBeenCalledWith(
+        "SELECT id_ingredient, name_ingredient FROM ingredients WHERE id_ingredient = ANY($1)",
+        [[1, 5, 12]]
+      );
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith(mockIngredients);
+    }); // /it
+
+    it("should return 400 if no valid ingredient IDs provided", async () => {
+      req.params.ids = "invalid+ids";
+
+      await getIngredientsByIds(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Aucun ID d'ingrédient valide fourni",
+      });
+    }); // /it
+
+    it("should handle database error", async () => {
+      db.any.mockRejectedValue(new Error("Database error"));
+
+      await getIngredientsByIds(req, res);
+
+      expect(db.any).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({ message: "Database error" });
+    }); // /it
+  }); // /describe getIngredientsByIds
+
   describe("getIngredientsFromRecipe", () => {
     beforeEach(() => {
       req = {
@@ -158,46 +218,55 @@ describe("Ingredient controllers", () => {
       };
       const mockIngredients = [
         {
+          id_ingredient: 1,
           name_ingredient: "Ingrédient de test 1",
           quantity: 60,
           mesurements: "g",
         },
         {
+          id_ingredient: 2,
           name_ingredient: "Ingrédient de test 2",
           quantity: 1,
           mesurements: "cuillère à soupe",
         },
         {
+          id_ingredient: 3,
           name_ingredient: "Ingrédient de test 3",
           quantity: 180,
           mesurements: "ml",
         },
         {
+          id_ingredient: 4,
           name_ingredient: "Ingrédient de test 4",
           quantity: 450,
           mesurements: "g",
         },
         {
+          id_ingredient: 5,
           name_ingredient: "Ingrédient de test 5",
           quantity: 2,
           mesurements: "cuillère à café",
         },
         {
+          id_ingredient: 6,
           name_ingredient: "Ingrédient de test 6",
           quantity: 1,
           mesurements: "gros",
         },
         {
+          id_ingredient: 7,
           name_ingredient: "Ingrédient de test 7",
           quantity: 225,
           mesurements: "g",
         },
         {
+          id_ingredient: 8,
           name_ingredient: "Ingrédient de test 8",
           quantity: 2,
           mesurements: "cuillère à soupe",
         },
         {
+          id_ingredient: 9,
           name_ingredient: "Ingrédient de test 9",
           quantity: 30,
           mesurements: "g",
@@ -215,7 +284,7 @@ describe("Ingredient controllers", () => {
         1
       );
       expect(db.manyOrNone).toHaveBeenCalledWith(
-        `SELECT i.name_ingredient, ri.quantity, ri.mesurements FROM recipes_has_ingredients AS ri
+        `SELECT i.id_ingredient, i.name_ingredient, ri.quantity, ri.mesurements FROM recipes_has_ingredients AS ri
       INNER JOIN ingredients AS i ON i.id_ingredient = ri.fk_id_ingredient
       WHERE fk_id_recipe = $1`,
         1

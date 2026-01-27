@@ -17,6 +17,8 @@ describe("mailerForgotPass", () => {
     process.env.GMAIL_USER = "sender@gmail.com";
     process.env.GMAIL_PASS = "pass123";
 
+    process.env.URL_WEBSITE = "https://www.wimf.com/";
+
     mockSendMail = jest.fn();
 
     nodemailer.createTransport.mockReturnValue({
@@ -47,7 +49,7 @@ describe("mailerForgotPass", () => {
       text: expect.stringContaining(`Bonjour ${username},`),
     });
     expect(mockSendMail.mock.calls[0][0].text).toContain(
-      `https://www.wimf.com/reinitialisation/${token}`
+      `https://www.wimf.com/reset-pass/${token}`
     );
   }); // /it
 

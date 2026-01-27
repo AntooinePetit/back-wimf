@@ -189,7 +189,7 @@ exports.addRecipe = async (req, res) => {
 
     const recipeCreated = await db.one(
       `INSERT INTO recipes(name_recipe, preparation_time, cooking_time, resting_time, instructions, total_time, nutritional_values_recipe, servings_recipe, image_recipe) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
       RETURNING *`,
       [
         name,

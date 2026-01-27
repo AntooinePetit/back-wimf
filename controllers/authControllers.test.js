@@ -77,7 +77,7 @@ describe("Auth Controllers", () => {
           id: 1,
           username: "testuser",
         },
-        "test-secret",
+        process.env.JWT,
         { expiresIn: "7d" }
       );
       expect(res.status).toHaveBeenCalledWith(201);
@@ -189,7 +189,7 @@ describe("Auth Controllers", () => {
       );
       expect(jwt.sign).toHaveBeenCalledWith(
         { id: "1", username: "testuser" },
-        "test-secret",
+        process.env.JWT,
         { expiresIn: "7d" }
       );
       expect(res.json).toHaveBeenCalledWith("mock-token");
@@ -314,7 +314,7 @@ describe("Auth Controllers", () => {
       );
       expect(jwt.sign).toHaveBeenCalledWith(
         { id: 1, purpose: "password_reset" },
-        "test-secret",
+        process.env.JWT,
         { expiresIn: "15m" }
       );
       expect(emailForgotPass).toHaveBeenCalledWith(
@@ -354,7 +354,7 @@ describe("Auth Controllers", () => {
       expect(db.oneOrNone).toHaveBeenCalled();
       expect(jwt.sign).toHaveBeenCalledWith(
         { id: 1, purpose: "password_reset" },
-        "test-secret",
+        process.env.JWT,
         { expiresIn: "15m" }
       );
       expect(res.status).toHaveBeenCalledWith(500);
