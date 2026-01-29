@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const resetPassMiddleware = (req, res, next) => {
   const resetPassHeader = req.headers.authorization;
 
-  if (!resetPassHeader | !resetPassHeader.startsWith("Bearer ")) {
+  if (!resetPassHeader || !resetPassHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Token manquant !" });
   }
 
