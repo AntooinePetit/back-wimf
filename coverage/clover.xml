@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1769510669349" clover="3.2.0">
-  <project timestamp="1769510669349" name="All files">
-    <metrics statements="335" coveredstatements="334" conditionals="149" coveredconditionals="143" methods="40" coveredmethods="40" elements="524" coveredelements="517" complexity="0" loc="335" ncloc="335" packages="3" files="8" classes="8"/>
+<coverage generated="1770218973348" clover="3.2.0">
+  <project timestamp="1770218973348" name="All files">
+    <metrics statements="337" coveredstatements="336" conditionals="153" coveredconditionals="147" methods="41" coveredmethods="41" elements="531" coveredelements="524" complexity="0" loc="337" ncloc="337" packages="3" files="8" classes="8"/>
     <package name="controllers">
       <metrics statements="283" coveredstatements="282" conditionals="135" coveredconditionals="129" methods="36" coveredmethods="36"/>
       <file name="authControllers.js" path="C:\Users\tstga\Documents\WIMF\back-wimf\controllers\authControllers.js">
@@ -301,7 +301,7 @@
       </file>
     </package>
     <package name="middlewares">
-      <metrics statements="44" coveredstatements="44" conditionals="14" coveredconditionals="14" methods="3" coveredmethods="3"/>
+      <metrics statements="44" coveredstatements="44" conditionals="16" coveredconditionals="16" methods="3" coveredmethods="3"/>
       <file name="adminMiddleware.js" path="C:\Users\tstga\Documents\WIMF\back-wimf\middlewares\adminMiddleware.js">
         <metrics statements="20" coveredstatements="20" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -341,11 +341,11 @@
         <line num="30" count="1" type="stmt"/>
       </file>
       <file name="resetPassMiddleware.js" path="C:\Users\tstga\Documents\WIMF\back-wimf\middlewares\resetPassMiddleware.js">
-        <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <metrics statements="12" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
-        <line num="14" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="3" type="cond" truecount="4" falsecount="0"/>
         <line num="15" count="1" type="stmt"/>
         <line num="18" count="2" type="stmt"/>
         <line num="20" count="2" type="stmt"/>
@@ -357,17 +357,19 @@
       </file>
     </package>
     <package name="utils">
-      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
       <file name="mailerForgotPass.js" path="C:\Users\tstga\Documents\WIMF\back-wimf\utils\mailerForgotPass.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="34" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="46" count="1" type="cond" truecount="2" falsecount="0"/>
       </file>
     </package>
   </project>
