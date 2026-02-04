@@ -17,7 +17,7 @@ describe("mailerForgotPass", () => {
     process.env.GMAIL_USER = "sender@gmail.com";
     process.env.GMAIL_PASS = "pass123";
 
-    process.env.URL_WEBSITE = "https://www.wimf.com/";
+    process.env.URL_WEBSITE = "https://www.wimf.com";
 
     mockSendMail = jest.fn();
 
@@ -36,14 +36,19 @@ describe("mailerForgotPass", () => {
     await mailerForgotPass(email, username, token);
 
     expect(nodemailer.createTransport).toHaveBeenCalledWith({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: "sender@gmail.com",
         pass: "pass123",
       },
+      connectionTimeout: 60000,
+      greetingTimeout: 30000,
+      socketTimeout: 60000,
     });
     expect(mockSendMail).toHaveBeenCalledWith({
-      from: `"WIMF" sender@gmail.com`,
+      from: `"WIMF" ${process.env.GMAIL_USER}`,
       to: email,
       subject: "Réinitialisation du mot de passe - mot de passe oublié",
       text: expect.stringContaining(`Bonjour ${username},`),
