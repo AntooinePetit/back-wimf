@@ -23,10 +23,9 @@ Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions); // optionnel : tu peux retourner l’info si ton contrôleur en a besoin
+    const info = await transporter.sendMail(mailOptions);
     return info;
   } catch (error) {
-    // Important : on relance l’erreur pour que le contrôleur puisse la gérer
     throw new Error("Échec de l'envoi de l'email");
   }
 }
