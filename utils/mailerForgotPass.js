@@ -29,6 +29,7 @@ Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
     const info = await transporter.sendMail(mailOptions);
     return info;
   } catch (error) {
+    console.log(error)
     throw new Error("Échec de l'envoi de l'email");
   }
 }
