@@ -7,9 +7,11 @@ async function emailForgotPass(email, username, token) {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_PASS,
     },
+    port: 587,
+    secure: false,
     connectionTimeout: 60000,
     greetingTimeout: 30000,
-    socketTimeout: 60000
+    socketTimeout: 60000,
   });
 
   const mailOptions = {
@@ -29,7 +31,7 @@ Ce lien sera fonctionnel pendant les 15 prochaines minutes !`,
     const info = await transporter.sendMail(mailOptions);
     return info;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     throw new Error("Échec de l'envoi de l'email");
   }
 }
