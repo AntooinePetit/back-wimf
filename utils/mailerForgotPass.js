@@ -2,13 +2,14 @@ const nodemailer = require("nodemailer");
 
 async function emailForgotPass(email, username, token) {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
     auth: {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_PASS,
     },
-    port: 587,
-    secure: false,
     connectionTimeout: 60000,
     greetingTimeout: 30000,
     socketTimeout: 60000,
