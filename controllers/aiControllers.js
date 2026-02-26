@@ -87,6 +87,7 @@ Exemple de sortie correcte :
     });
 
     const resultText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log(resultText);
 
     if (!resultText) {
       return res.status(500).json({ error: "Réponse IA vide ou invalide." });
@@ -98,9 +99,11 @@ Exemple de sortie correcte :
       .replace(/```/g, "")
       .trim();
 
+    console.log(cleanJsonText);
     let ingredientsJson;
     try {
       ingredientsJson = JSON.parse(cleanJsonText);
+      console.log(ingredientsJson);
     } catch (err) {
       return res.status(500).json({
         error: "La réponse IA n'est pas un JSON valide.",
@@ -131,6 +134,7 @@ Exemple de sortie correcte :
 
     // Remove duplicates
     ingredients = [...new Set(ingredients)];
+    console.log(ingredients);
 
     return res.json({ ingredients });
   } catch (err) {
