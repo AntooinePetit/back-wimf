@@ -32,25 +32,35 @@ const FORBIDDEN_INGREDIENTS = [
 
 exports.getIngredientsFromPicture = async (req, res) => {
   try {
+    console.log("[DEBUG] Début getIngredientsFromPicture");
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const { picture } = req.body;
+    console.log("[DEBUG] Type de picture reçu:", typeof picture);
+    console.log("[DEBUG] Longueur picture:", picture?.length);
 
     // Validation de base
     if (!picture || typeof picture !== "string") {
+      console.log("[ERROR] Image invalide ou manquante");
       return res.status(400).json({ error: "Aucune image valide fournie." });
     }
 
     const cleanedBase64 = picture.replace(/^data:image\/\w+;base64,/, "");
+    console.log("[DEBUG] Longueur base64 nettoyé:", cleanedBase64.length);
 
     // Vérification base64
     const isBase64 = /^[A-Za-z0-9+/]+={0,2}$/.test(cleanedBase64);
+    console.log("[DEBUG] Base64 valide:", isBase64);
     if (!isBase64) {
+      console.log("[ERROR] Format Base64 invalide");
       return res.status(400).json({ error: "Format Base64 invalide." });
     }
 
     // Taille limite
     const imageBuffer = Buffer.from(cleanedBase64, "base64");
+    console.log("[DEBUG] Taille image (octets):", imageBuffer.length);
+    console.log("[DEBUG] Taille image (Mo):", (imageBuffer.length / (1024 * 1024)).toFixed(2));
     if (imageBuffer.length > MAX_IMAGE_SIZE) {
+      console.log("[ERROR] Image trop lourde");
       return res.status(413).json({ error: "Image trop lourde (4Mo max)." });
     }
 
@@ -65,7 +75,7 @@ exports.getIngredientsFromPicture = async (req, res) => {
       {
         text: `
 Tu es un assistant qui liste uniquement les ingrédients visibles ou mentionnés, en français. 
-- Ne fais jamais de traduction vers l’anglais. 
+- Ne fais jamais de traduction vers l'anglais. 
 - Ne crée pas de mots inventés, incomplets ou des variantes inutiles. 
 - Répond uniquement avec un JSON strictement valide. 
 - La clé doit être "ingredients" et la valeur un tableau de chaînes de caractères.
@@ -80,16 +90,19 @@ Exemple de sortie correcte :
       },
     ];
 
+    console.log("[DEBUG] Envoi requête à Gemini...");
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
       contents,
       generationConfig: { temperature: 0.1 },
     });
+    console.log("[DEBUG] Réponse Gemini reçue");
 
     const resultText = response.candidates?.[0]?.content?.parts?.[0]?.text;
-    console.log(resultText);
+    console.log("[DEBUG] Texte brut IA:", resultText);
 
     if (!resultText) {
+      console.log("[ERROR] Réponse IA vide");
       return res.status(500).json({ error: "Réponse IA vide ou invalide." });
     }
 
@@ -99,12 +112,13 @@ Exemple de sortie correcte :
       .replace(/```/g, "")
       .trim();
 
-    console.log(cleanJsonText);
+    console.log("[DEBUG] JSON nettoyé:", cleanJsonText);
     let ingredientsJson;
     try {
       ingredientsJson = JSON.parse(cleanJsonText);
-      console.log(ingredientsJson);
+      console.log("[DEBUG] JSON parsé:", JSON.stringify(ingredientsJson, null, 2));
     } catch (err) {
+      console.log("[ERROR] Erreur parsing JSON:", err.message);
       return res.status(500).json({
         error: "La réponse IA n'est pas un JSON valide.",
         raw: resultText,
@@ -115,30 +129,39 @@ Exemple de sortie correcte :
       !ingredientsJson.ingredients ||
       !Array.isArray(ingredientsJson.ingredients)
     ) {
+      console.log("[ERROR] Format JSON incorrect - clé 'ingredients' manquante ou invalide");
       return res.status(500).json({
         error: "Format JSON incorrect.",
         raw: ingredientsJson,
       });
     }
+    console.log("[DEBUG] Ingrédients bruts:", ingredientsJson.ingredients);
 
     // Normalisation
     const normalize = (str) =>
       str.toLowerCase().trim().replace(/[()]/g, "").replace(/\s+/g, " ");
 
     let ingredients = ingredientsJson.ingredients.map(normalize);
+    console.log("[DEBUG] Ingrédients normalisés:", ingredients);
 
     // Filtrage des ingrédients interdits
+    const beforeFilter = ingredients.length;
     ingredients = ingredients.filter(
       (ing) => ing && !FORBIDDEN_INGREDIENTS.includes(ing) && ing.length > 1
     );
+    console.log("[DEBUG] Ingrédients filtrés (avant:", beforeFilter, "après:", ingredients.length, ")");
+    console.log("[DEBUG] Ingrédients après filtrage:", ingredients);
 
     // Remove duplicates
+    const beforeDedup = ingredients.length;
     ingredients = [...new Set(ingredients)];
-    console.log(ingredients);
+    console.log("[DEBUG] Doublons supprimés (avant:", beforeDedup, "après:", ingredients.length, ")");
+    console.log("[DEBUG] Ingrédients finaux:", ingredients);
 
     return res.json({ ingredients });
   } catch (err) {
-    console.error("Erreur IA :", err);
+    console.error("[ERROR] Erreur IA:", err.message);
+    console.error("[ERROR] Stack:", err.stack);
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -206,20 +229,20 @@ FORMAT EXACT ATTENDU :
 
 CONTRAINTES IMPORTANTES :
 - Le JSON doit être parfaitement valide.
-- "ingredients" doit être un tableau d’objets, un pour chaque ingrédient fourni.
+- "ingredients" doit être un tableau d'objets, un pour chaque ingrédient fourni.
 - "name_ingredient" doit correspondre EXACTEMENT aux ingrédients fournis (en minuscules si nécessaire).
-- "quantity" : mettre 0 si la quantité n’est pas explicitable.
+- "quantity" : mettre 0 si la quantité n'est pas explicitable.
 - "measurements" : indiquer une unité réaliste ("g", "ml", "pièce", etc.). Si inconnu → "" (chaîne vide).
 - Dans "recipe", n'utilise QUE ces ingrédients.
-- Pour les valeurs nutritionnelles, si l’IA n’est pas certaine → mettre "quantity": 0.
+- Pour les valeurs nutritionnelles, si l'IA n'est pas certaine → mettre "quantity": 0.
 - AUCUNE clé supplémentaire.
 - AUCUN texte autour, strict JSON.
 
 ### Règles pour les ingrédients :
 - Tu dois extraire tous les ingrédients mentionnés dans la recette.
 - S'il manque la quantité ou l'unité dans le texte, tu dois FAIRE UNE ESTIMATION COHÉRENTE pour une préparation de 2 personnes.
-- Il est strictement interdit d'utiliser quantity = 0 ou measurements = "" sauf si l’ingrédient ne peut vraiment pas être quantifié (ex : "sel" → mettre une estimation comme "1 pincée").
-- Toujours donner une unité logique (“g”, “ml”, “c.à.s”, “c.à.c”, “pincée”, “unité”, etc.).
+- Il est strictement interdit d'utiliser quantity = 0 ou measurements = "" sauf si l'ingrédient ne peut vraiment pas être quantifié (ex : "sel" → mettre une estimation comme "1 pincée").
+- Toujours donner une unité logique ("g", "ml", "c.à.s", "c.à.c", "pincée", "unité", etc.).
 - Les quantités doivent être réalistes (pas 1 g ou 2000 g sans raison).
       `,
       },
